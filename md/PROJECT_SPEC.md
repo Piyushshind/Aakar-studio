@@ -120,7 +120,7 @@ Use one tool per job, and never animate the same property of the same element wi
 | Logo and brand assets | Hand-built SVG, exported with sharp (Node) or Pillow/cairosvg (Python) | Section 4.6 |
 | Pre-rendering | vite-react-ssg or equivalent | Real HTML for SEO, added in the SEO phase |
 | PWA | vite-plugin-pwa | Optional |
-| Code quality | ESLint flat config, Prettier, prettier-plugin-tailwindcss | |
+| Code quality | oxlint, Prettier, prettier-plugin-tailwindcss | |
 | Bundle check | rollup-plugin-visualizer | |
 
 Division of labour:
@@ -750,6 +750,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-18 | Tech stack table (section 2): code quality uses oxlint instead of ESLint |
 | 2026-10-18 | Repo is public during development: `src/assets/photos/` git-ignored (manifest still committed), originals backed up in the owner's Google Drive, deploys from a local build via the Netlify or Cloudflare CLI (0.4 step 12, sections 12, 15, 18.2). Linting uses oxlint instead of ESLint (0.4 step 10) |
 | 2026-10-17 | Image processing complete: added inventory (7.3), theme labels, featured and hero lists, manifest-based Photo type, `photos.ts` helpers, consent gate, two-stage image pipeline, xl master for zoom, 3840px album spreads. Adapted hero, gallery (theme filters), baby band, services (real images or icon cards), albums and About to the real photos. Updated FAQ, marquee and SEO keywords for themed kids shoots. Added new open items |
 | 2026-10-16 | Banned AI-generated images entirely. Confirmed Google Maps listing photos count as `studio`. Clarified stock rules |
