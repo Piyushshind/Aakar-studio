@@ -25,9 +25,13 @@
   :root {
     color-scheme: dark;
     --gradient-gold: linear-gradient(135deg, #e9c46a 0%, #cf9a3e 45%, #8c5a1e 100%);
+    /* Fixed-header offset: the ONE place it is set. Lenis, scrollIntoView and #anchor jumps
+       all honour scroll-padding-top (src/lib/scroll.ts). Finalised with the header in Phase 5. */
+    --header-offset: 5rem;
   }
 
   html {
+    scroll-padding-top: var(--header-offset);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
