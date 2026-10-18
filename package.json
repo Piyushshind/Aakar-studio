@@ -7,7 +7,17 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "typecheck": "tsc -b",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "analyze": "vite build --mode analyze",
+    "preview": "vite preview",
+    "images:analyze": "node scripts/images/analyze.mjs",
+    "images:dedupe": "node scripts/images/dedupe.mjs",
+    "images:sheets": "node scripts/images/contact-sheets.mjs",
+    "images:classify": "node scripts/images/classify.mjs",
+    "images:export": "node scripts/images/export.mjs",
+    "images:report": "node scripts/images/report.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",
@@ -29,7 +39,6 @@
     "react-compare-slider": "^4.0.0",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.90.0",
-    "react-lite-youtube-embed": "^3.7.0",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
     "three": "^0.186.1",

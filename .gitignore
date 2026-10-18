@@ -1,3 +1,14 @@
+# Dependencies and build output
+node_modules
+dist
+dist-ssr
+stats.html
+
+# Environment files
+.env*
+!.env.example
+*.local
+
 # Logs
 logs
 *.log
@@ -7,20 +18,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-# Ignore image processing folder
-/src/haveToProcessImages/
+
+# Image pipeline: owner's original client photos (backup lives in the owner's Google Drive)
+src/haveToProcessImages/
+# Image pipeline: generated working files (contact sheets of client photos, reports)
+scripts/images/out/
+# Client photo masters: never committed while the repo is public.
+# Regenerate with the images:* scripts. src/data/photos.manifest.json IS committed.
+src/assets/photos/

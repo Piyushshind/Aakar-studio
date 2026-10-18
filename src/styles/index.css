@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+/* Design tokens (spec 4.2 and 4.3) */
+@theme {
+  --color-bg: #121010;
+  --color-surface: #1a1716;
+  --color-elevated: #241f1d;
+  --color-text: #f6efe6;
+  --color-muted: #a39a90;
+  --color-gold: #cf9a3e;
+  --color-gold-light: #e9c46a;
+  --color-gold-deep: #8c5a1e;
+  --color-gold-soft: #cf9a3e33;
+  --color-brown: #5a3a24;
+  --color-cream-bg: #f3ebe1;
+  --color-cream-muted: #8a7666;
+  --color-blush: #e8b4b8;
+  --color-line: #ffffff14;
+
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --gradient-gold: linear-gradient(135deg, #e9c46a 0%, #cf9a3e 45%, #8c5a1e 100%);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg font-sans text-text;
+  }
+
+  ::selection {
+    @apply bg-gold text-bg;
+  }
+}

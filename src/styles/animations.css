@@ -1,0 +1,16 @@
+/*
+ * Keyframes, masks, clip-paths and CSS scroll-driven animations (spec 2, division of labour).
+ * Wrap scroll-driven effects in @supports (animation-timeline: view()) with a static fallback.
+ */
+
+/* Reduced motion (spec 8.3): only quick opacity fades remain. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

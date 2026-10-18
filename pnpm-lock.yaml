@@ -65,9 +65,6 @@ importers:
       react-hook-form:
         specifier: ^7.90.0
         version: 7.90.0(@types/react@19.3.0)(react@19.3.1)
-      react-lite-youtube-embed:
-        specifier: ^3.7.0
-        version: 3.7.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       tailwind-merge:
         specifier: ^3.7.0
         version: 3.7.0
@@ -1390,12 +1387,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-lite-youtube-embed@3.7.0:
-    resolution: {integrity: sha512-diu1ihZ0LUGWZPtuq2Xxx0G/DGtzBfmrlLp/wedh6zXn8/ScH3zhJGhzN5wEbQTK/mOKmgAP2n58e7q6Jlbv6w==}
-    peerDependencies:
-      react: '>=18.2.0'
-      react-dom: '>=18.2.0'
-
   react-use-measure@2.1.7:
     resolution: {integrity: sha512-KrvcAo13I/60HpwGO5jpW7E9DfusKyLPLvuHlUyP5zqnmAPhNc6qTRjUQrdTADl0lpPpDVU2/Gg51UlOGHXbdg==}
     peerDependencies:
@@ -2516,11 +2507,6 @@ snapshots:
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
-
-  react-lite-youtube-embed@3.7.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
-    dependencies:
-      react: 19.3.1
-      react-dom: 19.3.1(react@19.3.1)
 
   react-use-measure@2.1.7(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
