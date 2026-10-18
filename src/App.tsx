@@ -1,5 +1,18 @@
-// Phase 1 test page: confirms Tailwind, theme tokens and fonts. Replaced in Phase 5.
+import { lazy, Suspense } from 'react';
+
+// Dev only: the Phase 2 foundation check panel (removed in Phase 5). Production builds don't
+// include it; they show the Phase 1 brand test page until the real sections exist.
+const FoundationCheck = import.meta.env.DEV ? lazy(() => import('./dev/FoundationCheck')) : null;
+
 function App() {
+  if (FoundationCheck) {
+    return (
+      <Suspense fallback={null}>
+        <FoundationCheck />
+      </Suspense>
+    );
+  }
+
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-6 px-6 text-center">
       <p className="text-xs font-semibold tracking-[0.4em] text-muted uppercase">
@@ -12,20 +25,6 @@ function App() {
         Capturing <span className="text-gold">Emotions</span>, Creating{' '}
         <span className="text-gold">Memories</span>
       </p>
-      <div className="mt-6 flex gap-3" aria-hidden="true">
-        {[
-          'bg-surface',
-          'bg-elevated',
-          'bg-gold',
-          'bg-gold-light',
-          'bg-gold-deep',
-          'bg-brown',
-          'bg-cream-bg',
-          'bg-blush',
-        ].map((c) => (
-          <span key={c} className={`size-6 rounded-full border border-line ${c}`} />
-        ))}
-      </div>
     </main>
   );
 }
