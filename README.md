@@ -1,32 +1,21 @@
-# React + TypeScript + Vite
+# Aakar Digital Photo Studio website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Static, animated single-page site for Aakar Digital Photo Studio, Jalgaon. React 19, TypeScript, Vite, Tailwind CSS v4, GSAP.
 
-Currently, two official plugins are available:
+The full specification is [md/PROJECT_SPEC.md](md/PROJECT_SPEC.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Commands (pnpm only)
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+pnpm install
+pnpm dev            # dev server
+pnpm build          # typecheck + production build to dist/
+pnpm lint           # oxlint
+pnpm typecheck
+pnpm format         # prettier --write
+pnpm analyze        # bundle report at dist/stats.html
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Photos
+
+Client photos are not in git. `src/assets/photos/` is git-ignored and regenerated from the owner's originals with the `images:*` scripts (spec section 7.2). `src/data/photos.manifest.json` is committed.
