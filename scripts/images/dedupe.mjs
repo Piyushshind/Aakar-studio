@@ -3,17 +3,20 @@
 //
 // Visual findings (watermarks, forced keepers/variants) live in dedupe-overrides.json
 // next to this script, so re-running stays deterministic.
-import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { OUT_DIR, readJson, writeOut, hamming, log } from './lib.mjs';
+import sharp from 'sharp';
+import { OUT_DIR, SOURCE_DIR, readJson, writeOut, hamming, log } from './lib.mjs';
 
 const HASH_THRESHOLD = 6;
 // Same shot, but treat as a separate edit when the crop or exposure differs this much.
 const VARIANT_CROP = 0.03;
 const VARIANT_BRIGHTNESS = 4;
 
-const overridesPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dedupe-overrides.json');
+const overridesPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'dedupe-overrides.json',
+);
 const overrides = await readJson(overridesPath).catch(() => ({}));
 const watermarked = new Set(overrides.watermarked ?? []);
 const forceKeeper = new Set(overrides.forceKeeper ?? []);
@@ -41,7 +44,10 @@ for (let i = 0; i < inventory.length; i++) {
   for (let j = i + 1; j < inventory.length; j++) {
     const a = inventory[i];
     const b = inventory[j];
-    if (baseName(a.fileName) === baseName(b.fileName) || hamming(a.dHash, b.dHash) <= HASH_THRESHOLD) {
+    if (
+      baseName(a.fileName) === baseName(b.fileName) ||
+      hamming(a.dHash, b.dHash) <= HASH_THRESHOLD
+    ) {
       union(i, j);
     }
   }
@@ -67,11 +73,70 @@ const byRank = (a, b) => {
   return a.fileName.localeCompare(b.fileName);
 };
 
-function isVariant(keeper, r) {
+function isVariant(keeper, r, diff) {
   if (forceDuplicate.has(r.fileName)) return false;
   if (forceVariant.has(r.fileName)) return true;
-  const crop = Math.max(Math.abs(1 - r.width / keeper.width), Math.abs(1 - r.height / keeper.height));
-  return crop > VARIANT_CROP || Math.abs(r.meanBrightness - keeper.meanBrightness) > VARIANT_BRIGHTNESS;
+  // A badged copy of a shot we already hold clean is never worth keeping.
+  if (watermarked.has(r.fileName) && !watermarked.has(keeper.fileName)) return false;
+  // Same size and only a tiny region differs: same edit (e.g. badge, re-export).
+  if (diff && diff.strongPixelsPct < 1) return false;
+  const crop = Math.max(
+    Math.abs(1 - r.width / keeper.width),
+    Math.abs(1 - r.height / keeper.height),
+  );
+  return (
+    crop > VARIANT_CROP || Math.abs(r.meanBrightness - keeper.meanBrightness) > VARIANT_BRIGHTNESS
+  );
+}
+
+/**
+ * For two same-size copies, find where they differ (difference blend at 1/8 scale).
+ * A small, dense box near an edge is the tell-tale of an added logo badge.
+ */
+async function diffRegion(a, b) {
+  const w = Math.round(a.width / 8);
+  const h = Math.round(a.height / 8);
+  const load = (r) =>
+    sharp(path.join(SOURCE_DIR, r.relPath))
+      .rotate()
+      .resize(w, h, { fit: 'fill' })
+      .toColourspace('srgb')
+      .removeAlpha()
+      .raw()
+      .toBuffer();
+  const [pa, pb] = await Promise.all([load(a), load(b)]);
+  let x0 = w,
+    y0 = h,
+    x1 = -1,
+    y1 = -1,
+    n = 0,
+    sum = 0;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 3;
+      const v = Math.max(
+        Math.abs(pa[i] - pb[i]),
+        Math.abs(pa[i + 1] - pb[i + 1]),
+        Math.abs(pa[i + 2] - pb[i + 2]),
+      );
+      sum += v;
+      if (v > 48) {
+        n++;
+        x0 = Math.min(x0, x);
+        y0 = Math.min(y0, y);
+        x1 = Math.max(x1, x);
+        y1 = Math.max(y1, y);
+      }
+    }
+  }
+  const pct = (v, d) => Math.round((v / d) * 100);
+  return {
+    meanDiff: +(sum / (w * h)).toFixed(2),
+    strongPixelsPct: +((n / (w * h)) * 100).toFixed(3),
+    box: n
+      ? { left: pct(x0, w), top: pct(y0, h), right: pct(x1 + 1, w), bottom: pct(y1 + 1, h) }
+      : null,
+  };
 }
 
 const groups = [];
@@ -87,12 +152,17 @@ for (const members of clusters.values()) {
   for (const shot of shots.values()) {
     const sorted = [...shot].sort(byRank);
     const keeper = sorted[0];
+    const diffs = new Map();
+    for (const r of sorted.slice(1)) {
+      if (r.width === keeper.width && r.height === keeper.height)
+        diffs.set(r, await diffRegion(keeper, r));
+    }
     const variants = [];
     const rejected = [];
     for (const r of sorted.slice(1)) {
       // Variants are compared against the keeper and any variant kept so far.
       const kept = [keeper, ...variants];
-      if (kept.every((k) => isVariant(k, r))) variants.push(r);
+      if (kept.every((k) => isVariant(k, r, k === keeper ? diffs.get(r) : null))) variants.push(r);
       else rejected.push(r);
     }
     groups.push({
@@ -105,9 +175,9 @@ for (const members of clusters.values()) {
       rejected: rejected.map((r) => ({
         file: r.fileName,
         reason: watermarked.has(r.fileName)
-          ? 'watermark/logo badge'
-          : r.dHash === keeper.dHash && r.width === keeper.width
-            ? 'identical copy'
+          ? 'watermark/logo badge (clean copy kept)'
+          : diffs.get(r)?.strongPixelsPct === 0
+            ? 'pixel-identical copy'
             : 'lower resolution or sharpness',
       })),
       members: shot.map((r) => ({
@@ -119,6 +189,7 @@ for (const members of clusters.values()) {
         icc: r.iccProfile ?? r.space,
         watermarked: watermarked.has(r.fileName),
         hammingToKeeper: hamming(r.dHash, keeper.dHash),
+        diffVsKeeper: diffs.get(r),
       })),
     });
   }
@@ -142,6 +213,13 @@ const result = {
   groups: reported,
 };
 
+const fmtDiff = (d) =>
+  !d
+    ? ''
+    : d.box
+      ? `mean ${d.meanDiff}, ${d.strongPixelsPct}% px in box L${d.box.left} T${d.box.top} R${d.box.right} B${d.box.bottom} (%)`
+      : `mean ${d.meanDiff}, none`;
+
 const md = `# Duplicate report
 
 - Files analysed: ${inventory.length}
@@ -152,19 +230,23 @@ const md = `# Duplicate report
 
 ${reported
   .map(
-    (g) => `## ${g.id} · ${g.kind}${g.shotsInCluster > 1 ? ` (cluster of ${g.clusterSize} files over ${g.shotsInCluster} frames)` : ''}
+    (
+      g,
+    ) => `## ${g.id} · ${g.kind}${g.shotsInCluster > 1 ? ` (cluster of ${g.clusterSize} files over ${g.shotsInCluster} frames)` : ''}
 
 - **Keeper:** ${g.keeper}
 ${g.variants.map((v) => `- Variant (kept): ${v}`).join('\n')}
 ${g.rejected.map((r) => `- Rejected: ${r.file} — ${r.reason}`).join('\n')}
 
-| File | Size | Sharp | Bright | ICC | WM | Δhash |
-|---|---|---|---|---|---|---|
-${g.members.map((m) => `| ${m.file} | ${m.size} | ${m.sharpness} | ${m.brightness} | ${m.icc} | ${m.watermarked ? 'yes' : ''} | ${m.hammingToKeeper} |`).join('\n')}
+| File | Size | Sharp | Bright | ICC | WM | Δhash | Pixel diff vs keeper |
+|---|---|---|---|---|---|---|---|
+${g.members.map((m) => `| ${m.file} | ${m.size} | ${m.sharpness} | ${m.brightness} | ${m.icc} | ${m.watermarked ? 'yes' : ''} | ${m.hammingToKeeper} | ${fmtDiff(m.diffVsKeeper)} |`).join('\n')}
 `,
   )
   .join('\n')}`;
 
 await writeOut(path.join(OUT_DIR, 'duplicates.json'), JSON.stringify(result, null, 2));
 await writeOut(path.join(OUT_DIR, 'duplicates-report.md'), md.replace(/\n{3,}/g, '\n\n'));
-log(`groups reported: ${reported.length}, keepers: ${keepers.length}, rejected: ${rejectedSet.size}`);
+log(
+  `groups reported: ${reported.length}, keepers: ${keepers.length}, rejected: ${rejectedSet.size}`,
+);

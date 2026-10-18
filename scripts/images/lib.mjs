@@ -6,7 +6,10 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 export const ROOT = path.resolve(here, '../..');
-export const SOURCE_DIR = path.join(ROOT, 'src/haveToProcessImages/drive-download-20261017T160525Z-1-001');
+export const SOURCE_DIR = path.join(
+  ROOT,
+  'src/haveToProcessImages/drive-download-20261017T160525Z-1-001',
+);
 export const OUT_DIR = path.join(here, 'out');
 export const PHOTOS_DIR = path.join(ROOT, 'src/assets/photos');
 export const MANIFEST_PATH = path.join(ROOT, 'src/data/photos.manifest.json');
@@ -78,7 +81,12 @@ export function parseExif(buf) {
   const str = (count, valOff) => {
     const start = count <= 4 ? valOff : tiff + u32(valOff);
     if (start + count > buf.length) return null;
-    return buf.toString('latin1', start, start + count).replace(/\0+$/, '').trim() || null;
+    return (
+      buf
+        .toString('latin1', start, start + count)
+        .replace(/\0+$/, '')
+        .trim() || null
+    );
   };
 
   const readIfd = (ifdOff, handler) => {

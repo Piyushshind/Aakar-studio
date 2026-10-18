@@ -27,20 +27,23 @@ const indexed = items.map((r) => ({ ...r, index: inventory.indexOf(r) + 1 }));
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const short = (s, n = 34) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
-// --corners: show the top-left and top-right 14% corners side by side, to spot logo badges.
+// --corners: show the top-left and top-right zones (25% wide, 22% tall) side by side.
+// The studio's logo badge sits around 83–93% across and 4–16% down when present.
 const CORNERS = args.has('--corners');
-const CORNER = 0.14;
+const ZONE_W = 0.25;
+const ZONE_H = 0.22;
 
 async function cornerPair(file) {
   const rotated = await sharp(file).rotate().toBuffer({ resolveWithObject: true });
   const { width, height } = rotated.info;
-  const size = Math.round(Math.min(width, height) * CORNER);
+  const zw = Math.round(width * ZONE_W);
+  const zh = Math.round(height * ZONE_H);
   const crop = (left) =>
     sharp(rotated.data)
-      .extract({ left, top: 0, width: size, height: size })
-      .resize(THUMB / 2 - 2, THUMB / 2 - 2)
+      .extract({ left, top: 0, width: zw, height: zh })
+      .resize(THUMB / 2 - 2, THUMB / 2 - 2, { fit: 'contain', background: '#e8e8e8' })
       .toBuffer();
-  const [tl, tr] = await Promise.all([crop(0), crop(width - size)]);
+  const [tl, tr] = await Promise.all([crop(0), crop(width - zw)]);
   return sharp({ create: { width: THUMB, height: THUMB, channels: 3, background: '#e8e8e8' } })
     .composite([
       { input: tl, left: 0, top: THUMB / 4 },
@@ -54,7 +57,10 @@ async function tile(r) {
   const file = path.join(SOURCE_DIR, r.relPath);
   const img = CORNERS
     ? await cornerPair(file)
-    : await sharp(file).rotate().resize(THUMB, THUMB, { fit: 'contain', background: '#e8e8e8' }).toBuffer();
+    : await sharp(file)
+        .rotate()
+        .resize(THUMB, THUMB, { fit: 'contain', background: '#e8e8e8' })
+        .toBuffer();
   const label = Buffer.from(
     `<svg width="${THUMB}" height="${LABEL_H}" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="#fff"/>

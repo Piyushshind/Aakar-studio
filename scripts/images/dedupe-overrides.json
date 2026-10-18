@@ -1,0 +1,21 @@
+{
+  "_comment": "Visual findings from the corners-*.jpg contact sheets (Step 3). Each listed file carries the small 'Aakar' logo badge near the top-right corner; dedupe.mjs prefers a clean copy of the same shot.",
+  "watermarked": [
+    "DSC00008 - Copy copy 2.jpg",
+    "DSC01597 copy 2.jpg",
+    "DSC01615 copy.jpg",
+    "DSC01652 copy 4.jpg",
+    "DSC01756 copy - Copy (2) copy 2 - Copy copy.jpg",
+    "DSC01771 copy 2 - Copy copy.jpg",
+    "DSC01777 copy - Copy - Copy copy 2.jpg",
+    "DSC02274 copy 2.jpg",
+    "DSC02295 copy 2.jpg",
+    "DSC02319 copy 2.jpg",
+    "DSC02364 copy - Copy copy.jpg",
+    "DSC02409 copy 2.jpg",
+    "DSC02475 copy 2.jpg"
+  ],
+  "forceKeeper": [],
+  "forceDuplicateOfKeeper": [],
+  "forceVariant": []
+}
