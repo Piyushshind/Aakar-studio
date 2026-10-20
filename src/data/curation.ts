@@ -17,9 +17,18 @@ export const heroPhotoIds = [
  * Album titles and types, in display order. Titles are the ones printed on the album pages;
  * wedding-01's printed title is Marathi with the couple's names, so it gets a neutral title.
  */
-export const albumInfo: Record<string, { title: string; type: string }> = {
-  'little-farmer': { title: 'Our Little Farmer', type: 'Kids themed album' },
-  'little-farmer-green': { title: 'Our Little Farmer', type: 'Kids themed album' },
-  'beach-baby': { title: 'Beach Vibes', type: 'Kids themed album' },
+export const albumInfo: Record<string, { title: string; subtitle?: string; type: string }> = {
+  // Subtitles are other titles printed on the pages: little-farmer-01, little-farmer-green-02, beach-baby-01.
+  'little-farmer': {
+    title: 'Our Little Farmer',
+    subtitle: 'Village Charm',
+    type: 'Kids themed album',
+  },
+  'little-farmer-green': {
+    title: 'Our Little Farmer',
+    subtitle: 'Pure Joy',
+    type: 'Kids themed album',
+  },
+  'beach-baby': { title: 'Beach Vibes', subtitle: 'Sun, Sand & Smiles', type: 'Kids themed album' },
   'wedding-01': { title: 'Wedding Album', type: 'Wedding album' },
 };

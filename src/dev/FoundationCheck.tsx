@@ -197,7 +197,8 @@ export default function FoundationCheck() {
       <Panel title={`Albums (${albums.length})`}>
         {albums.map((a) => (
           <Row key={a.slug} label={a.slug}>
-            “{a.title}” · {a.type} · cover {a.cover.id} ({a.cover.kind}) · {a.pages.length} pages:{' '}
+            “{a.title}”{a.subtitle ? ` — ${a.subtitle}` : ''} · {a.type} · cover {a.cover.id} (
+            {a.cover.kind}) · {a.pages.length} pages:{' '}
             {a.pages.map((p) => p.id.replace(`${a.slug}-`, '')).join(', ')}
           </Row>
         ))}

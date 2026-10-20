@@ -73,10 +73,11 @@ export function getAlbums(): Album[] {
       const sorted = entries.toSorted(byAlbumOrder);
       const frontCover = sorted.find((p) => p.kind === 'album-cover');
       const cover = frontCover ?? sorted[0];
-      const info = albumInfo[slug] ?? { title: slug, type: 'Album' };
+      const info = albumInfo[slug] ?? { title: slug, subtitle: undefined, type: 'Album' };
       return {
         slug,
         title: info.title,
+        subtitle: info.subtitle,
         type: info.type,
         cover,
         pages: frontCover ? sorted.filter((p) => p !== frontCover) : sorted,

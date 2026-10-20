@@ -46,6 +46,7 @@ export interface Photo {
 export interface Album {
   slug: string;
   title: string;
+  subtitle?: string; // other text printed on the pages, to tell same-titled albums apart
   type: string;
   cover: Photo; // lowest-ordered album-cover, or the first page if none
   pages: Photo[]; // sorted by albumOrder; excludes `cover` when it is an album-cover
