@@ -41,3 +41,5 @@ scripts/images/out/
 # Client photo masters: never committed while the repo is public.
 # Regenerate with the images:* scripts. src/data/photos.manifest.json IS committed.
 src/assets/photos/
+# Logo reference: banner photo with a baby in it; never committed while the repo is public.
+src/assets/brand/reference-banner.jpg

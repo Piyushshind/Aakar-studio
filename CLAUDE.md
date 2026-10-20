@@ -33,4 +33,5 @@
 - `pnpm dev` / `pnpm build` / `pnpm preview`
 - `pnpm lint` / `pnpm typecheck` / `pnpm format` / `pnpm format:check`
 - `pnpm analyze` (bundle visualizer, `ANALYZE=true`)
+- `pnpm brand:build` (logo SVGs, PNGs, favicons, manifest, OG image, `logoArt.ts`; Python only when logo text changes)
 - `pnpm images:analyze|dedupe|sheets|classify|export|report` (only when asked)
