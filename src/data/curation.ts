@@ -1,5 +1,14 @@
 // Hand-picked ids and album titles layered on top of photos.manifest.json (spec 7.3).
-// Kept free of imports so src/lib/photos.ts can read it without an import cycle.
+// Kept free of imports: src/lib/photos.ts and the build-time photo gate (vite.config.ts) read it.
+
+/**
+ * Photos that must never appear on the site, whatever their consent status. Every photos.ts
+ * getter skips them, and the build never even emits their image files.
+ */
+export const excludedPhotos: Record<string, string> = {
+  'wedding-01-06':
+    'Back cover shows an older blue Aakar logo; hidden until the owner confirms which logo is current.',
+};
 
 /** Hero candidates, in display order (spec 7.3). */
 export const heroPhotoIds = [

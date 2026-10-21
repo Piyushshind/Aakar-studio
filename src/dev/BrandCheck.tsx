@@ -70,7 +70,7 @@ export default function BrandCheck() {
         </div>
       </Block>
 
-      <Block title="Mark at 16 / 24 / 32 / 48 / 64 / 128 px (full and simple)">
+      <Block title="Mark at 16 / 24 / 32 / 48 / 64 / 128 px (full, simple, tiny)">
         {BACKGROUNDS.map((bg) => (
           <div
             key={bg.name}
@@ -80,9 +80,15 @@ export default function BrandCheck() {
           >
             {MARK_SIZES.map((size) => (
               <div key={size} className="flex items-end gap-2">
-                {[false, true].map((simple) => (
-                  <div key={String(simple)} style={{ width: size, height: size }}>
-                    <Logo variant="mark" simple={simple} tone={bg.tone} className="size-full" />
+                {(['full', 'simple', 'tiny'] as const).map((kind) => (
+                  <div key={kind} style={{ width: size, height: size }}>
+                    <Logo
+                      variant="mark"
+                      simple={kind === 'simple'}
+                      tiny={kind === 'tiny'}
+                      tone={bg.tone}
+                      className="size-full"
+                    />
                   </div>
                 ))}
               </div>
@@ -93,21 +99,24 @@ export default function BrandCheck() {
 
       <Block title="Favicons and app icons (as delivered)">
         <div className="flex flex-wrap items-end gap-8 rounded-lg border border-line bg-surface p-6 text-xs text-muted">
-          <figure className="space-y-2">
-            <div className="flex items-center gap-3 rounded-md bg-[#dee1e6] px-3 py-2 text-[#202124]">
-              <img src="/favicon/favicon.svg" width={16} height={16} alt="" />
-              <span>Light tab</span>
-            </div>
-            <div className="flex items-center gap-3 rounded-md bg-[#35363a] px-3 py-2 text-[#e8eaed]">
-              <img src="/favicon/favicon.svg" width={16} height={16} alt="" />
-              <span>Dark tab</span>
-            </div>
-            <figcaption>favicon.svg @16</figcaption>
-          </figure>
-          {[16, 32, 48].map((s) => (
+          {[
+            ['Light tab', 'bg-[#dee1e6] text-[#202124]'],
+            ['Dark tab', 'bg-[#35363a] text-[#e8eaed]'],
+          ].map(([label, colors]) => (
+            <figure key={label} className="space-y-2">
+              <div className={`flex items-center gap-3 rounded-md px-3 py-2 ${colors}`}>
+                {[16, 24, 32].map((s) => (
+                  <img key={s} src="/favicon/favicon.svg" width={s} height={s} alt="" />
+                ))}
+                <span>{label}</span>
+              </div>
+              <figcaption>favicon.svg @16 / 24 / 32</figcaption>
+            </figure>
+          ))}
+          {[16, 24, 32, 48].map((s) => (
             <figure key={s} className="space-y-2">
-              <img src="/favicon/favicon-32.png" width={s} height={s} alt="" />
-              <figcaption>favicon-32.png @{s}</figcaption>
+              <img src="/favicon/favicon.ico" width={s} height={s} alt="" />
+              <figcaption>favicon.ico @{s}</figcaption>
             </figure>
           ))}
           <figure className="space-y-2">

@@ -216,9 +216,12 @@ const CAMERA_BODY =
   'M26.6,138.3 L12.6,138.3 Q8,138.3 8,133.7 L8,77.1 Q8,72.5 12.6,72.5 L17.6,72.5' +
   ' L19.3,67.6 Q19.7,66.3 21.1,66.3 L29.3,66.3 Q30.7,66.3 31,67.6 L31.9,72.5' +
   ' L39.2,72.5 L43.5,61.9 Q44.2,60.3 46,60.3 L61.2,60.3 Q64.3,60.3 64.9,63.3';
+// Simple camera: the viewfinder hook ends earlier so the thick stroke clears the A's hairline.
 const CAMERA_BODY_SIMPLE =
   'M26.6,138.3 L12.6,138.3 Q8,138.3 8,133.7 L8,77.1 Q8,72.5 12.6,72.5' +
-  ' L39.2,72.5 L43.5,61.9 Q44.2,60.3 46,60.3 L61.2,60.3 Q64.3,60.3 64.9,63.3';
+  ' L39.2,72.5 L43.5,61.9 Q44.2,60.3 46,60.3 L60.6,60.3 Q63.2,60.3 63.6,62.6';
+/** Camera outline weight, ~20% heavier than first drafted, to balance the gold A (banner weight). */
+const CAMERA_STROKE = { full: 2.75, simple: 9.6 };
 const FLASH = 'M46.8,67.4 L49.4,63.4 L61.2,63.4 L62.8,67.4Z';
 
 const BARREL = brushArc({
@@ -226,14 +229,15 @@ const BARREL = brushArc({
   r: 42.6,
   from: 216,
   to: 169,
-  thickness: (t) => 3.3 * Math.sin(Math.PI * t) ** 0.7 * (1 - 0.6 * t) + 0.15,
+  thickness: (t) => 3.9 * Math.sin(Math.PI * t) ** 0.7 * (1 - 0.6 * t) + 0.15,
 });
 
 /**
  * Mark markup. `ink` paints the camera outline (and in text, the wordmark); gold always uses the
  * gradients. `__ID__` prefixes every id so <Logo> can make them unique per instance.
  */
-function markMarkup({ ink, simple = false }) {
+function markMarkup({ ink, simple = false, tiny = false, fitGroup = false }) {
+  if (tiny) simple = true;
   const lens = simple
     ? `<g id="__ID__lens" class="lens">
         <circle id="__ID__lens-glass" class="lens-glass" cx="72" cy="114" r="27.2" fill="#171312"/>
@@ -249,17 +253,21 @@ function markMarkup({ ink, simple = false }) {
         <circle cx="70.4" cy="116.4" r="1.6" fill="#fff" fill-opacity=".9"/>
         <circle id="__ID__lens-rim" class="lens-rim" cx="72" cy="114" r="31.9" fill="none" stroke="url(#__ID__gold)" stroke-width="3.8"/>
       </g>`;
-  return `
+  const camera = tiny
+    ? ''
+    : `
     <g id="__ID__camera" class="camera">
-      <path class="camera-body" d="${simple ? CAMERA_BODY_SIMPLE : CAMERA_BODY}" fill="none" stroke="${ink}" stroke-width="${simple ? 8 : 2.3}" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="camera-body" d="${simple ? CAMERA_BODY_SIMPLE : CAMERA_BODY}" fill="none" stroke="${ink}" stroke-width="${simple ? CAMERA_STROKE.simple : CAMERA_STROKE.full}" stroke-linecap="round" stroke-linejoin="round"/>
       ${simple ? '' : `<path class="camera-barrel" d="${BARREL}" fill="${ink}"/>`}
       <path class="camera-flash" d="${FLASH}" fill="url(#__ID__gold)"/>
-    </g>
+    </g>`;
+  const letterAndLens = `
     ${lens}
     <g id="__ID__a-letter" class="a-letter" fill="url(#__ID__gold)">
       <path class="a-strokes" d="${aLetter({ thin: simple ? 7 : 3.6 })}"/>
       <path class="a-swash" d="${swash({ extra: simple ? 3 : 0 })}"/>
     </g>`;
+  return camera + (fitGroup ? `<g class="fit">${letterAndLens}</g>` : letterAndLens);
 }
 
 const DEFS = `
@@ -354,6 +362,11 @@ const VARIANTS = {
   'mark-simple': {
     body: (ink) => markMarkup({ ink, simple: true }),
     box: box(3, 15, 166.6, 148.5),
+  },
+  // 16–24 px only (favicon): the gold A and lens, no camera.
+  'mark-tiny': {
+    body: (ink) => markMarkup({ ink, tiny: true }),
+    box: box(34.5, 15, 166.6, 148.5),
   },
   horizontal: {
     body: (ink) =>
@@ -482,6 +495,7 @@ const FILES = [
   ['logo-mark-light', 'mark', INK.light],
   ['logo-mark-simple', 'mark-simple', INK.dark],
   ['logo-mark-simple-light', 'mark-simple', INK.light],
+  ['logo-mark-tiny', 'mark-tiny', INK.dark], // gold only: no ink, works on any background
   ['logo-horizontal-light', 'horizontal', INK.light],
   ['logo-horizontal-dark', 'horizontal', INK.dark],
   ['logo-stacked-light', 'stacked', INK.light],
@@ -501,21 +515,35 @@ for (const [name] of FILES) {
     write(path.join(PNG_DIR, `${name}-${w}.png`), await png(svgs[name], w));
 }
 
-// 3. Favicons. The SVG favicon adapts its camera colour to the browser's colour scheme.
-const faviconSvg = optimizeSvg(
-  svgDoc('mark-simple', INK.dark).replace(
-    '<defs>',
-    `<style>@media (prefers-color-scheme:dark){.camera-body{stroke:${INK.light}}}</style><defs>`,
-  ),
-);
+// 3. Favicons. favicon.svg is square and adapts twice: the camera turns cream on dark browser
+// themes, and at 24 px or smaller (media queries in an SVG image test its rendered size) the
+// camera is hidden and the A and lens are scaled up to fill the square, like mark-tiny.
+const faviconSvg = (() => {
+  const [sx, sy, sw, sh] = VARIANTS['mark-simple'].box;
+  const side = Math.max(sw, sh);
+  const sq = [sx - (side - sw) / 2, sy - (side - sh) / 2, side, side];
+  const [tx0, ty0, tw, th] = VARIANTS['mark-tiny'].box;
+  const k = side / Math.max(tw, th);
+  const dx = sq[0] + side / 2 - k * (tx0 + tw / 2);
+  const dy = sq[1] + side / 2 - k * (ty0 + th / 2);
+  const style =
+    `@media (prefers-color-scheme:dark){.camera-body{stroke:${INK.light}}}` +
+    `@media (max-width:24px){.camera{display:none}.fit{transform:translate(${n(dx)}px,${n(dy)}px) scale(${k.toFixed(4)})}}`;
+  const doc = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${sq.map(n).join(' ')}" width="${n(side)}" height="${n(side)}"><style>${style}</style>${DEFS}${markMarkup({ ink: INK.dark, simple: true, fitGroup: true })}</svg>`;
+  return optimizeSvg(doc.replaceAll('__ID__', ''));
+})();
 write(path.join(FAVICON, 'favicon.svg'), faviconSvg);
-const favTile = (size) => tile(size, { variant: 'mark-simple', scale: 0.86, radius: 0.2 });
+// 16 and 24 px: A and lens only (mark-tiny); 32 px and up keep the camera.
+const favTile = (size) =>
+  size <= 24
+    ? tile(size, { variant: 'mark-tiny', scale: 0.8, radius: 0.2 })
+    : tile(size, { variant: 'mark-simple', scale: 0.86, radius: 0.2 });
 const fav = {};
-for (const s of [16, 32, 48]) fav[s] = await favTile(s);
+for (const s of [16, 24, 32, 48]) fav[s] = await favTile(s);
 write(path.join(FAVICON, 'favicon-32.png'), fav[32]);
 write(
   path.join(FAVICON, 'favicon.ico'),
-  ico([16, 32, 48].map((size) => ({ size, data: fav[size] }))),
+  ico([16, 24, 32, 48].map((size) => ({ size, data: fav[size] }))),
 );
 write(path.join(FAVICON, 'apple-touch-icon.png'), await tile(180, { scale: 0.72 }));
 write(path.join(FAVICON, 'icon-192.png'), await tile(192, { scale: 0.72 }));
@@ -591,7 +619,7 @@ write(
 // 5. Art module for <Logo>: inline markup with currentColor ink and `__ID__` id placeholders.
 {
   const art = {};
-  for (const variant of ['mark', 'mark-simple', 'horizontal', 'stacked', 'tagline']) {
+  for (const variant of ['mark', 'mark-simple', 'mark-tiny', 'horizontal', 'stacked', 'tagline']) {
     const svg = optimizeSvg(svgDoc(variant, 'currentColor', { idPrefix: '__ID__' }));
     art[variant] = {
       viewBox: svg.match(/viewBox="([^"]+)"/)[1],

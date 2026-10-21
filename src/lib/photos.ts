@@ -1,8 +1,10 @@
 // Typed access to src/data/photos.manifest.json (spec 13). Every section gets photos through
-// these helpers, and every getter returns publishable photos only (consent gate, spec 6).
+// these helpers, and every getter returns publishable photos only: never an excluded photo
+// (curation.excludedPhotos), and no consent-pending photo in the launch build (spec 6).
 import { albumInfo, heroPhotoIds } from '@/data/curation';
 import manifest from '@/data/photos.manifest.json';
 import { themeLabels } from '@/data/themes';
+import { photoBlockReason } from '@/lib/imagePolicy';
 import type {
   Album,
   Category,
@@ -22,12 +24,22 @@ export function isConsentPending(photo: Photo) {
   return photo.requiresConsent && photo.consent !== true;
 }
 
-/** Hidden only in builds with VITE_ENFORCE_CONSENT=true (the launch build). */
-export function isPublishable(photo: Photo) {
-  return !(ENFORCE_CONSENT && isConsentPending(photo));
+/**
+ * False for excluded photos, and for consent-pending photos in builds with
+ * VITE_ENFORCE_CONSENT=true (the launch build). `enforceConsent` overrides the build flag
+ * (dev-only simulation).
+ */
+export function isPublishable(photo: Photo, { enforceConsent = ENFORCE_CONSENT } = {}) {
+  return photoBlockReason(photo, enforceConsent) === null;
 }
 
-const published = allPhotos.filter(isPublishable);
+const published = allPhotos.filter((p) => isPublishable(p));
+const anyById = new Map(allPhotos.map((p) => [p.id, p]));
+
+/** Any manifest entry by id, publishable or not. For ResponsiveImage and dev checks only. */
+export function findPhoto(id: string): Photo | undefined {
+  return anyById.get(id);
+}
 const byId = new Map(published.map((p) => [p.id, p]));
 
 export interface PhotoFilter {
@@ -110,13 +122,4 @@ export function themesIn(category: PhotoCategory): string[] {
   ];
 }
 
-/**
- * TODO(Phase 4): resolve a manifest `src` to a built asset URL.
- * Photos are git-ignored, so a fresh clone has no files. Phase 4 will use
- * `import.meta.glob('/src/assets/photos/**\/*.webp', { query: ..., import: 'default' })`, which
- * returns an empty map when files are missing, and return `undefined` for a missing photo so
- * callers can skip it. A missing file must never break the build.
- */
-export function resolvePhotoUrl(_photo: Photo): string | undefined {
-  return undefined;
-}
+// Image URLs and srcsets: src/lib/images.ts (resolvePhotoUrl, getPhotoSources).

@@ -9,8 +9,10 @@ interface LogoProps {
   variant?: LogoVariant;
   /** light = cream text for dark backgrounds, dark = brown text for cream/white backgrounds. */
   tone?: LogoTone;
-  /** Mark only: the simplified mark for 16–32 px. */
+  /** Mark only: the simplified mark for 32–48 px. */
   simple?: boolean;
+  /** Mark only: gold A and lens without the camera, for 16–24 px. */
+  tiny?: boolean;
   className?: string;
   title?: string;
 }
@@ -26,11 +28,19 @@ export function Logo({
   variant = 'horizontal',
   tone = 'light',
   simple = false,
+  tiny = false,
   className,
   title = 'Aakar Digital Photo Studio',
 }: LogoProps) {
   const prefix = `aakar-${useId().replace(/[^\w-]/g, '')}-`;
-  const art = logoArt[variant === 'mark' && simple ? 'mark-simple' : variant];
+  const art =
+    logoArt[
+      variant === 'mark' && tiny
+        ? 'mark-tiny'
+        : variant === 'mark' && simple
+          ? 'mark-simple'
+          : variant
+    ];
   const titleId = `${prefix}title`;
 
   return (

@@ -3,7 +3,9 @@
 ## Source of truth
 
 - The spec is `md/PROJECT_SPEC.md`. Read it at the start of every session. It wins over anything else; keep it in `md/`.
-- Work phase by phase (spec section 14). Commit at the end of each phase, report, and wait for approval before starting the next.
+- Work phase by phase (spec section 14). At the end of each phase, report, suggest commit messages and wait for approval before starting the next.
+- Claude suggests commit messages; the user commits and pushes. Claude never runs `git commit` or `git push`.
+- Claude does not run builds (`pnpm build`, `vite build`, fresh-clone builds): say which build to run and what to check, and the user runs it.
 - Ask before architectural changes the spec doesn't describe.
 
 ## Hard rules

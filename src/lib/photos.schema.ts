@@ -2,7 +2,7 @@
 // Dev only: main.tsx loads this module behind `import.meta.env.DEV`, so zod and the checks
 // never reach the production bundle.
 import { z } from 'zod';
-import { albumInfo, heroPhotoIds } from '@/data/curation';
+import { albumInfo, excludedPhotos, heroPhotoIds } from '@/data/curation';
 import manifest from '@/data/photos.manifest.json';
 import { services } from '@/data/services';
 import { themeLabels } from '@/data/themes';
@@ -87,6 +87,9 @@ function crossCheck(photos: Photo[]): string[] {
     }
   }
 
+  for (const id of Object.keys(excludedPhotos)) {
+    if (!ids.has(id)) errors.push(`curation.excludedPhotos: "${id}" not in manifest`);
+  }
   for (const id of heroPhotoIds) {
     if (ids.get(id)?.kind !== 'photo')
       errors.push(`curation.heroPhotoIds: "${id}" is not a manifest photo`);

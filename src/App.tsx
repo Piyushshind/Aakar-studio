@@ -1,16 +1,18 @@
 import { lazy, Suspense } from 'react';
 
-// Dev only: the Phase 3 brand check and Phase 2 foundation check panels (removed in Phase 5).
+// Dev only: the Phase 2–4 check panels (brand, images, foundation; removed in Phase 5).
 // Production builds don't include them; they show the Phase 1 brand test page until the real
 // sections exist. The logo isn't used in production until it is approved (spec 4.6).
 const BrandCheck = import.meta.env.DEV ? lazy(() => import('./dev/BrandCheck')) : null;
+const ImagesCheck = import.meta.env.DEV ? lazy(() => import('./dev/ImagesCheck')) : null;
 const FoundationCheck = import.meta.env.DEV ? lazy(() => import('./dev/FoundationCheck')) : null;
 
 function App() {
-  if (BrandCheck && FoundationCheck) {
+  if (BrandCheck && ImagesCheck && FoundationCheck) {
     return (
       <Suspense fallback={null}>
         <BrandCheck />
+        <ImagesCheck />
         <FoundationCheck />
       </Suspense>
     );
