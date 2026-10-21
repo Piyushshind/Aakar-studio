@@ -1,36 +1,72 @@
 import { lazy, Suspense } from 'react';
+import { FloatingButtons } from '@/components/common/FloatingButtons';
+import { ScrollProgress } from '@/components/common/ScrollProgress';
+import { CustomCursor } from '@/components/cursor/CustomCursor';
+import { Footer } from '@/components/layout/Footer';
+import { Header } from '@/components/layout/Header';
+import { About } from '@/sections/About';
+import { Albums } from '@/sections/Albums';
+import { AnywhereBand } from '@/sections/AnywhereBand';
+import { BabyBand } from '@/sections/BabyBand';
+import { Contact } from '@/sections/Contact';
+import { Faq } from '@/sections/Faq';
+import { Gallery } from '@/sections/Gallery';
+import { Hero } from '@/sections/Hero';
+import { Marquee } from '@/sections/Marquee';
+import { Process } from '@/sections/Process';
+import { Quality } from '@/sections/Quality';
+import { QuoteBand } from '@/sections/QuoteBand';
+import { Services } from '@/sections/Services';
+import { Social } from '@/sections/Social';
+import { Testimonials } from '@/sections/Testimonials';
 
-// Dev only: the Phase 2–4 check panels (brand, images, foundation; removed in Phase 5).
-// Production builds don't include them; they show the Phase 1 brand test page until the real
-// sections exist. The logo isn't used in production until it is approved (spec 4.6).
-const BrandCheck = import.meta.env.DEV ? lazy(() => import('./dev/BrandCheck')) : null;
-const ImagesCheck = import.meta.env.DEV ? lazy(() => import('./dev/ImagesCheck')) : null;
-const FoundationCheck = import.meta.env.DEV ? lazy(() => import('./dev/FoundationCheck')) : null;
+// Dev only: the brand, images and foundation check panels at `?dev`. Production builds never
+// include them (import.meta.env.DEV is false, so the dynamic import is dropped).
+const DevPanels = import.meta.env.DEV ? lazy(() => import('./dev/DevPanels')) : null;
+const showDevPanels = DevPanels !== null && new URLSearchParams(window.location.search).has('dev');
 
 function App() {
-  if (BrandCheck && ImagesCheck && FoundationCheck) {
+  if (DevPanels && showDevPanels) {
     return (
       <Suspense fallback={null}>
-        <BrandCheck />
-        <ImagesCheck />
-        <FoundationCheck />
+        <DevPanels />
       </Suspense>
     );
   }
 
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-6 px-6 text-center">
-      <p className="text-xs font-semibold tracking-[0.4em] text-muted uppercase">
-        Digital Photo Studio
-      </p>
-      <h1 className="font-display text-[clamp(3rem,10vw,10rem)] leading-none font-semibold tracking-tight">
-        Aakar
-      </h1>
-      <p className="text-sm font-medium tracking-[0.25em] uppercase">
-        Capturing <span className="text-gold">Emotions</span>, Creating{' '}
-        <span className="text-gold">Memories</span>
-      </p>
-    </main>
+    <>
+      <a
+        href="#main"
+        className="sr-only z-[100] bg-gold px-4 py-3 text-sm font-semibold text-bg focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >
+        Skip to content
+      </a>
+      <Header />
+      <main id="main" tabIndex={-1} className="outline-none">
+        {/* Spec 5 order. Sections with no content (testimonials, social) render nothing. */}
+        <Hero />
+        <Marquee />
+        <Quality />
+        <Gallery />
+        <BabyBand />
+        <Albums />
+        <Services />
+        <AnywhereBand />
+        <QuoteBand />
+        <Process />
+        <About />
+        <Testimonials />
+        <Faq />
+        <Social />
+        <Contact />
+      </main>
+      <Footer />
+      {/* Global extras (spec 5): progress line, WhatsApp and back-to-top buttons, cursor. */}
+      <ScrollProgress />
+      <FloatingButtons />
+      <CustomCursor />
+    </>
   );
 }
 

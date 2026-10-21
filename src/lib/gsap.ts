@@ -46,8 +46,22 @@ if (typeof document !== 'undefined') {
     else window.scrollTo(0, y);
   });
 
-  // Spec 8.2: refresh once web fonts have loaded (images are handled where they render).
+  // Spec 8.2: refresh once web fonts have loaded. Images have fixed aspect ratios, but content
+  // can still change height (gallery "View more", FAQ answers, the map), so any change in the
+  // page height re-measures every trigger, debounced.
   void document.fonts.ready.then(() => ScrollTrigger.refresh());
+  let refreshTimer = 0;
+  let lastHeight = 0;
+  new ResizeObserver(([entry]) => {
+    const height = Math.round(entry.contentRect.height);
+    if (height === lastHeight) return;
+    lastHeight = height;
+    window.clearTimeout(refreshTimer);
+    refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+  }).observe(document.body);
+
+  // Dev only: lets headless checks count triggers (StrictMode duplicates would show up).
+  if (import.meta.env.DEV) Object.assign(window, { __gsap: gsap, __ScrollTrigger: ScrollTrigger });
 }
 
 export {

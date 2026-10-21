@@ -10,6 +10,22 @@ export const excludedPhotos: Record<string, string> = {
     'Back cover shows an older blue Aakar logo; hidden until the owner confirms which logo is current.',
 };
 
+/** The single hero photo used until the Phase 7 crossfade (one of heroPhotoIds). */
+// Not traditional-flowers-03: it is the only -xl master, so the photo-quality section uses it.
+export const heroLeadPhotoId = 'baby-kids-kutchi-traditional-01';
+
+/**
+ * object-position focal points that keep faces in frame when a photo is cropped (spec 4.4).
+ * Photos not listed are centred.
+ */
+export const photoFocus: Record<string, string> = {
+  'baby-kids-traditional-flowers-03': '50% 30%',
+  'baby-kids-kutchi-traditional-01': '46% 55%',
+  'baby-kids-pink-winter-02': '45% 45%',
+  'baby-kids-first-birthday-01': '42% 60%',
+  'baby-kids-teddy-theme-01': '50% 40%',
+};
+
 /** Hero candidates, in display order (spec 7.3). */
 export const heroPhotoIds = [
   'baby-kids-traditional-flowers-01',

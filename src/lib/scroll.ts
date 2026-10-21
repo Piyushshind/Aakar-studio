@@ -13,6 +13,8 @@ export function setActiveLenis(lenis: Lenis | null) {
     console.warn('SmoothScrollProvider: a second Lenis instance was registered');
   }
   activeLenis = lenis;
+  // Dev only: headless checks drive and inspect the live instance.
+  if (import.meta.env.DEV) Object.assign(window, { __lenis: lenis });
 }
 
 export function getActiveLenis() {
@@ -58,3 +60,9 @@ export function scrollToSection(id: string, { focus = true } = {}) {
   }
   return true;
 }
+
+/** onClick for in-page links: smooth scroll below the header; the #hash href is the no-JS fallback. */
+export const goTo = (id: string) => (event: { preventDefault(): void }) => {
+  event.preventDefault();
+  scrollToSection(id);
+};

@@ -13,6 +13,11 @@ interface LogoProps {
   simple?: boolean;
   /** Mark only: gold A and lens without the camera, for 16–24 px. */
   tiny?: boolean;
+  /**
+   * Horizontal only: crop off the "DIGITAL PHOTO STUDIO" label for small sizes (the header),
+   * where it would be ~3 px tall. Same approved art, shorter viewBox.
+   */
+  compact?: boolean;
   className?: string;
   title?: string;
 }
@@ -29,6 +34,7 @@ export function Logo({
   tone = 'light',
   simple = false,
   tiny = false,
+  compact = false,
   className,
   title = 'Aakar Digital Photo Studio',
 }: LogoProps) {
@@ -42,11 +48,19 @@ export function Logo({
           : variant
     ];
   const titleId = `${prefix}title`;
+  // Banner-pixel y where the label starts; the lens ends at ~148 (scripts/brand/build.mjs).
+  const viewBox =
+    compact && variant === 'horizontal'
+      ? (() => {
+          const [x, y, w] = art.viewBox.split(' ').map(Number);
+          return `${x} ${y} ${w} ${152 - y}`;
+        })()
+      : art.viewBox;
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox={art.viewBox}
+      viewBox={viewBox}
       role="img"
       aria-labelledby={titleId}
       className={cn('block h-auto', tone === 'light' ? 'text-text' : 'text-brown', className)}

@@ -17,17 +17,55 @@
   --color-blush: #e8b4b8;
   --color-line: #ffffff14;
 
+  /* Motion tokens (spec 4.5), mirrored from src/lib/motion.ts (main.tsx checks them in dev).
+     Overriding Tailwind's eases makes ease-out / ease-in-out match GSAP's power3 / power2. */
+  --ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
 }
+
+/* Only once JS has run (html.js, set by index.html): hidden-until-loaded states. */
+@custom-variant js (&:where(.js *));
 
 @layer base {
   :root {
     color-scheme: dark;
     --gradient-gold: linear-gradient(135deg, #e9c46a 0%, #cf9a3e 45%, #8c5a1e 100%);
-    /* Fixed-header offset: the ONE place it is set. Lenis, scrollIntoView and #anchor jumps
-       all honour scroll-padding-top (src/lib/scroll.ts). Finalised with the header in Phase 5. */
-    --header-offset: 5rem;
+    /* Fixed header height: the ONE place it is set. The header uses it for its own height, and
+       Lenis, scrollIntoView and #anchor jumps honour it through scroll-padding-top. */
+    --header-offset: 4rem;
+    /* Layout rhythm (spec 4.4): fluid side gutter and section spacing (72px mobile → 160px). */
+    --gutter: clamp(1.25rem, 4vw, 4rem);
+    --section-space: clamp(4.5rem, 10vw, 10rem);
+
+    /* Motion tokens for CSS (mirror src/lib/motion.ts: duration, stagger, reveal, parallax). */
+    --duration-fast: 300ms;
+    --duration-base: 600ms;
+    --duration-slow: 1200ms;
+    --stagger-base: 80ms;
+    --reveal-y: 16px;
+    --reveal-range: 24vh;
+    --reveal-step: 3vh;
+    --reveal-photo-scale: 1.08;
+    --parallax-soft: 24px;
+    --parallax-strong: 48px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --reveal-y: 28px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-offset: 5rem;
+    }
   }
 
   html {
@@ -43,5 +81,66 @@
 
   ::selection {
     @apply bg-gold text-bg;
+  }
+
+  /* Visible keyboard focus everywhere (spec 10). */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+/* Small uppercase label with wide tracking, like "DIGITAL PHOTO STUDIO" on the logo. */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* Comfortable reading text: 17px → 18px, line-height 1.65, max ~60ch at the call site. */
+@utility text-body {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  @media (min-width: 1024px) {
+    font-size: 1.125rem;
+  }
+}
+
+/* Display headlines: Fraunces, tight tracking, balanced lines (no orphan words). */
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+/* Thin, quiet scrollbar for horizontal strips. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+/* Text link whose underline draws in from the left on hover and keyboard focus. */
+@utility link-draw {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.25em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 }

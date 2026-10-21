@@ -87,3 +87,46 @@ export const quoteBand = {
 
 // Spec 17.12
 export const contactHeadline = "Let's capture your story.";
+
+// Spec 17.13 (photo quality section, approved 2026-10-21).
+export const qualityCopy = {
+  title: 'Every detail, beautifully clear.',
+  body: 'Look closer: the embroidery, the jewellery, the tiniest expressions. Every photograph is carefully lit, shot and edited so the details hold up, on screen and in print.',
+};
+
+// Gallery "Best of" strip label.
+export const bestOfLabel = 'Best of the studio';
+
+// Section headings and short lines that spec 17 doesn't cover. DRAFT: need the user's approval.
+// Wording is drawn from spec 17 (17.5, 17.6, 17.9, 17.10); nothing here adds facts.
+export const sectionTitles = {
+  services: 'Shoots for every chapter.',
+  process: 'From first message to finished album.',
+  about: 'A studio in the heart of Jalgaon.',
+  faq: 'Questions, answered.',
+};
+
+export const albumsNote =
+  'Every album is designed from scratch around your photos, in the style, size and finish you choose.';
+
+export const anywhereBand = {
+  statement: taglines.anywhere,
+  supporting: 'In our studio, outdoors, or at your venue, in Jalgaon and beyond.',
+  places: ['In the studio', 'Outdoors', 'At your venue', 'Jalgaon & beyond'],
+};
+
+export const aboutOffer = [
+  { title: 'Studio and outdoor', text: 'In our studio, outdoors, or at your venue.' },
+  { title: 'Any age', text: 'Newborns, babies, children, couples and whole families.' },
+  { title: 'Any delivery format', text: 'Pen drive, Google Drive, WhatsApp or a printed album.' },
+  {
+    title: 'Fully custom albums',
+    text: 'Designed around your photos, in any style, size or finish.',
+  },
+];
+
+export const faqFollowUp = {
+  text: "Didn't find your answer?",
+  cta: 'Ask us on WhatsApp',
+  whatsappMessage: 'Hi, I have a question about a photoshoot.',
+};

@@ -13,6 +13,25 @@
     <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!--
+      Motion gate (spec 8.3), before first paint: hidden "before reveal" states only apply under
+      html.motion-ok, so without JS or with reduced motion everything is visible. html.js gates
+      the image load fade the same way. html.sdt marks support for CSS scroll-driven animations
+      (otherwise an IntersectionObserver fallback runs).
+    -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var sync = function () {
+          root.classList.toggle('motion-ok', !reduce.matches);
+        };
+        sync();
+        reduce.addEventListener('change', sync);
+        if (window.CSS && CSS.supports('animation-timeline: view()')) root.classList.add('sdt');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

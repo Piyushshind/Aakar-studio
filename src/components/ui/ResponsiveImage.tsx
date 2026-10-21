@@ -1,5 +1,6 @@
 import { Camera } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode, type SyntheticEvent } from 'react';
+import { photoFocus } from '@/data/curation';
 import { cn } from '@/lib/cn';
 import { getPhotoSources } from '@/lib/images';
 import { findPhoto, isConsentPending, isPublishable } from '@/lib/photos';
@@ -18,9 +19,12 @@ interface ResponsiveImageProps {
   xl?: boolean;
   /** Wrapper classes (size, rounding, position). */
   className?: string;
+  /** Crop to this aspect ratio (e.g. "3 / 2") instead of the photo's own. */
+  ratio?: string;
   /** Classes for the <img> itself. */
   imgClassName?: string;
   fit?: 'cover' | 'contain';
+  /** Defaults to the photo's focal point in curation.photoFocus (keeps faces in a crop). */
   objectPosition?: string;
   /** Rare: override the manifest alt text (e.g. "" when purely decorative). */
   alt?: string;
@@ -42,6 +46,7 @@ export function ResponsiveImage({
   xl = false,
   className,
   imgClassName,
+  ratio: ratioOverride,
   fit = 'cover',
   objectPosition,
   alt,
@@ -66,7 +71,7 @@ export function ResponsiveImage({
   }
   if (!isPublishable(entry)) return fallback;
 
-  const ratio = `${entry.width} / ${entry.height}`;
+  const ratio = ratioOverride ?? `${entry.width} / ${entry.height}`;
   const sources = getPhotoSources(entry, { xl });
   const label = alt ?? entry.alt;
   if (!sources) {
@@ -74,10 +79,10 @@ export function ResponsiveImage({
   }
 
   const shown = priority || loaded;
-  const objectStyle = { objectFit: fit, objectPosition };
+  const objectStyle = { objectFit: fit, objectPosition: objectPosition ?? photoFocus[entry.id] };
 
   return (
-    <div className={cn('relative overflow-hidden', className)} style={{ aspectRatio: ratio }}>
+    <div className={cn('relative overflow-clip', className)} style={{ aspectRatio: ratio }}>
       {sources.placeholder && !priority && (
         <img
           src={sources.placeholder}
@@ -110,7 +115,8 @@ export function ResponsiveImage({
           className={cn(
             'relative block size-full',
             !priority && 'transition-opacity duration-500 ease-out motion-reduce:transition-none',
-            shown ? 'opacity-100' : 'opacity-0',
+            // Hidden until loaded only when JS runs (it reveals it); without JS it just shows.
+            shown ? 'opacity-100' : 'js:opacity-0',
             imgClassName,
           )}
           style={objectStyle}
@@ -147,11 +153,11 @@ function MissingImage({
   );
 }
 
-/** Dev only (spec 6): marks photos whose consent isn't confirmed yet. */
+/** Dev only (spec 6): marks photos whose consent isn't confirmed yet. Bottom-left, clear of the header. */
 function ConsentBadge({ photo }: { photo: Photo }) {
   if (!import.meta.env.DEV || !isConsentPending(photo)) return null;
   return (
-    <span className="pointer-events-none absolute top-2 left-2 rounded-full bg-bg/80 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-blush uppercase">
+    <span className="pointer-events-none absolute bottom-2 left-2 rounded-full bg-bg/80 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-blush uppercase">
       Consent pending
     </span>
   );

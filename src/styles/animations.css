@@ -1,7 +1,218 @@
 /*
  * Keyframes, masks, clip-paths and CSS scroll-driven animations (spec 2, division of labour).
- * Wrap scroll-driven effects in @supports (animation-timeline: view()) with a static fallback.
+ *
+ * The no-flash rule: every "before" state (hidden, offset, clipped) lives under html.motion-ok,
+ * which index.html sets before first paint only when motion is allowed. Without JS, or with
+ * reduced motion, none of these selectors match and everything is fully visible.
+ * html.sdt = CSS scroll-driven animations are supported; otherwise src/lib/reveal.ts runs an
+ * IntersectionObserver that adds .is-revealed once.
  */
+
+/* ---------- Reveals: <Reveal variant="up | fade | photo | line"> ---------- */
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-y));
+  }
+}
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Photos: a wipe rising from the bottom while the image settles from a slight zoom. The wipe is
+   a "curtain" in the section's own background colour that shrinks upwards (scaleY, composited).
+   Animating clip-path from scroll repainted every photo on every frame: measured at 4x CPU
+   throttle, frames went from 17 ms to 27 ms average, with 50-75 ms long tasks. */
+@keyframes reveal-photo {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+
+[data-tone] {
+  --reveal-curtain: var(--color-bg);
+}
+[data-tone='surface'] {
+  --reveal-curtain: var(--color-surface);
+}
+[data-tone='cream'] {
+  --reveal-curtain: var(--color-cream-bg);
+}
+
+.motion-ok [data-reveal='photo'] {
+  position: relative;
+}
+.motion-ok [data-reveal='photo']::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--reveal-curtain, var(--color-bg));
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+
+@keyframes reveal-photo-img {
+  from {
+    transform: scale(var(--reveal-photo-scale));
+  }
+}
+
+@keyframes reveal-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* The "before" state, shared by both paths: until an element is near the viewport (and so has
+   a live timeline) or revealed, it rests in its starting pose. src/lib/reveal.ts sets the
+   classes. Once .is-revealed, no rule applies and it's simply the element's own style. */
+.motion-ok [data-reveal='up']:not(.is-near, .is-revealed) {
+  opacity: 0;
+  transform: translateY(var(--reveal-y));
+}
+.motion-ok [data-reveal='fade']:not(.is-near, .is-revealed) {
+  opacity: 0;
+}
+.motion-ok [data-reveal='photo']:not(.is-near, .is-revealed)::after {
+  transform: scaleY(1);
+}
+.motion-ok [data-reveal='photo']:not(.is-near, .is-revealed) picture img {
+  transform: scale(var(--reveal-photo-scale));
+}
+.motion-ok [data-reveal='line']:not(.is-near, .is-revealed) {
+  transform: scaleX(0);
+}
+
+/* Scroll-driven (Chrome, Edge, Safari 26+): near the viewport, progress follows the element
+   entering it. A named view timeline on the wrapper lets the inner photo and the curtain share
+   it, whatever their own overflow. Longhands only: the `animation` shorthand would reset
+   animation-timeline. */
+.motion-ok.sdt [data-reveal].is-near {
+  view-timeline: --reveal block;
+}
+
+.motion-ok.sdt [data-reveal].is-near:not([data-reveal='photo']),
+.motion-ok.sdt [data-reveal='photo'].is-near::after,
+.motion-ok.sdt [data-reveal='photo'].is-near picture img {
+  animation-timeline: --reveal;
+  animation-fill-mode: both;
+  animation-duration: auto;
+  animation-timing-function: var(--ease-out);
+  animation-range: entry calc(var(--reveal-i, 0) * var(--reveal-step))
+    entry calc(var(--reveal-range) + var(--reveal-i, 0) * var(--reveal-step));
+}
+
+.motion-ok.sdt [data-reveal='up'].is-near {
+  animation-name: reveal-up;
+}
+.motion-ok.sdt [data-reveal='fade'].is-near {
+  animation-name: reveal-fade;
+}
+.motion-ok.sdt [data-reveal='photo'].is-near::after {
+  animation-name: reveal-photo;
+}
+.motion-ok.sdt [data-reveal='photo'].is-near picture img {
+  animation-name: reveal-photo-img;
+}
+.motion-ok.sdt [data-reveal='line'].is-near {
+  animation-name: reveal-line;
+}
+
+/* Fallback: a one-off time-based transition when .is-revealed arrives. */
+.motion-ok:not(.sdt) [data-reveal],
+.motion-ok:not(.sdt) [data-reveal='photo']::after {
+  transition-property: opacity, transform;
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--ease-expo);
+  transition-delay: calc(var(--reveal-i, 0) * var(--stagger-base));
+}
+.motion-ok:not(.sdt) [data-reveal='photo'] picture img {
+  transition-property: opacity, transform, scale;
+  transition-duration: var(--duration-base), calc(var(--duration-slow) * 1.5), var(--duration-slow);
+  transition-timing-function: var(--ease-out), var(--ease-expo), var(--ease-out);
+}
+
+/* ---------- Kinetic titles (SplitText line masks) ---------- */
+
+/* Masks clip at the padding box: room for Fraunces ascenders and descenders, cancelled by
+   negative margins so the layout doesn't change. A split title is a flex column because
+   adjacent negative block margins would collapse into one and open up the line spacing. */
+:has(> .kinetic-line-mask) {
+  display: flex;
+  flex-direction: column;
+}
+
+.kinetic-line-mask {
+  padding-block: 0.14em;
+  margin-block: -0.14em;
+}
+
+/* ---------- Parallax (desktop, scroll-driven only; spec 5 items 7 and 13) ---------- */
+
+@keyframes parallax {
+  from {
+    translate: 0 var(--parallax, var(--parallax-soft));
+  }
+  to {
+    translate: 0 calc(var(--parallax, var(--parallax-soft)) * -1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .motion-ok.sdt [data-parallax] {
+    animation-name: parallax;
+    animation-timeline: view();
+    animation-fill-mode: both;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-range: cover;
+  }
+}
+
+/* ---------- Scroll progress bar ---------- */
+
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.scroll-progress {
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+}
+
+.sdt .scroll-progress {
+  animation-name: scroll-progress;
+  animation-timeline: scroll(root block);
+  animation-fill-mode: both;
+  animation-duration: auto;
+  animation-timing-function: linear;
+}
+
+/* ---------- Custom cursor (fine pointers, motion allowed) ---------- */
+
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Native cursor where precision matters: text fields, selects and the map. */
+.has-custom-cursor :is(input, textarea, select, iframe, [contenteditable]) {
+  cursor: auto !important;
+}
 
 /* Reduced motion (spec 8.3): only quick opacity fades remain. */
 @media (prefers-reduced-motion: reduce) {

@@ -8,9 +8,11 @@ import App from './App.tsx';
 import { MotionProvider } from './components/common/MotionProvider';
 import { SmoothScrollProvider } from './components/common/SmoothScrollProvider';
 
-// Dev only: validate the photo manifest once (zod never ships to production).
+// Dev only: validate the photo manifest once (zod never ships to production), and check the CSS
+// copies of the motion tokens still match src/lib/motion.ts.
 if (import.meta.env.DEV) {
   void import('./lib/photos.schema').then(({ validateManifest }) => validateManifest());
+  void import('./lib/motion').then(({ checkCssMotionTokens }) => checkCssMotionTokens());
 }
 
 createRoot(document.getElementById('root')!).render(
