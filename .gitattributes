@@ -1,0 +1,37 @@
+# Line endings: store and check out text as LF on every OS, so Windows checkouts stop showing
+# every touched file as changed. Prettier writes LF too (its default endOfLine).
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary: never normalise or diff as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.heic binary
+*.tif binary
+*.tiff binary
+*.psd binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.riv binary
+*.mp4 binary
+*.webm binary
+*.pdf binary
+*.zip binary
+
+# SVG is text (logo artwork is diffed), but keep it LF like everything else.
+*.svg text eol=lf
+
+# Lockfile: text, but don't show its diff by default.
+pnpm-lock.yaml -diff
