@@ -60,7 +60,7 @@ export function SectionHeading({
         {number && (
           <span
             aria-hidden="true"
-            className={cn('h-px w-10', cream ? 'bg-gold-deep/50' : 'bg-gold/60')}
+            className={cn('h-px w-6 sm:w-10', cream ? 'bg-gold-deep/50' : 'bg-gold/60')}
           />
         )}
         <span>{eyebrow}</span>
@@ -69,7 +69,7 @@ export function SectionHeading({
         ref={titleRef}
         id={id}
         className={cn(
-          'section-title mt-6 display text-[clamp(2.5rem,6.2vw,5.75rem)]',
+          'section-title mt-6 display text-[clamp(2.25rem,6.2vw,5.75rem)]',
           split && 'lg:col-span-7',
           cream ? 'text-brown' : 'text-text',
         )}

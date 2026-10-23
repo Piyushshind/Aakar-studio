@@ -17,7 +17,7 @@ export function QuoteBand() {
   return (
     <Section id="quote" spacing="none" aria-labelledby="quote-title" className="quote-band">
       <Container>
-        <Reveal className="relative overflow-clip border border-gold/35 bg-surface px-6 py-16 sm:px-12 lg:grid lg:grid-cols-12 lg:items-end lg:gap-12 lg:px-16 lg:py-24">
+        <Reveal className="relative overflow-clip border border-gold/35 bg-surface px-5 py-12 sm:px-12 sm:py-16 lg:grid lg:grid-cols-12 lg:items-end lg:gap-12 lg:px-16 lg:py-24">
           {/* Soft gold glow in one corner: the only decoration. */}
           <div
             aria-hidden="true"
@@ -25,13 +25,13 @@ export function QuoteBand() {
           />
           <div className="relative lg:col-span-7">
             <p className="flex items-center gap-4 eyebrow text-gold">
-              <span aria-hidden="true" className="h-px w-10 bg-gold/60" />
+              <span aria-hidden="true" className="h-px w-6 bg-gold/60 sm:w-10" />
               Custom quote
             </p>
             <h2
               ref={title}
               id="quote-title"
-              className="section-title mt-6 display text-[clamp(2.5rem,6vw,5.5rem)]"
+              className="section-title mt-6 display text-[clamp(2.25rem,6vw,5.5rem)]"
             >
               {quoteBand.headline}
             </h2>

@@ -164,25 +164,27 @@ function ServiceList() {
             key={service.id}
             data-cursor="enquire"
             data-preview={service.imageId && getPhoto(service.imageId) ? service.id : undefined}
-            className="service-row group relative grid grid-cols-[2.5rem_1fr_5rem] items-start gap-x-4 gap-y-5 border-t border-line py-8 sm:grid-cols-[3.5rem_1fr_7rem] sm:gap-x-6 lg:grid-cols-12 lg:gap-x-10 lg:py-10"
+            className="service-row group relative grid grid-cols-[minmax(0,1fr)_4.5rem] items-start gap-x-4 gap-y-3 border-t border-line py-8 sm:grid-cols-[3.5rem_minmax(0,1fr)_7rem] sm:gap-x-6 sm:gap-y-5 lg:grid-cols-12 lg:gap-x-10 lg:py-10"
           >
+            {/* Phones: the number sits above the title, so the title gets the full width beside
+                the thumbnail. From sm up it's the row's first column again. */}
             <span
               aria-hidden="true"
-              className="pt-2 eyebrow text-gold opacity-60 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 lg:col-span-1 lg:pt-3"
+              className="col-start-1 row-start-1 eyebrow text-gold opacity-60 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 sm:pt-2 lg:col-span-1 lg:pt-3"
             >
               {number(i)}
             </span>
             {/* Title and thumbnail let clicks through to the stretched Enquire link on desktop. */}
-            <h3 className="display text-[clamp(1.75rem,3vw,2.75rem)] transition-[translate] duration-(--duration-base) ease-out motion-safe:group-focus-within:translate-x-3 motion-safe:group-hover:translate-x-3 lg:pointer-events-none lg:col-span-4">
+            <h3 className="col-start-1 row-start-2 display text-[clamp(1.75rem,3vw,2.75rem)] transition-[translate] duration-(--duration-base) ease-out motion-safe:group-focus-within:translate-x-3 motion-safe:group-hover:translate-x-3 sm:col-start-2 sm:row-start-1 lg:pointer-events-none lg:col-span-4">
               {service.title}
             </h3>
             <ServiceMedia
               service={service}
               sizes="(min-width: 1440px) 220px, (min-width: 1024px) 15vw, 7rem"
               iconClassName="size-8 sm:size-10"
-              className="col-start-3 row-start-1 lg:pointer-events-none lg:col-span-2 lg:col-start-11"
+              className="col-start-2 row-span-2 row-start-1 sm:col-start-3 lg:pointer-events-none lg:col-span-2 lg:col-start-11 lg:row-span-1"
             />
-            <div className="service-text col-span-3 sm:col-span-2 sm:col-start-2 lg:col-span-5 lg:col-start-6 lg:row-start-1 lg:pt-2">
+            <div className="service-text col-span-2 row-start-3 sm:col-span-1 sm:col-start-2 sm:row-start-2 lg:col-span-5 lg:col-start-6 lg:row-start-1 lg:pt-2">
               <p className="max-w-[46ch] text-body text-pretty text-muted">{service.description}</p>
               <div className="mt-5">
                 <EnquireLink service={service} />

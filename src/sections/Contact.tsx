@@ -45,14 +45,25 @@ function ActionTile({ action, index }: { action: Action; index: number }) {
       <a
         href={action.href}
         {...(external && { target: '_blank', rel: 'noopener noreferrer' })}
-        className="contact-action group flex h-full items-center gap-5 border border-line bg-bg/40 p-5 hover:border-gold/60 sm:p-6 xl:flex-col xl:items-start xl:gap-10 xl:p-7"
+        className="contact-action group flex h-full items-center gap-4 border border-line bg-bg/40 p-4 hover:border-gold/60 sm:gap-5 sm:p-6 xl:flex-col xl:items-start xl:gap-10 xl:p-7"
       >
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold group-hover:bg-gold group-hover:text-bg">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold group-hover:bg-gold group-hover:text-bg sm:size-12">
           <ActionIcon aria-hidden="true" strokeWidth={1.25} className="size-5" />
         </span>
         <span className="min-w-0">
-          <span className="block eyebrow text-[0.68rem] text-gold">{action.label}</span>
-          <span className="mt-1.5 block truncate text-text/90 xl:mt-2">{action.value}</span>
+          <span className="block eyebrow text-xs text-gold lg:text-[0.68rem]">{action.label}</span>
+          <span className="mt-1.5 block text-text/90 xl:mt-2">
+            {/* Long values (the email) may break only before the "@", never mid-word. */}
+            {action.value.includes('@') ? (
+              <>
+                {action.value.slice(0, action.value.indexOf('@'))}
+                <wbr />
+                {action.value.slice(action.value.indexOf('@'))}
+              </>
+            ) : (
+              action.value
+            )}
+          </span>
         </span>
       </a>
     </Reveal>
@@ -74,13 +85,13 @@ export function Contact() {
         <header>
           <Reveal as="p" className="flex items-center gap-4 eyebrow text-gold">
             <span aria-hidden="true">{number}</span>
-            <span aria-hidden="true" className="h-px w-10 bg-gold/60" />
+            <span aria-hidden="true" className="h-px w-6 bg-gold/60 sm:w-10" />
             <span>{label}</span>
           </Reveal>
           <h2
             ref={title}
             id="contact-title"
-            className="section-title mt-6 max-w-[12ch] display text-[clamp(3rem,9vw,8.5rem)]"
+            className="section-title mt-6 max-w-[12ch] display text-[clamp(2.5rem,9vw,8.5rem)]"
           >
             {typographic(contactHeadline)}
           </h2>
@@ -88,7 +99,7 @@ export function Contact() {
 
         <ul
           aria-label="Get in touch"
-          className="mt-14 grid gap-3 sm:grid-cols-2 lg:mt-20 xl:grid-cols-4 xl:gap-4"
+          className="mt-14 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:mt-20 xl:grid-cols-4 xl:gap-4"
         >
           {ACTIONS.map((action, i) => (
             <ActionTile key={action.label} action={action} index={i} />
@@ -110,7 +121,9 @@ export function Contact() {
                 return (
                   <div key={days} className="flex justify-between gap-6 border-b border-line pb-3">
                     <dt className="text-muted">{days}</dt>
-                    <dd className="text-text/90 tabular-nums">{time}</dd>
+                    <dd className="text-right whitespace-nowrap text-text/90 tabular-nums">
+                      {time}
+                    </dd>
                   </div>
                 );
               })}

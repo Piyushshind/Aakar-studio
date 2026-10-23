@@ -33,14 +33,14 @@ function AboutMark() {
   return (
     <Reveal
       variant="fade"
-      className="about-mark relative flex aspect-[4/5] items-center justify-center border border-gold/25 bg-bg/40 max-lg:aspect-[4/3]"
+      className="about-mark relative flex aspect-square items-center justify-center border border-gold/25 bg-bg/40 sm:aspect-[4/3] lg:aspect-[4/5]"
     >
       <div aria-hidden="true" className="absolute inset-3 border border-line sm:inset-4" />
       {/* Gentle parallax (desktop): the mark drifts inside its still frame. */}
       <div aria-hidden="true" data-parallax className="w-[42%] max-w-56">
         <Logo variant="mark" tone="light" className="w-full" />
       </div>
-      <p className="absolute inset-x-0 bottom-8 text-center eyebrow text-[0.62rem] text-muted sm:bottom-10">
+      <p className="absolute inset-x-0 bottom-8 text-center eyebrow text-xs text-muted sm:bottom-10 lg:text-[0.62rem]">
         {studio.subTagline} · {studio.address.locality}
       </p>
     </Reveal>
@@ -71,7 +71,7 @@ export function About() {
           />
           <Reveal
             as="p"
-            className="mt-10 max-w-[34ch] font-display text-[clamp(1.375rem,2.2vw,1.875rem)] leading-snug text-pretty text-text/95"
+            className="mt-10 max-w-[34ch] font-display text-[clamp(1.25rem,2.2vw,1.875rem)] leading-snug text-pretty text-text/95"
           >
             {lead}
           </Reveal>
@@ -89,7 +89,7 @@ export function About() {
             <span aria-hidden="true" className="h-px w-10 bg-gold/60" />
             <span>
               <span className="block font-display text-xl text-text italic">{studio.owner}</span>
-              <span className="mt-1 block eyebrow text-[0.62rem] text-muted">
+              <span className="mt-1 block eyebrow text-xs text-muted lg:text-[0.62rem]">
                 Owner, {studio.name}
               </span>
             </span>
@@ -116,7 +116,7 @@ export function About() {
             <dl className="about-stats mt-12 grid grid-cols-2 gap-8 sm:grid-cols-3">
               {studio.stats.map((stat) => (
                 <div key={stat.label}>
-                  <dt className="eyebrow text-[0.62rem] text-muted">{stat.label}</dt>
+                  <dt className="eyebrow text-xs text-muted lg:text-[0.62rem]">{stat.label}</dt>
                   <dd className="mt-2 display text-5xl text-gold">
                     {stat.value}
                     {stat.suffix}

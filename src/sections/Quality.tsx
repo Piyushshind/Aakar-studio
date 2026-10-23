@@ -129,7 +129,9 @@ export function Quality() {
                     key={stop.label}
                     className="quality-caption invisible absolute bottom-0 left-0 w-max rounded-xs border border-gold/40 bg-bg/75 px-4 py-3 opacity-0 backdrop-blur-md"
                   >
-                    <span className="block eyebrow text-[0.62rem] text-gold">{stop.label}</span>
+                    <span className="block eyebrow text-xs text-gold lg:text-[0.62rem]">
+                      {stop.label}
+                    </span>
                     <span className="mt-1 block font-display text-lg text-text">{stop.text}</span>
                   </li>
                 ))}
@@ -157,7 +159,9 @@ export function Quality() {
                 imgClassName="origin-(--focus) scale-[4]"
               />
             </div>
-            <figcaption className="mt-3 eyebrow text-[0.6rem] text-muted">Up close</figcaption>
+            <figcaption className="mt-3 eyebrow text-xs text-muted lg:text-[0.6rem]">
+              Up close
+            </figcaption>
           </Reveal>
         </div>
 

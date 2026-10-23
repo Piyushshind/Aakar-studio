@@ -107,7 +107,7 @@ export function Header() {
           href="#top"
           onClick={goTo('top')}
           aria-label="Aakar Digital Photo Studio, back to top"
-          className="shrink-0"
+          className="shrink-0 py-1"
         >
           <Logo variant="horizontal" compact tone="light" className="h-9 w-auto lg:h-11" />
         </a>
@@ -119,7 +119,7 @@ export function Header() {
                 <a
                   href={`#${item.id}`}
                   onClick={goTo(item.id)}
-                  className="link-draw eyebrow text-[0.7rem] text-text/80 hover:text-gold-light"
+                  className="link-draw eyebrow text-xs text-text/80 hover:text-gold-light lg:text-[0.7rem]"
                 >
                   {item.label}
                 </a>

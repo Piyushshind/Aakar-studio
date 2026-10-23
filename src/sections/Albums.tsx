@@ -54,7 +54,7 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
       </div>
       <div className="mt-6 flex items-start justify-between gap-6">
         <div>
-          <p className="eyebrow text-[0.65rem] text-gold">{album.type}</p>
+          <p className="eyebrow text-xs text-gold lg:text-[0.65rem]">{album.type}</p>
           <h3 className="mt-3 display text-[clamp(1.75rem,2.6vw,2.5rem)]">
             {/* Stretched button: the whole card opens the album viewer (Phase 8). */}
             <button
@@ -73,7 +73,7 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
             </p>
           )}
         </div>
-        <p className="shrink-0 pt-0.5 eyebrow text-[0.65rem] text-muted">
+        <p className="shrink-0 pt-0.5 eyebrow text-xs text-muted lg:text-[0.65rem]">
           {pageCount} {pageCount === 1 ? 'page' : 'pages'}
         </p>
       </div>

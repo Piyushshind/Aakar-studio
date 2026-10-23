@@ -637,7 +637,9 @@ Use this copy as written in `src/data/`. Items marked TBD stay as placeholders u
 | Google Maps link | https://maps.app.goo.gl/WQSiiJc4WbKtbNfx6 (Directions button and `hasMap`) |
 | Map embed | Use `https://www.google.com/maps?q=Om+Chamber+Jalgaon+Court+Jalgaon+425001&output=embed` until the official embed code from Google Maps (Share → Embed a map) is provided |
 | Founded / years in business | TBD |
-| Instagram / Facebook / YouTube | TBD (user will send) |
+| Instagram | https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=x0anqvb (invite link as sent; profile URL with the handle to follow) |
+| Facebook | https://www.facebook.com/prakash.sonawane.165 (the share link https://www.facebook.com/share/1E2ZAVXkG1/ resolves to this personal profile) |
+| YouTube | TBD |
 | Domain | TBD |
 
 ### 17.2 Taglines
@@ -741,7 +743,7 @@ Let's capture your story.
 
 - [ ] **Consent (launch blocker):** confirm parents agreed for every child photo used (49 photos), and the wedding couple agreed for the wedding-01 album (shows names, date and guests)
 - [ ] Confirm opening hours are AM/PM as assumed (10 AM – 8 PM, Sunday 10 AM – 3 PM)
-- [ ] Confirm the owner's name spelling: Prakash S. Suryawanshi
+- [ ] Confirm the owner's name spelling: Prakash S. Suryawanshi (the Facebook link resolves to a profile named prakash.sonawane: which surname is right, and is that the studio's account?)
 - [ ] What are DSC00006 and DSC00008 (woman, floral arch): maternity, portrait or something else?
 - [ ] Does the studio offer regular wedding or event video coverage (not cinematic films)? If yes, add it as a service
 - [ ] For baby shoots, does the studio provide props and themed backdrops? (The themed sets in the photos suggest yes)
@@ -753,7 +755,7 @@ Let's capture your story.
 - [ ] A cover for the beach-baby album
 - [ ] Before/after photo pairs (section hidden without them)
 - [ ] Year the studio started (optional)
-- [ ] Instagram, Facebook and YouTube links
+- [ ] Instagram profile URL (instagram.com/<handle>/, the invite link may expire or need a login), a Facebook business Page if there is one, and YouTube
 - [ ] Real customer reviews (from the Google Maps listing, with permission to quote)
 - [ ] Real numbers for stats (optional; section hidden without them)
 - [x] Logo approved by the user and the owner (2026-10-21)
@@ -778,6 +780,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-23 | Instagram and Facebook links added (17.1, `studio.socials`): shown in the footer; the social grid stays hidden until posts are provided. Owner-name and Instagram-handle questions in 18.1 |
 | 2026-10-23 | WebGL: hand-written WebGL2 module instead of three + R3F, approved by the user (section 2 table): measured lazy chunk 2.1 KB gz versus 335.6 KB |
 | 2026-10-23 | Signature moment 5 (album cover into flip-book) moved from Phase 7 to Phase 8, with the album viewer (8.1, 14). `.gitattributes` added (LF line endings) |
 | 2026-10-23 | Product photography removed (1, 5, 11, 17.3, 17.6, 17.11, 18.2); services are now eight. 6 new photos added with the new `pnpm images:add` (7.3): newborn, maternity and pre-wedding service cards and the baby band use them, and the gallery now filters by category. `family.jpg` withheld (another studio's branding, 18.1). `scripts/new_added_photos/` git-ignored |

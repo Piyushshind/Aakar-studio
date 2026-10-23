@@ -32,12 +32,13 @@ const VARIANTS: Record<'dark' | 'cream', Record<ButtonVariant, string>> = {
   dark: {
     primary: `bg-gold text-bg motion-reduce:hover:bg-gold-light ${SHEEN}`,
     secondary: `border border-text/35 text-text before:bg-gold/12 hover:border-gold ${FILL}`,
-    ghost: 'px-0 text-text hover:text-gold-light',
+    // Ghost: invisible vertical padding (cancelled by negative margin) for a 44px tap target.
+    ghost: '-my-3.5 px-0 py-3.5 text-text hover:text-gold-light',
   },
   cream: {
     primary: `bg-brown text-cream-bg motion-reduce:hover:bg-[#4a2f1d] ${SHEEN}`,
     secondary: `border border-brown/40 text-brown before:bg-brown/8 hover:border-brown ${FILL}`,
-    ghost: 'px-0 text-brown',
+    ghost: '-my-3.5 px-0 py-3.5 text-brown',
   },
 };
 
@@ -48,7 +49,11 @@ const GHOST_LINE = {
     'relative before:absolute before:inset-x-0 before:-bottom-2 before:h-px before:bg-brown/40 after:absolute after:inset-x-0 after:-bottom-2 after:h-px after:origin-right after:scale-x-0 after:bg-brown after:transition-[scale] after:duration-(--duration-base) group-hover/button:after:origin-left group-hover/button:after:scale-x-100 group-focus-visible/button:after:origin-left group-focus-visible/button:after:scale-x-100',
 };
 
-const SIZES = { md: 'h-11 px-5 text-[0.7rem]', lg: 'h-13 px-7 text-xs' };
+// min-height, not height: on phones a long label may wrap (below) and the button grows.
+const SIZES = {
+  md: 'min-h-11 px-5 py-2 text-xs lg:text-[0.7rem]',
+  lg: 'min-h-13 px-7 py-2.5 text-xs',
+};
 
 /**
  * CTA button (spec 5): primary gold, secondary outline, ghost text link. Renders <a> with
@@ -66,12 +71,12 @@ export function Button(props: ButtonAsButton | ButtonAsLink) {
   } = props;
   const ghost = variant === 'ghost';
   const classes = cn(
-    'group/button inline-flex items-center justify-center gap-2.5 rounded-xs font-semibold tracking-[0.2em] whitespace-nowrap uppercase transition-[scale] duration-(--duration-fast) motion-safe:active:scale-[0.97]',
+    'group/button inline-flex items-center justify-center gap-2.5 rounded-xs font-semibold tracking-[0.2em] text-center whitespace-normal sm:whitespace-nowrap uppercase transition-[scale] duration-(--duration-fast) motion-safe:active:scale-[0.97]',
     // The sheen and fill are clipped to the button; the ghost underline sits below it.
     !ghost && 'relative isolate overflow-clip',
     SIZES[size],
     VARIANTS[tone][variant],
-    ghost && 'h-auto',
+    ghost && 'min-h-0',
     className,
   );
   const content = (

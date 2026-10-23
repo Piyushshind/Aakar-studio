@@ -24,7 +24,9 @@ export function Testimonials() {
                 </blockquote>
                 <figcaption className="mt-6">
                   <span className="block text-text">{t.name}</span>
-                  <span className="mt-1 block eyebrow text-[0.62rem] text-muted">{t.event}</span>
+                  <span className="mt-1 block eyebrow text-xs text-muted lg:text-[0.62rem]">
+                    {t.event}
+                  </span>
                 </figcaption>
               </figure>
             </li>

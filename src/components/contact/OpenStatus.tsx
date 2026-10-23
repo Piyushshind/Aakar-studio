@@ -27,7 +27,7 @@ export function OpenStatus({ className }: { className?: string }) {
   return (
     <p
       className={cn(
-        'open-status inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 text-sm',
+        'open-status inline-flex flex-wrap items-center gap-x-2.5 gap-y-0.5 rounded-2xl border px-3.5 py-1.5 text-sm',
         status.open ? 'border-[#8fbf8f]/40 text-text' : 'border-line text-muted',
         className,
       )}
@@ -37,7 +37,7 @@ export function OpenStatus({ className }: { className?: string }) {
         className={cn('size-2 rounded-full', status.open ? 'bg-[#8fbf8f]' : 'bg-muted/70')}
       />
       <span className="font-semibold">{label}</span>
-      {detail && <span className="text-muted">· {detail}</span>}
+      {detail && <span className="whitespace-nowrap text-muted">· {detail}</span>}
     </p>
   );
 }

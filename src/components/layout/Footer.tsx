@@ -21,13 +21,13 @@ export function Footer() {
 
         <nav aria-label="Footer" className="lg:col-span-2">
           <h2 className="eyebrow text-gold">Explore</h2>
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-3 space-y-0.5">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={goTo(item.id)}
-                  className="link-draw text-text/80 hover:text-gold-light"
+                  className="link-draw inline-block py-2.5 text-text/80 [--link-pad:0.625rem] hover:text-gold-light"
                 >
                   {item.label}
                 </a>
@@ -55,14 +55,20 @@ export function Footer() {
 
         <div className="lg:col-span-3">
           <h2 className="eyebrow text-gold">Contact</h2>
-          <ul className="mt-5 space-y-3 text-text/80">
+          <ul className="mt-3 space-y-0.5 text-text/80">
             <li>
-              <a href={telLink()} className="link-draw hover:text-gold-light">
+              <a
+                href={telLink()}
+                className="link-draw inline-block py-2.5 [--link-pad:0.625rem] hover:text-gold-light"
+              >
                 {studio.phone}
               </a>
             </li>
             <li>
-              <a href={mailtoLink()} className="link-draw break-all hover:text-gold-light">
+              <a
+                href={mailtoLink()}
+                className="link-draw inline-block py-2.5 break-all [--link-pad:0.625rem] hover:text-gold-light"
+              >
                 {studio.email}
               </a>
             </li>
@@ -72,7 +78,7 @@ export function Footer() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-draw hover:text-gold-light"
+                  className="link-draw inline-block py-2.5 [--link-pad:0.625rem] hover:text-gold-light"
                 >
                   {s.platform}
                 </a>

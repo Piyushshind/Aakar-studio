@@ -31,7 +31,7 @@ export function AnywhereBand() {
         <h2
           ref={title}
           id="anywhere-title"
-          className="section-title mx-auto mt-14 max-w-[16ch] display text-[clamp(2.75rem,7.5vw,7rem)] lg:mt-20"
+          className="section-title mx-auto mt-14 max-w-[16ch] display text-[clamp(2.375rem,7.5vw,7rem)] lg:mt-20"
         >
           {typographic(anywhereBand.statement)}
         </h2>
@@ -51,7 +51,7 @@ export function AnywhereBand() {
           {anywhereBand.places.map((place, i) => (
             <li
               key={place}
-              className="flex items-center justify-center gap-6 eyebrow text-[0.68rem] tracking-[0.22em] whitespace-nowrap text-gold sm:tracking-[0.32em]"
+              className="flex items-center justify-center gap-6 eyebrow text-xs tracking-[0.22em] whitespace-nowrap text-gold sm:tracking-[0.32em] lg:text-[0.68rem]"
             >
               {i > 0 && (
                 <span

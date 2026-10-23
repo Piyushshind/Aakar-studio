@@ -54,7 +54,7 @@ export function Faq() {
               <summary className="flex cursor-pointer list-none items-start gap-5 py-6 lg:gap-8 lg:py-8 [&::-webkit-details-marker]:hidden">
                 <span
                   aria-hidden="true"
-                  className="w-6 shrink-0 pt-2 eyebrow text-[0.65rem] text-gold"
+                  className="w-6 shrink-0 pt-2 eyebrow text-xs text-gold lg:text-[0.65rem]"
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>

@@ -175,7 +175,7 @@ export function Hero() {
           aria-label="Scroll to the next section"
         >
           <span aria-hidden="true" className="h-px w-12 bg-gold/70" />
-          <span className="eyebrow text-[0.65rem] text-text/70">Scroll</span>
+          <span className="eyebrow text-xs text-text/70 lg:text-[0.65rem]">Scroll</span>
         </a>
       </Container>
     </Section>
@@ -431,12 +431,12 @@ function HeroMedia({ slides }: { slides: Photo[] }) {
         />
 
         {count > 1 && (
-          <div className="hero-intro hero-controls absolute right-4 bottom-4 z-10 flex items-center gap-1 rounded-full border border-line bg-bg/60 py-1 pr-2 pl-1 backdrop-blur-md lg:right-[max(var(--gutter),calc((100vw_-_1440px)/2_+_var(--gutter)))] lg:bottom-8">
+          <div className="hero-intro hero-controls absolute right-4 bottom-4 z-10 flex items-center rounded-full border border-line bg-bg/60 pr-2 pl-0.5 backdrop-blur-md lg:right-[max(var(--gutter),calc((100vw_-_1440px)/2_+_var(--gutter)))] lg:bottom-8">
             <button
               type="button"
               onClick={() => setPlaying((p) => !p)}
               aria-label={playing ? 'Pause slideshow' : 'Play slideshow'}
-              className="flex size-8 items-center justify-center rounded-full text-text hover:text-gold-light"
+              className="flex size-11 items-center justify-center rounded-full text-text hover:text-gold-light"
             >
               {playing ? (
                 <Pause aria-hidden="true" className="size-3.5" strokeWidth={1.75} />
@@ -451,7 +451,7 @@ function HeroMedia({ slides }: { slides: Photo[] }) {
                 onClick={() => show(i)}
                 aria-label={`Show photo ${i + 1} of ${count}`}
                 aria-current={i === current ? 'true' : undefined}
-                className="group/dot flex size-6 items-center justify-center"
+                className="group/dot flex h-11 w-6 items-center justify-center"
               >
                 {/* A fixed pill that stretches on X when current (scale and opacity only). */}
                 <span

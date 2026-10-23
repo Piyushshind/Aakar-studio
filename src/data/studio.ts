@@ -37,7 +37,16 @@ export const studio: StudioInfo = {
   mapLink: 'https://maps.app.goo.gl/WQSiiJc4WbKtbNfx6',
   // Placeholder until the official Google Maps embed code is provided (spec 17.1).
   mapEmbedUrl: 'https://www.google.com/maps?q=Om+Chamber+Jalgaon+Court+Jalgaon+425001&output=embed',
-  socials: [], // TBD: Instagram, Facebook, YouTube
+  // Spec 17.1. Facebook: where the owner's share link resolves (a personal profile).
+  // Instagram: the invite link as given; replace with the profile URL (instagram.com/<handle>/)
+  // once the handle is known. YouTube: TBD.
+  socials: [
+    {
+      platform: 'Instagram',
+      url: 'https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=x0anqvb',
+    },
+    { platform: 'Facebook', url: 'https://www.facebook.com/prakash.sonawane.165' },
+  ],
   stats: [], // only real numbers; the stats block hides while empty
   // foundedYear: TBD
 };

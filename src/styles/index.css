@@ -95,8 +95,12 @@
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.24em;
   line-height: 1.4;
+  /* Wider tracking from 640px; on phones 0.32em made short labels wrap at 320-360px. */
+  @media (min-width: 640px) {
+    letter-spacing: 0.32em;
+  }
   text-transform: uppercase;
 }
 
@@ -131,7 +135,7 @@
     content: '';
     position: absolute;
     inset-inline: 0;
-    bottom: -0.25em;
+    bottom: calc(var(--link-pad, 0px) - 0.25em);
     height: 1px;
     background: currentColor;
     transform: scaleX(0);

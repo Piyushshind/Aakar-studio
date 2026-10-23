@@ -140,7 +140,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               {studio.phone}
             </Button>
           </div>
-          <p className="eyebrow text-[0.65rem] text-muted">
+          <p className="eyebrow text-xs text-muted lg:text-[0.65rem]">
             {studio.subTagline} · {studio.address.locality}
           </p>
         </Container>

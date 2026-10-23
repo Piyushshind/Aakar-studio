@@ -35,7 +35,7 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="eyebrow text-[0.65rem] text-text/80">
+      <label htmlFor={id} className="eyebrow text-xs text-text/80 lg:text-[0.65rem]">
         {label}
         {optional && (
           <span className="ml-2 tracking-[0.12em] text-muted normal-case">(optional)</span>

@@ -77,7 +77,8 @@ export function Gallery() {
           layout="split"
         />
 
-        <Reveal className="-mx-(--gutter) mt-14 scrollbar-thin overflow-x-auto px-(--gutter)">
+        {/* Phones: the tab row scrolls; its right edge fades to say so. */}
+        <Reveal className="-mx-(--gutter) mt-14 scrollbar-thin overflow-x-auto [mask-image:linear-gradient(to_right,#000_calc(100%-3rem),transparent)] px-(--gutter) pr-12 lg:[mask-image:none] lg:pr-(--gutter)">
           <ul
             role="group"
             aria-label={galleryFilterMode === 'theme' ? 'Filter by theme' : 'Filter by category'}
@@ -95,14 +96,14 @@ export function Gallery() {
                       setExpanded(false);
                     }}
                     className={cn(
-                      '-mb-px flex items-baseline gap-1.5 border-b py-4 eyebrow text-[0.68rem] whitespace-nowrap',
+                      '-mb-px flex items-baseline gap-1.5 border-b py-4 eyebrow text-xs whitespace-nowrap lg:text-[0.68rem]',
                       active
                         ? 'border-gold text-text'
                         : 'border-transparent text-muted hover:text-text',
                     )}
                   >
                     {t.label}
-                    <span className="text-[0.6rem] tracking-normal text-muted/80">
+                    <span className="text-xs tracking-normal text-muted/80 lg:text-[0.6rem]">
                       {t.photos.length}
                     </span>
                   </button>
@@ -268,7 +269,7 @@ function BestOfStrip() {
         <h3 id="best-of-title" className="eyebrow text-gold">
           {bestOfLabel}
         </h3>
-        <p aria-hidden="true" className="eyebrow text-[0.65rem] text-muted">
+        <p aria-hidden="true" className="eyebrow text-xs text-muted lg:text-[0.65rem]">
           Scroll →
         </p>
       </Reveal>
@@ -295,7 +296,7 @@ function BestOfStrip() {
             onClick={goTo('work')}
             className={`best-of-item group/more ${ITEM_HEIGHT} flex w-[clamp(240px,22vw,340px)] shrink-0 snap-start flex-col justify-between border border-gold/30 p-8 hover:border-gold/70`}
           >
-            <span className="eyebrow text-[0.65rem] text-gold">{bestOfLabel}</span>
+            <span className="eyebrow text-xs text-gold lg:text-[0.65rem]">{bestOfLabel}</span>
             <span>
               <span className="block display text-[clamp(2rem,3vw,2.75rem)]">See all work</span>
               <ArrowUpRight
