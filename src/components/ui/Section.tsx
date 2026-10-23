@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentProps } from 'react';
 import { cn } from '@/lib/cn';
 
 export type SectionTone = 'dark' | 'surface' | 'cream';
@@ -9,7 +9,7 @@ const TONES: Record<SectionTone, string> = {
   cream: 'bg-cream-bg text-brown',
 };
 
-interface SectionProps extends ComponentPropsWithoutRef<'section'> {
+interface SectionProps extends ComponentProps<'section'> {
   id: string;
   tone?: SectionTone;
   /** Vertical rhythm: 'none' for sections that manage their own spacing (hero, bands). */

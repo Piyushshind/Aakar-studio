@@ -37,7 +37,10 @@ function LenisScrollTriggerSync() {
       if (!lenis) return;
       const raf = (time: number) => lenis.raf(time * 1000);
       const offScroll = lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(raf);
+      // Prioritised: Lenis scrolls before GSAP renders its tweens. The other way round, Lenis's
+      // window.scrollTo() lands right after GSAP has written transforms and forces a synchronous
+      // style recalc every frame (measured: ~60% of the tick while scrolling the pinned strip).
+      gsap.ticker.add(raf, false, true);
       gsap.ticker.lagSmoothing(0);
       setActiveLenis(lenis);
       ScrollTrigger.refresh();

@@ -22,10 +22,22 @@ export const reveal = {
 } as const;
 
 export const loop = {
+  /** Seconds each hero photo stays before the next crossfade. */
+  heroSlide: 6,
   /** Seconds for one marquee cycle at base speed. */
   marquee: 38,
   /** Max marquee speed multiplier from scroll velocity. */
   marqueeBoost: 5,
+} as const;
+
+/** Logo preloader (spec 5 item 1): finishes once the hero image is loaded and `min` has passed,
+ * and opens by `max` whatever happens. */
+export const preloader = {
+  min: 1.1,
+  max: 1.4,
+  /** Seconds after navigation: if the app mounts later than this, skip the preloader rather
+   * than covering a page that's already been waiting. */
+  lateMount: 2,
 } as const;
 
 /** Parallax travel in px (desktop only, spec 5 items 7 and 13). */

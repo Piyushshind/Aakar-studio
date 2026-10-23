@@ -10,9 +10,22 @@ export const excludedPhotos: Record<string, string> = {
     'Back cover shows an older blue Aakar logo; hidden until the owner confirms which logo is current.',
 };
 
-/** The single hero photo used until the Phase 7 crossfade (one of heroPhotoIds). */
+/** The first hero photo: the LCP image (preloaded) and the only one with reduced motion. */
 // Not traditional-flowers-03: it is the only -xl master, so the photo-quality section uses it.
 export const heroLeadPhotoId = 'baby-kids-kutchi-traditional-01';
+
+/**
+ * Hero crossfade, in order (Phase 7): the lead photo, then four from heroPhotoIds picked for
+ * varied palettes: earthy farm, bright beach, cool blue, soft pink. traditional-flowers-01 and
+ * krishna-theme-01 share the lead's orange backdrop, so they're left out.
+ */
+export const heroSlideIds = [
+  heroLeadPhotoId,
+  'baby-kids-farm-theme-01',
+  'baby-kids-beach-theme-04',
+  'baby-kids-blue-sky-01',
+  'baby-kids-pink-winter-01',
+];
 
 /**
  * object-position focal points that keep faces in frame when a photo is cropped (spec 4.4).
@@ -24,6 +37,11 @@ export const photoFocus: Record<string, string> = {
   'baby-kids-pink-winter-02': '45% 45%',
   'baby-kids-first-birthday-01': '42% 60%',
   'baby-kids-teddy-theme-01': '50% 40%',
+  // Hero slides: the child stays in the roughly square split-layout panel.
+  'baby-kids-farm-theme-01': '45% 60%',
+  'baby-kids-beach-theme-04': '45% 65%',
+  'baby-kids-blue-sky-01': '72% 55%',
+  'baby-kids-pink-winter-01': '40% 55%',
   // 4:3 service thumbnails and previews of portrait photos: keep faces in the crop.
   'maternity-portrait-01': '50% 22%',
   'pre-wedding-outdoor-03': '50% 20%',

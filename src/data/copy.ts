@@ -93,6 +93,21 @@ export const qualityCopy = {
   body: 'Look closer: the embroidery, the jewellery, the tiniest expressions. Every photograph is carefully lit, shot and edited so the details hold up, on screen and in print.',
 };
 
+// Zoom-into-detail stops (Phase 7), on traditional-flowers-03. DRAFT copy: needs approval.
+// x, y: the detail's position as fractions of the photo; scale: zoom (≤ 2.2 keeps the 4000px -xl
+// master sharp on a 2x screen at 1440); label + text: the caption that fades in at the stop.
+export const qualityStops = [
+  { x: 0.56, y: 0.68, scale: 2, label: 'The embroidery', text: 'Every thread and mirror, crisp.' },
+  { x: 0.55, y: 0.5, scale: 2.2, label: 'The jewellery', text: 'Fine metalwork in true colour.' },
+  {
+    x: 0.51,
+    y: 0.31,
+    scale: 2.2,
+    label: 'The expression',
+    text: "The moment you'll want to keep.",
+  },
+];
+
 // Gallery "Best of" strip label.
 export const bestOfLabel = 'Best of the studio';
 

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { FloatingButtons } from '@/components/common/FloatingButtons';
+import { Preloader } from '@/components/common/Preloader';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
 import { CustomCursor } from '@/components/cursor/CustomCursor';
 import { Footer } from '@/components/layout/Footer';
@@ -66,6 +67,8 @@ function App() {
       <ScrollProgress />
       <FloatingButtons />
       <CustomCursor />
+      {/* Logo preloader: first visit this session only, motion allowed (spec 5 item 1). */}
+      <Preloader />
     </>
   );
 }

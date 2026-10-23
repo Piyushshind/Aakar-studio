@@ -141,6 +141,49 @@
   transition-timing-function: var(--ease-out), var(--ease-expo), var(--ease-out);
 }
 
+/* ---------- Preloader cover (html.intro, set by index.html) ---------- */
+
+/* Holds the first frames until the Preloader component mounts (it removes html.intro). If the
+   app never starts, the cover fades away by itself after 3 s: it can never block the page. */
+@keyframes intro-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.intro body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--color-bg);
+  animation: intro-failsafe var(--duration-fast) 3s forwards;
+}
+
+/* ---------- Hero slides: gentle Ken Burns (CSS crossfade mode) ---------- */
+
+/* The current photo eases in a little over its time on screen (--hero-slide, from motion.ts
+   loop.heroSlide), and keeps going while it fades out so it never jumps back. Off when the
+   WebGL layer draws over the slides, and without motion. */
+@keyframes hero-kenburns {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.07;
+  }
+}
+
+.motion-ok .hero-slide:is(.is-active, .is-leaving) .hero-kb {
+  animation: hero-kenburns calc(var(--hero-slide) + var(--duration-slow) * 2) linear both;
+}
+
+/* As specific as the rule above (plus later), so the WebGL layer reliably switches it off. */
+.motion-ok .hero-media[data-gl='on'] .hero-slide .hero-kb {
+  animation: none;
+}
+
 /* ---------- Kinetic titles (SplitText line masks) ---------- */
 
 /* Masks clip at the padding box: room for Fraunces ascenders and descenders, cancelled by

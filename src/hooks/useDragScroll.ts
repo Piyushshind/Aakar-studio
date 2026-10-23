@@ -1,13 +1,22 @@
 import { useEffect, type RefObject } from 'react';
+import type { ScrollTrigger } from '@/lib/gsap';
+import { getActiveLenis } from '@/lib/scroll';
 
 const DRAG_THRESHOLD = 5; // px before a press becomes a drag (a smaller move is still a click)
 
 /**
- * Mouse drag-to-scroll for a native horizontal scroller (the "Best of" strip, until Phase 7 pins
- * it). Touch and pen keep native scrolling; scroll-snap is paused while dragging so the strip
- * settles on the nearest photo after, and the click that ends a drag doesn't open a photo.
+ * Mouse drag-to-scroll for the "Best of" strip. Touch and pen keep native scrolling.
+ * - Native row (mobile, reduced motion): drags the row's scrollLeft; scroll-snap pauses while
+ *   dragging so the row settles on the nearest photo after.
+ * - Pinned strip (desktop, `pin` set): drags the page through the pin instead, `scrollPerPx`
+ *   page pixels per pixel of rail travel, so the rail follows the pointer one-to-one.
+ * The click that ends a drag never opens a photo.
  */
-export function useDragScroll(ref: RefObject<HTMLElement | null>) {
+export function useDragScroll(
+  ref: RefObject<HTMLElement | null>,
+  pin?: RefObject<ScrollTrigger | null>,
+  scrollPerPx = 1,
+) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -15,6 +24,7 @@ export function useDragScroll(ref: RefObject<HTMLElement | null>) {
     let startScroll = 0;
     let pressed = false;
     let dragging = false;
+    let pinnedDrag = false;
 
     const onMove = (event: PointerEvent) => {
       if (!pressed) return;
@@ -25,7 +35,16 @@ export function useDragScroll(ref: RefObject<HTMLElement | null>) {
         el.style.scrollSnapType = 'none';
         el.dataset.dragging = 'true';
       }
-      el.scrollLeft = startScroll - dx;
+      if (pinnedDrag) {
+        const st = pin?.current;
+        const target = startScroll - dx * scrollPerPx;
+        const y = st ? Math.min(st.end, Math.max(st.start, target)) : target;
+        const lenis = getActiveLenis();
+        if (lenis) lenis.scrollTo(y, { immediate: true });
+        else window.scrollTo(0, y);
+      } else {
+        el.scrollLeft = startScroll - dx;
+      }
     };
     const onUp = () => {
       pressed = false;
@@ -47,8 +66,9 @@ export function useDragScroll(ref: RefObject<HTMLElement | null>) {
       if (event.pointerType !== 'mouse' || event.button !== 0) return;
       event.preventDefault(); // no native image drag or text selection
       pressed = true;
+      pinnedDrag = Boolean(pin?.current);
       startX = event.clientX;
-      startScroll = el.scrollLeft;
+      startScroll = pinnedDrag ? window.scrollY : el.scrollLeft;
       window.addEventListener('pointermove', onMove);
       window.addEventListener('pointerup', onUp);
     };
@@ -59,5 +79,5 @@ export function useDragScroll(ref: RefObject<HTMLElement | null>) {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
     };
-  }, [ref]);
+  }, [ref, pin, scrollPerPx]);
 }

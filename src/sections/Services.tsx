@@ -64,6 +64,11 @@ function ServiceMedia({
   );
 }
 
+/**
+ * The row's one real link. On desktop its ::after stretches over the whole row (the row is its
+ * positioning box), so clicking anywhere on the row enquires without a second, nested or
+ * duplicate link. The link itself stays unpositioned there so the pseudo-element reaches the row.
+ */
 function EnquireLink({ service }: { service: Service }) {
   return (
     <Button
@@ -71,7 +76,7 @@ function EnquireLink({ service }: { service: Service }) {
       variant="ghost"
       icon={<ArrowUpRight />}
       aria-label={`Enquire about ${service.title} on WhatsApp`}
-      className="relative z-10 flex-row-reverse"
+      className="flex-row-reverse lg:after:absolute lg:after:inset-0 lg:after:content-['']"
     >
       Enquire
     </Button>
@@ -153,7 +158,6 @@ function ServiceList() {
   return (
     <ol ref={list} className="services-list relative mt-16 border-b border-line lg:mt-24">
       {services.map((service, i) => {
-        const href = whatsappLink(service.whatsappMessage);
         return (
           <Reveal
             as="li"
@@ -162,23 +166,13 @@ function ServiceList() {
             data-preview={service.imageId && getPhoto(service.imageId) ? service.id : undefined}
             className="service-row group relative grid grid-cols-[2.5rem_1fr_5rem] items-start gap-x-4 gap-y-5 border-t border-line py-8 sm:grid-cols-[3.5rem_1fr_7rem] sm:gap-x-6 lg:grid-cols-12 lg:gap-x-10 lg:py-10"
           >
-            {/* Desktop: the whole row opens the enquiry. Mouse-only duplicate of the Enquire
-                link, so it's hidden from keyboards and screen readers. */}
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabIndex={-1}
-              aria-hidden="true"
-              className="absolute inset-0 hidden lg:block"
-            />
             <span
               aria-hidden="true"
               className="pt-2 eyebrow text-gold opacity-60 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 lg:col-span-1 lg:pt-3"
             >
               {number(i)}
             </span>
-            {/* Title and thumbnail let clicks through to the row link on desktop. */}
+            {/* Title and thumbnail let clicks through to the stretched Enquire link on desktop. */}
             <h3 className="display text-[clamp(1.75rem,3vw,2.75rem)] transition-[translate] duration-(--duration-base) ease-out motion-safe:group-focus-within:translate-x-3 motion-safe:group-hover:translate-x-3 lg:pointer-events-none lg:col-span-4">
               {service.title}
             </h3>

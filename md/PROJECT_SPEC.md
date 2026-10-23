@@ -105,8 +105,8 @@ Use one tool per job, and never animate the same property of the same element wi
 | Smooth scroll | Lenis (`lenis/react`) | One instance at app root, synced with ScrollTrigger |
 | UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` |
 | Simple scroll effects | Native CSS scroll-driven animations | Reveals, progress bar, light parallax; wrap in `@supports` with a fallback |
-| WebGL | three, @react-three/fiber, @react-three/drei | Signature moments only, lazy-loaded |
-| Post-processing | @react-three/postprocessing | Optional, subtle |
+| WebGL | Hand-written WebGL2 module (`src/components/webgl/heroGL.ts`) | Hero transition only, lazy-loaded. Chosen over three + R3F by measurement (2026-10-23): lazy chunk 2.1 KB gz versus 335.6 KB (three alone 135.1 KB) for one full-screen plane. three / R3F stay installed but unused |
+| Post-processing | none | Not needed for one shader |
 | Interactive vector | Rive (`@rive-app/react-canvas`) | Optional, e.g. camera shutter loader |
 | Carousels | embla-carousel-react (+ autoplay plugin) | |
 | Lightbox | yet-another-react-lightbox (Zoom, Thumbnails, Captions) | Or custom Motion + GSAP Flip |
@@ -458,7 +458,7 @@ With four categories the gallery filters by category (section 5, item 6): All, N
 2. Hero WebGL photo crossfade and kinetic headline
 3. Zoom-into-detail quality section (plus before/after when pairs exist)
 4. Horizontal "Best of" gallery
-5. Album cover into flip-book transition
+5. Album cover into flip-book transition (built in Phase 8 with the album viewer; moments 1 to 4 are Phase 7)
 
 Everything else is polished but restrained.
 
@@ -587,8 +587,8 @@ Keep the site working at every step. At the end of each phase, report back, sugg
 4. Image delivery: `vite-imagetools` setup and `ResponsiveImage` (section 7.2, stage 2). The masters already exist.
 5. Static layout: every section responsive with no animation, using real manifest photos, checked on mobile. Needs the logo approved.
 6. Core motion: reveals, kinetic type, header behaviour, marquee, cursor.
-7. Signature moments (section 8.1).
-8. Interactive pieces: filters, lightbox, carousels, album viewer, FAQ accordion, contact form.
+7. Signature moments 1 to 4 (section 8.1): preloader, hero, zoom into detail, "Best of" strip.
+8. Interactive pieces: filters, lightbox, carousels, album viewer with signature moment 5 (cover into flip-book), FAQ accordion, contact form.
 9. SEO and accessibility pass, including adding pre-rendering.
 10. Performance pass: Lighthouse, bundle analysis, mobile testing.
 11. Content top-up: process any new photos from the owner with `images:*`, set `consent`, add reviews and socials.
@@ -778,6 +778,8 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-23 | WebGL: hand-written WebGL2 module instead of three + R3F, approved by the user (section 2 table): measured lazy chunk 2.1 KB gz versus 335.6 KB |
+| 2026-10-23 | Signature moment 5 (album cover into flip-book) moved from Phase 7 to Phase 8, with the album viewer (8.1, 14). `.gitattributes` added (LF line endings) |
 | 2026-10-23 | Product photography removed (1, 5, 11, 17.3, 17.6, 17.11, 18.2); services are now eight. 6 new photos added with the new `pnpm images:add` (7.3): newborn, maternity and pre-wedding service cards and the baby band use them, and the gallery now filters by category. `family.jpg` withheld (another studio's branding, 18.1). `scripts/new_added_photos/` git-ignored |
 | 2026-10-21 | Photo quality copy approved and added (17.13). Phase 5 Part A accepted: split hero layout |
 | 2026-10-21 | Logo approved by the user and the owner (4.6, 18.1); Phase 5 started |

@@ -17,7 +17,9 @@
       Motion gate (spec 8.3), before first paint: hidden "before reveal" states only apply under
       html.motion-ok, so without JS or with reduced motion everything is visible. html.js gates
       the image load fade the same way. html.sdt marks support for CSS scroll-driven animations
-      (otherwise an IntersectionObserver fallback runs).
+      (otherwise an IntersectionObserver fallback runs). html.intro: the logo preloader will play
+      (motion allowed, first visit this session); a CSS cover holds the frame until it mounts and
+      removes itself after 3 s whatever happens, so it can never block the page.
     -->
     <script>
       (function () {
@@ -30,6 +32,13 @@
         sync();
         reduce.addEventListener('change', sync);
         if (window.CSS && CSS.supports('animation-timeline: view()')) root.classList.add('sdt');
+        try {
+          // ?intro replays it (review and testing).
+          var replay = /[?&]intro/.test(location.search);
+          if (!reduce.matches && (replay || !sessionStorage.getItem('aakar-intro'))) {
+            root.classList.add('intro');
+          }
+        } catch (e) {}
       })();
     </script>
   </head>

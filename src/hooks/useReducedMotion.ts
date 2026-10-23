@@ -11,6 +11,12 @@ export function useReducedMotion() {
 }
 
 /** Non-hook read for event handlers and plain functions. */
+// One MediaQueryList, reused: matchMedia() builds a new one per call, which adds up when this is
+// read on every scroll frame (measured: half a second of a 13 s throttled scroll trace).
+let reducedQuery: MediaQueryList | null = null;
+
 export function prefersReducedMotion() {
-  return typeof window !== 'undefined' && window.matchMedia(REDUCED_MOTION_QUERY).matches;
+  if (typeof window === 'undefined') return false;
+  reducedQuery ??= window.matchMedia(REDUCED_MOTION_QUERY);
+  return reducedQuery.matches;
 }

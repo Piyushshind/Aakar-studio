@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
@@ -7,9 +8,13 @@ import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { bestOfLabel, homeIntro, taglines } from '@/data/copy';
 import { bestOf, galleryFilterMode, galleryTabs } from '@/data/gallery';
-import { useDragScroll } from '@/hooks/useDragScroll';
 import { sectionEyebrows } from '@/data/navigation';
+import { useDragScroll } from '@/hooks/useDragScroll';
+import { MOTION_OK_QUERY } from '@/hooks/useReducedMotion';
 import { cn } from '@/lib/cn';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { duration, ease } from '@/lib/motion';
+import { getActiveLenis, goTo } from '@/lib/scroll';
 import type { Photo } from '@/types/content';
 
 const INITIAL_COUNT = 12;
@@ -59,8 +64,6 @@ export function Gallery() {
   const tab = galleryTabs.find((t) => t.id === tabId) ?? galleryTabs[0];
   const visible = expanded ? tab.photos : tab.photos.slice(0, INITIAL_COUNT);
   const { number, label } = sectionEyebrows.work;
-  const strip = useRef<HTMLDivElement>(null);
-  useDragScroll(strip);
 
   return (
     <Section id="work" tone="surface" aria-labelledby="work-title" className="gallery">
@@ -131,36 +134,179 @@ export function Gallery() {
         )}
       </Container>
 
-      {bestOf.length > 0 && (
-        <div className="best-of mt-(--section-space)">
-          <Reveal as={Container} className="flex items-end justify-between gap-6">
-            <h3 id="best-of-title" className="eyebrow text-gold">
-              {bestOfLabel}
-            </h3>
-            <p aria-hidden="true" className="eyebrow text-[0.65rem] text-muted">
-              Scroll →
-            </p>
-          </Reveal>
-          <div
-            ref={strip}
-            role="region"
-            aria-labelledby="best-of-title"
-            tabIndex={0}
-            data-cursor="drag"
-            className="best-of-track mt-6 flex snap-x snap-mandatory scroll-pl-[max(var(--gutter),calc((100%_-_1440px)/2_+_var(--gutter)))] scrollbar-thin gap-3 overflow-x-auto pr-(--gutter) pb-5 pl-[max(var(--gutter),calc((100%_-_1440px)/2_+_var(--gutter)))] sm:gap-4"
-          >
-            {bestOf.map((photo) => (
-              <PhotoButton
-                key={photo.id}
-                photo={photo}
-                sizes="(min-width: 1024px) 45vw, 85vw"
-                cursor="inherit"
-                className="h-[clamp(320px,62svh,680px)] w-auto shrink-0 snap-start [&>div]:h-full [&>div]:w-auto"
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {bestOf.length > 0 && <BestOfStrip />}
     </Section>
+  );
+}
+
+// Desktop with motion: the pinned horizontal strip. Mobile and reduced motion: native swipe.
+const PIN_QUERY = `(min-width: 1024px) and ${MOTION_OK_QUERY}`;
+/** Skew from scroll velocity: px/s per degree, and the clamp in degrees. */
+const SKEW_VELOCITY = 400;
+const MAX_SKEW = 3;
+/** Page scroll per pixel of horizontal travel: under 1, so twelve photos don't become a scroll
+ * trap (about 4 screens instead of 7.5 at 1440). */
+const SCROLL_PER_PX = 0.6;
+/** Each photo drifts this far (percent of its width) inside its frame across the strip. */
+const DRIFT = 6;
+const ITEM_HEIGHT = 'h-[clamp(320px,62svh,680px)]';
+
+/**
+ * "Best of" (spec 5 item 6; signature moment 4).
+ *
+ * Desktop: the block pins and vertical scroll moves the rail sideways through the featured photos,
+ * each drifting slightly inside its frame, with a light skew from scroll speed that settles to
+ * zero. It ends on a "See all work" card that returns to the gallery. Focusing a photo or pressing
+ * the arrow keys scrolls the page to it, so the focused item is always on screen. Mouse drag
+ * scrolls the page through the pin (useDragScroll), scaled by SCROLL_PER_PX so the rail still
+ * moves one-to-one under the pointer.
+ * Mobile and reduced motion: the native horizontal row with snap points.
+ */
+function BestOfStrip() {
+  const root = useRef<HTMLDivElement>(null);
+  const strip = useRef<HTMLDivElement>(null);
+  const pinned = useRef<ScrollTrigger | null>(null);
+  useDragScroll(strip, pinned, SCROLL_PER_PX);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(PIN_QUERY, () => {
+        const track = strip.current;
+        const rail = track?.querySelector<HTMLElement>('.best-of-rail');
+        if (!track || !rail) return;
+        track.dataset.pinned = 'true';
+        track.scrollLeft = 0;
+
+        const visibleWidth = () => {
+          const cs = getComputedStyle(track);
+          return track.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        };
+        const travel = () => Math.max(0, rail.scrollWidth - visibleWidth());
+
+        const skewTo = gsap.quickTo(rail, 'skewX', { duration: duration.base, ease: ease.out });
+        const move = gsap.to(rail, {
+          x: () => -travel(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'center center',
+            end: () => `+=${travel() * SCROLL_PER_PX}`,
+            pin: true,
+            scrub: duration.fast,
+            invalidateOnRefresh: true,
+            onUpdate: (self) =>
+              skewTo(gsap.utils.clamp(-MAX_SKEW, MAX_SKEW, -self.getVelocity() / SKEW_VELOCITY)),
+          },
+        });
+        pinned.current = move.scrollTrigger ?? null;
+        const settle = () => skewTo(0);
+        ScrollTrigger.addEventListener('scrollEnd', settle);
+
+        // Each photo drifts inside its frame as it crosses the screen.
+        for (const item of gsap.utils.toArray<HTMLElement>('.best-of-photo', rail)) {
+          const img = item.querySelector('picture img');
+          if (!img) continue;
+          gsap.fromTo(
+            img,
+            { xPercent: -DRIFT, scale: 1 + (DRIFT * 2.5) / 100 },
+            {
+              xPercent: DRIFT,
+              ease: 'none',
+              scrollTrigger: {
+                containerAnimation: move,
+                trigger: item,
+                start: 'left right',
+                end: 'right left',
+                scrub: true,
+              },
+            },
+          );
+        }
+
+        // Keyboard: keep the focused photo on screen, and let the arrow keys step through.
+        const scrollToX = (x: number) => {
+          const st = pinned.current;
+          if (!st) return;
+          const p = gsap.utils.clamp(0, 1, x / Math.max(1, travel()));
+          const y = st.start + p * (st.end - st.start);
+          const lenis = getActiveLenis();
+          if (lenis) lenis.scrollTo(y);
+          else window.scrollTo({ top: y });
+        };
+        const onFocusIn = (event: FocusEvent) => {
+          const item = (event.target as Element).closest<HTMLElement>('.best-of-item');
+          if (item) scrollToX(item.offsetLeft - (visibleWidth() - item.offsetWidth) / 2);
+        };
+        const onKey = (event: KeyboardEvent) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          const first = rail.querySelector<HTMLElement>('.best-of-item');
+          if (!pinned.current || !first) return;
+          event.preventDefault();
+          const now = -Number(gsap.getProperty(rail, 'x'));
+          scrollToX(now + first.offsetWidth * (event.key === 'ArrowRight' ? 1 : -1));
+        };
+        track.addEventListener('focusin', onFocusIn);
+        track.addEventListener('keydown', onKey);
+
+        return () => {
+          ScrollTrigger.removeEventListener('scrollEnd', settle);
+          track.removeEventListener('focusin', onFocusIn);
+          track.removeEventListener('keydown', onKey);
+          delete track.dataset.pinned;
+          pinned.current = null;
+        };
+      });
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
+
+  return (
+    <div ref={root} className="best-of mt-(--section-space)">
+      <Reveal as={Container} className="flex items-end justify-between gap-6">
+        <h3 id="best-of-title" className="eyebrow text-gold">
+          {bestOfLabel}
+        </h3>
+        <p aria-hidden="true" className="eyebrow text-[0.65rem] text-muted">
+          Scroll →
+        </p>
+      </Reveal>
+      <div
+        ref={strip}
+        role="region"
+        aria-labelledby="best-of-title"
+        tabIndex={0}
+        data-cursor="drag"
+        className="best-of-track mt-6 flex snap-x snap-mandatory scroll-pl-[max(var(--gutter),calc((100%_-_1440px)/2_+_var(--gutter)))] scrollbar-thin overflow-x-auto pr-(--gutter) pb-5 pl-[max(var(--gutter),calc((100%_-_1440px)/2_+_var(--gutter)))] data-pinned:snap-none data-pinned:overflow-x-clip"
+      >
+        <div className="best-of-rail relative flex w-max gap-3 sm:gap-4">
+          {bestOf.map((photo) => (
+            <PhotoButton
+              key={photo.id}
+              photo={photo}
+              sizes="(min-width: 1024px) 45vw, 85vw"
+              cursor="inherit"
+              className={`best-of-item best-of-photo ${ITEM_HEIGHT} w-auto shrink-0 snap-start [&>div]:h-full [&>div]:w-auto`}
+            />
+          ))}
+          <a
+            href="#work"
+            onClick={goTo('work')}
+            className={`best-of-item group/more ${ITEM_HEIGHT} flex w-[clamp(240px,22vw,340px)] shrink-0 snap-start flex-col justify-between border border-gold/30 p-8 hover:border-gold/70`}
+          >
+            <span className="eyebrow text-[0.65rem] text-gold">{bestOfLabel}</span>
+            <span>
+              <span className="block display text-[clamp(2rem,3vw,2.75rem)]">See all work</span>
+              <ArrowUpRight
+                aria-hidden="true"
+                strokeWidth={1.25}
+                className="mt-6 size-8 text-gold transition-[translate] duration-(--duration-base) group-hover/more:translate-x-1 group-hover/more:-translate-y-1"
+              />
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

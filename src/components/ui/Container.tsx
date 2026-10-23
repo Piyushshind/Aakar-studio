@@ -1,7 +1,7 @@
-import type { ComponentPropsWithoutRef, ElementType } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 import { cn } from '@/lib/cn';
 
-type ContainerProps<T extends ElementType> = { as?: T } & ComponentPropsWithoutRef<T>;
+type ContainerProps<T extends ElementType> = { as?: T } & ComponentProps<T>;
 
 /** Page container (spec 4.4): max ~1440px with the fluid side gutter. */
 export function Container<T extends ElementType = 'div'>({

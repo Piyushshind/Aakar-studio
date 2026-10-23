@@ -32,6 +32,7 @@ export function Header() {
     let lastY = window.scrollY;
     let frame = 0;
     let isHidden = false;
+    let lastOpacity = -1;
     const hide = (next: boolean) => {
       if (next === isHidden) return; // state only changes on a direction change, not per frame
       isHidden = next;
@@ -50,12 +51,17 @@ export function Header() {
       onScroll();
     });
 
+    // The position is read in the scroll event, before this frame's style writes: reading it
+    // inside requestAnimationFrame, after GSAP has written transforms, forces a style recalc.
+    let y = window.scrollY;
     const update = () => {
       frame = 0;
-      const y = window.scrollY;
 
-      if (background.current) {
-        background.current.style.opacity = String(Math.min(1, Math.max(0, y / heroEnd)));
+      // Written only when it changes (it stays at 1 for the rest of the page).
+      const opacity = Math.round(Math.min(1, Math.max(0, y / heroEnd)) * 100) / 100;
+      if (background.current && opacity !== lastOpacity) {
+        background.current.style.opacity = String(opacity);
+        lastOpacity = opacity;
       }
 
       if (y <= heroEnd || prefersReducedMotion()) {
@@ -69,6 +75,7 @@ export function Header() {
       lastY = y;
     };
     const onScroll = () => {
+      y = window.scrollY;
       frame ||= requestAnimationFrame(update);
     };
 

@@ -9,6 +9,11 @@ export const themeLabels: Record<string, string> = {
   'first-birthday': 'First Birthday',
   'blue-sky': 'Blue Skies',
   'pink-winter': 'Pink Winter',
+  // 2026-10-23 photos (newborn, maternity, pre-wedding)
+  studio: 'Studio',
+  portrait: 'Portrait',
+  outdoor: 'Outdoor',
+  'ring-ceremony': 'Ring Ceremony',
 };
 
 /** Label for a theme id; unlisted ids (e.g. the album-only `wedding`) fall back to title case. */
