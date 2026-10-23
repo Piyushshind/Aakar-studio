@@ -102,7 +102,13 @@ export function Hero() {
 
         const intro = gsap
           .timeline({ paused: true, defaults: { ease: ease.expo } })
-          .to(q('.hero-media'), { scale: 1, duration: duration.slow * 1.5, ease: ease.out }, 0)
+          .to(
+            q('.hero-media'),
+            // clearProps: no leftover transform, which would trap the controls in their own
+            // stacking layer under the copy.
+            { scale: 1, duration: duration.slow * 1.5, ease: ease.out, clearProps: 'transform' },
+            0,
+          )
           .to(split.chars, { yPercent: 0, duration: duration.slow, stagger: stagger.tight }, 0.1)
           .to(
             items,
@@ -133,8 +139,8 @@ export function Hero() {
     >
       {lead && <HeroMedia slides={slides} />}
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-end pb-12 lg:min-h-svh lg:justify-center lg:pt-(--header-offset) lg:pb-28">
-        <div className="hero-copy max-w-[40rem] lg:max-w-[44%]">
+      <Container className="pointer-events-none relative z-10 flex flex-1 flex-col justify-end pb-12 lg:min-h-svh lg:justify-center lg:pt-(--header-offset) lg:pb-28">
+        <div className="hero-copy pointer-events-auto max-w-[40rem] lg:max-w-[44%]">
           <h1 id="hero-title" className="hero-title">
             {/* Split into characters for the intro; screen readers read the plain copy. */}
             <span className="sr-only">Aakar</span>
@@ -419,19 +425,10 @@ function HeroMedia({ slides }: { slides: Photo[] }) {
           />
         )}
 
-        {/* Blend the photo into the page: bottom on mobile, left edge on desktop. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--color-bg)_0%,rgb(18_16_16/0.6)_22%,transparent_50%)] lg:bg-[linear-gradient(to_right,var(--color-bg)_0%,rgb(18_16_16/0.55)_16%,transparent_42%),linear-gradient(to_top,rgb(18_16_16/0.55)_0%,transparent_30%)]"
-        />
-        {/* Keeps the transparent header readable over the photo. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-bg/70 to-transparent"
-        />
-
+        {/* The copy layer above lets the pointer through except over the text and buttons, so
+            these controls and the WebGL ripple get real mouse events on desktop. */}
         {count > 1 && (
-          <div className="hero-intro hero-controls absolute right-4 bottom-4 z-10 flex items-center rounded-full border border-line bg-bg/60 pr-2 pl-0.5 backdrop-blur-md lg:right-[max(var(--gutter),calc((100vw_-_1440px)/2_+_var(--gutter)))] lg:bottom-8">
+          <div className="hero-intro hero-controls absolute right-4 bottom-4 z-20 flex items-center rounded-full border border-line bg-bg/60 pr-2 pl-0.5 backdrop-blur-md lg:right-[max(var(--gutter),calc((100vw_-_1440px)/2_+_var(--gutter)))] lg:bottom-8">
             <button
               type="button"
               onClick={() => setPlaying((p) => !p)}
@@ -468,6 +465,20 @@ function HeroMedia({ slides }: { slides: Photo[] }) {
           </div>
         )}
       </div>
+
+      {/* Blend the photo into the page: bottom on mobile, left edge on desktop. Outside the
+          clipped slide box, and on phones 2px past the photo's bottom edge: the photo layer
+          (scaled by the Ken Burns zoom) and the clip can round a fractional edge differently on
+          the GPU, which left a one-pixel line of photo flickering under the panel. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -bottom-0.5 bg-[linear-gradient(to_top,var(--color-bg)_0%,var(--color-bg)_2px,rgb(18_16_16/0.6)_22%,transparent_50%)] lg:bottom-0 lg:bg-[linear-gradient(to_right,var(--color-bg)_0%,rgb(18_16_16/0.55)_16%,transparent_42%),linear-gradient(to_top,rgb(18_16_16/0.55)_0%,transparent_30%)]"
+      />
+      {/* Keeps the transparent header readable over the photo. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-bg/70 to-transparent"
+      />
     </div>
   );
 }

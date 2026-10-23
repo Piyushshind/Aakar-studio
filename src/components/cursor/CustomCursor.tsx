@@ -20,7 +20,9 @@ type Mode = 'default' | 'link' | 'label' | 'hidden';
  * fields and while navigating by keyboard (so it never sits on a focus outline).
  */
 export function CustomCursor() {
-  const finePointer = useMediaQuery(FINE_POINTER_QUERY);
+  // Desktop-sized screens only, as well as a fine pointer: DevTools' device mode (and some
+  // tablets with a mouse) can report a fine pointer on a phone-sized screen.
+  const finePointer = useMediaQuery(`${FINE_POINTER_QUERY} and (min-width: 1024px)`);
   const reducedMotion = useReducedMotion();
   return finePointer && !reducedMotion ? <Cursor /> : null;
 }
