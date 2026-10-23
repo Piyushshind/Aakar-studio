@@ -18,6 +18,7 @@
     "images:classify": "node scripts/images/classify.mjs",
     "images:export": "node scripts/images/export.mjs",
     "images:report": "node scripts/images/report.mjs",
+    "images:add": "node scripts/images/add-new.mjs",
     "brand:build": "node --disable-warning=ExperimentalWarning scripts/brand/build.mjs"
   },
   "dependencies": {

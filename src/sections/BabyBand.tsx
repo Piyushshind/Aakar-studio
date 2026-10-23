@@ -12,10 +12,10 @@ import { getPhoto } from '@/lib/photos';
 import { whatsappLink } from '@/lib/whatsapp';
 import type { Photo } from '@/types/content';
 
-// Soft baby-kids photos (spec 5, item 7): no newborn photos yet, and the copy stays about babies
-// without claiming these are newborn shoots. Tall portrait left, two landscapes stacked right.
+// Soft photos (spec 5, item 7): the studio's newborn photo plus soft baby-kids shoots. Tall
+// portrait left, two landscapes stacked right.
 const TALL_ID = 'baby-kids-teddy-theme-01';
-const STACK_IDS = ['baby-kids-pink-winter-02', 'baby-kids-first-birthday-01'];
+const STACK_IDS = ['newborn-studio-01', 'baby-kids-pink-winter-02'];
 
 /**
  * "Tiny Fingers, Big Memories" (spec 5, item 7): the cream section between the dark ones, with

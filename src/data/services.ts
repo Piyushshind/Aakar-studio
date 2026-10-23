@@ -6,6 +6,7 @@ export const services: Service[] = [
     id: 'newborn',
     title: 'Newborn Photoshoot',
     icon: 'Baby',
+    imageId: 'newborn-studio-01',
     description:
       "Your baby's first days, beautifully preserved. Gentle poses, soft lighting and carefully styled setups, always at your baby's pace and with their comfort first.",
     whatsappMessage: "Hi Aakar Digital Photo Studio, I'd like to know about a Newborn Photoshoot.",
@@ -23,6 +24,7 @@ export const services: Service[] = [
     id: 'maternity',
     title: 'Maternity Photoshoot',
     icon: 'Heart',
+    imageId: 'maternity-portrait-01',
     description:
       'Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter.',
     whatsappMessage: "Hi, I'd like to know about a Maternity Photoshoot.",
@@ -40,6 +42,7 @@ export const services: Service[] = [
     id: 'pre-wedding',
     title: 'Pre-Wedding & Engagement',
     icon: 'HeartHandshake',
+    imageId: 'pre-wedding-outdoor-03',
     description:
       'Tell your love story before the big day, with relaxed couple portraits at the locations you love.',
     whatsappMessage: "Hi, I'd like to know about a Pre-Wedding Shoot.",
@@ -60,13 +63,6 @@ export const services: Service[] = [
     description:
       'First birthdays, half birthdays, naming ceremonies and family functions, captured with every smile and every detail.',
     whatsappMessage: "Hi, I'd like to know about photography for a birthday or ceremony.",
-  },
-  {
-    id: 'product',
-    title: 'Product Photography',
-    icon: 'Package',
-    description: 'Clean, attractive product photos for shops, brands and online selling.',
-    whatsappMessage: "Hi, I'd like to know about Product Photography.",
   },
   {
     id: 'albums',

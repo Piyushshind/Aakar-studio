@@ -44,7 +44,6 @@ export const marqueeWords = [
   'Weddings',
   'Pre-Wedding',
   'Family',
-  'Product',
   'Custom Albums',
 ];
 

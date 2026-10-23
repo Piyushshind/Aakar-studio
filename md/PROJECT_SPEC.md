@@ -1,6 +1,6 @@
 # PROJECT_SPEC — Aakar Digital Photo Studio Website
 
-Last updated: 2026-10-21
+Last updated: 2026-10-23
 
 ## Instructions for the AI developer
 
@@ -73,7 +73,7 @@ A fully static, fully animated single-page marketing website for Aakar Digital P
 | Owner | Prakash S. Suryawanshi |
 | Address | Shop No. 6, Om Chamber, in front of Jalgaon Court, Jalgaon, Maharashtra 425001 |
 | Team | Photographers, videographers, album designers and support staff (no names or photos shown) |
-| Specialities | Newborn, baby and kids, maternity, weddings, pre-wedding, family, birthdays and ceremonies, product photography, custom albums |
+| Specialities | Newborn, baby and kids, maternity, weddings, pre-wedding, family, birthdays and ceremonies, custom albums |
 | Strongest portfolio today | Themed baby and kids studio shoots, and custom-designed albums (section 7.3) |
 | Coverage | In-studio and outdoor shoots, anywhere the customer wants |
 | Audience | Parents, families, couples and local businesses in and around Jalgaon |
@@ -253,10 +253,10 @@ One long-scroll page in this order, each section its own component in `src/secti
 6. **Gallery** — Masonry or bento grid with hover zoom, parallax shift, caption reveal and a "View" cursor. Click opens the lightbox. Then a GSAP-pinned horizontal "Best of" strip of the featured photos.
    - **Filter logic:** if two or more categories have photos, filter by category (tabs for categories with photos only). If only one category has photos, filter by **theme** within it, using the labels in section 7.3. Motion layout animations on filter change.
    - *Current state:* only `baby-kids` has photos, so tabs are All plus the nine themes.
-7. **"Tiny Fingers, Big Memories" band** — Cream section with brown text, 3 to 5 large photos, gentle parallax, newborn and baby trust points and a "Plan Your Baby's Shoot" WhatsApp CTA. *Current state:* no newborn photos, so use soft baby-kids photos (pink-winter, teddy, first-birthday themes). Keep the copy about babies; do not claim the photos are newborn shoots.
+7. **"Tiny Fingers, Big Memories" band** — Cream section with brown text, 3 to 5 large photos, gentle parallax, newborn and baby trust points and a "Plan Your Baby's Shoot" WhatsApp CTA. *Current state:* the newborn photo (`newborn-studio-01`) with soft baby-kids photos (teddy, pink-winter themes).
 8. **Albums** — Grid of album covers, each a real client album. Clicking opens a viewer: GSAP + CSS 3D flip-book on desktop, Embla swipe slider on mobile, with a GSAP Flip cover-to-viewer transition. Album spreads are wide (about 3:1); show them full-width in the viewer. Short note that every album is custom-designed. *Current state:* four albums (section 7.3). If an album has no `album-cover`, use its first page as the cover.
-9. **Services** — Nine animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
-   - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use wedding-01 album pages; other cards are icon cards.
+9. **Services** — Eight animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
+   - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Newborn, Maternity and Pre-Wedding use the 2026-10-23 photos; Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use album pages; Family is an icon card.
 10. **"Anywhere you celebrate" band** — Short full-width statement: in-studio or outdoor, in Jalgaon or wherever the customer wants. Background: studio photo preferred; a licensed real stock landscape is acceptable here because it is atmosphere, not portfolio.
 11. **Custom quote band** — Replaces pricing. No prices anywhere on the site. Headline and copy from section 17.8 with WhatsApp and Call buttons.
 12. **How it works** — Five steps from section 17.9. A DrawSVG line connects them as you scroll.
@@ -407,9 +407,11 @@ All photos on the site are real photographs. **No AI-generated images anywhere**
 
 Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `src/assets/photos/about/`, `src/assets/photos/stock/`, and `src/assets/photos/_review/` (never imported by the site). The originals in `src/haveToProcessImages/` are git-ignored and never imported.
 
-### 7.3 Current photo inventory (2026-10-17)
+### 7.3 Current photo inventory (2026-10-17, updated 2026-10-23)
 
 73 originals (760 MB) became 56 WebP masters (23.9 MB). 17 duplicates were skipped. 54 are in the manifest and 2 are in `_review`.
+
+**Added 2026-10-23:** 7 originals delivered in `scripts/new_added_photos/` (git-ignored), category taken from the file names. 6 were added with `pnpm images:add` (`scripts/images/add-new.mjs`: same encoding as `images:export`; it only appends to the manifest, so hand-edited `consent` and `featured` stay as they are; re-run it after any `images:export`). The manifest now has 60 entries. `family.jpg` was not added: it carries another studio's branding ("Krishna Kids Photography" logo and phone numbers).
 
 | Category | Count | Notes |
 | --- | --- | --- |
@@ -419,7 +421,12 @@ Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `s
 | `albums/little-farmer-green` | 3 | Designed album pages |
 | `albums/beach-baby` | 2 | No cover; use the first page as cover |
 | `_review` | 2 | DSC00006 and DSC00008, a woman in a floral-arch portrait; category to be confirmed by the owner |
-| `newborn`, `maternity`, `wedding` (photos), `pre-wedding`, `family`, `events`, `product`, `about` | 0 | Requested from the owner |
+| `newborn` | 1 | `newborn-studio-01` (2026-10-23) |
+| `maternity` | 1 | `maternity-portrait-01` (2026-10-23) |
+| `pre-wedding` | 4 | `pre-wedding-outdoor-01` to `-03` and `pre-wedding-ring-ceremony-01` (engagement ring close-up, hands only) (2026-10-23) |
+| `wedding` (photos), `family`, `events`, `about` | 0 | Requested from the owner |
+
+With four categories the gallery filters by category (section 5, item 6): All, Newborn, Baby & Kids, Maternity, Pre-Wedding.
 
 **Theme labels** (for gallery filters and captions, in `src/data/themes.ts`):
 
@@ -439,7 +446,7 @@ Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `s
 
 **Hero candidates (8):** traditional-flowers-01, traditional-flowers-03, krishna-theme-01, farm-theme-01, beach-theme-04, kutchi-traditional-01, blue-sky-01, pink-winter-01.
 
-**Consent status:** `consent` is `null` on every entry. 49 of 54 photos show children, and the wedding album shows a private couple and guests. All of these have `requiresConsent: true` and must be confirmed by the owner before launch (section 6, consent gate).
+**Consent status:** `consent` is `null` on every entry. 49 of 54 photos show children, and the wedding album shows a private couple and guests. The 2026-10-23 newborn, maternity and couple photos show identifiable private clients; only the ring close-up does not. All of these have `requiresConsent: true` and must be confirmed by the owner before launch (section 6, consent gate).
 
 **Excluded:** `wedding-01-06` (album back cover) shows an older blue Aakar logo. It is listed in `excludedPhotos` in `src/data/curation.ts`, so no getter returns it and the build never emits it, until the owner confirms which logo is current.
 
@@ -507,7 +514,7 @@ Code-split WebGL, the lightbox and the album viewer. Lazy-load the map iframe. S
 - Pre-render at build time so the HTML holds real content.
 - **Title:** Aakar Digital Photo Studio | Newborn, Baby & Wedding Photographer in Jalgaon
 - **Meta description:** Newborn, baby, maternity, wedding, pre-wedding and family photography in Jalgaon, Maharashtra. Studio and outdoor shoots, custom albums. Call or WhatsApp 9890468885.
-- **Keywords:** newborn photography Jalgaon, baby photoshoot Jalgaon, kids theme photoshoot Jalgaon, first birthday photoshoot Jalgaon, wedding photographer Jalgaon, pre-wedding shoot Jalgaon, maternity photoshoot Jalgaon, product photography Jalgaon, passport photo Jalgaon, photo studio Jalgaon.
+- **Keywords:** newborn photography Jalgaon, baby photoshoot Jalgaon, kids theme photoshoot Jalgaon, first birthday photoshoot Jalgaon, wedding photographer Jalgaon, pre-wedding shoot Jalgaon, maternity photoshoot Jalgaon, passport photo Jalgaon, photo studio Jalgaon.
 - **JSON-LD `ProfessionalService`:** name, founder/owner Prakash S. Suryawanshi, telephone `+91-9890468885`, email, `PostalAddress` (streetAddress "Shop No. 6, Om Chamber, in front of Jalgaon Court", addressLocality Jalgaon, addressRegion Maharashtra, postalCode 425001, addressCountry IN), `openingHoursSpecification` from section 17.1, `hasMap` with the Maps link, `areaServed` Jalgaon and beyond. Add geo coordinates and `sameAs` socials when available. No `aggregateRating` until real ratings are provided.
 - **JSON-LD `FAQPage`** from section 17.10.
 - Open Graph and Twitter tags with `public/og-image.jpg`.
@@ -650,7 +657,7 @@ Use this copy as written in `src/data/`. Items marked TBD stay as placeholders u
 - **Tagline:** Capturing Emotions, Creating Memories
 - **Sub-line:** Newborn, baby, maternity, wedding and family photography in Jalgaon, in our studio, outdoors, or wherever you celebrate.
 - **CTAs:** View Our Work · Book on WhatsApp
-- **Marquee:** Newborn · Baby & Kids · Themed Shoots · First Birthday · Maternity · Weddings · Pre-Wedding · Family · Product · Custom Albums
+- **Marquee:** Newborn · Baby & Kids · Themed Shoots · First Birthday · Maternity · Weddings · Pre-Wedding · Family · Custom Albums
 
 ### 17.4 Home intro
 
@@ -664,18 +671,17 @@ Behind every shoot is a dedicated team of photographers, videographers and album
 
 Every shoot ends the same way: with photographs and albums made just for you, to be kept, shared and relived for years to come.
 
-### 17.6 Services (nine cards)
+### 17.6 Services (eight cards)
 
 | Service | Icon | Image (current) | Description | WhatsApp message |
 | --- | --- | --- | --- | --- |
-| Newborn Photoshoot | `Baby` | Icon card | Your baby's first days, beautifully preserved. Gentle poses, soft lighting and carefully styled setups, always at your baby's pace and with their comfort first. | Hi Aakar Digital Photo Studio, I'd like to know about a Newborn Photoshoot. |
+| Newborn Photoshoot | `Baby` | `newborn-studio-01` | Your baby's first days, beautifully preserved. Gentle poses, soft lighting and carefully styled setups, always at your baby's pace and with their comfort first. | Hi Aakar Digital Photo Studio, I'd like to know about a Newborn Photoshoot. |
 | Baby & Kids Themed Shoots | `Sparkles` | Featured kids photo | Little Krishna, Little Farmer, Beach Baby and more: playful themed sets for babies and children of any age, in our studio or outdoors. Bring their favourite outfits and we'll create the magic. | Hi, I'd like to know about a Baby and Kids Themed Photoshoot. |
-| Maternity Photoshoot | `Heart` | Icon card | Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter. | Hi, I'd like to know about a Maternity Photoshoot. |
+| Maternity Photoshoot | `Heart` | `maternity-portrait-01` | Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter. | Hi, I'd like to know about a Maternity Photoshoot. |
 | Wedding Photography | `Gem` | wedding-01 album page | From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. | Hi, I'd like to know about Wedding Photography. |
-| Pre-Wedding & Engagement | `HeartHandshake` | Icon card | Tell your love story before the big day, with relaxed couple portraits at the locations you love. | Hi, I'd like to know about a Pre-Wedding Shoot. |
+| Pre-Wedding & Engagement | `HeartHandshake` | `pre-wedding-outdoor-03` | Tell your love story before the big day, with relaxed couple portraits at the locations you love. | Hi, I'd like to know about a Pre-Wedding Shoot. |
 | Family & Sibling Portraits | `Users` | Icon card | Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family. | Hi, I'd like to know about a Family Photoshoot. |
 | Birthdays & Ceremonies | `PartyPopper` | first-birthday photo | First birthdays, half birthdays, naming ceremonies and family functions, captured with every smile and every detail. | Hi, I'd like to know about photography for a birthday or ceremony. |
-| Product Photography | `Package` | Icon card | Clean, attractive product photos for shops, brands and online selling. | Hi, I'd like to know about Product Photography. |
 | Custom Photo Albums | `BookOpen` | Album spread (little-farmer or wedding-01) | Albums designed entirely around your photos and your taste, in any style, size or finish you like. | Hi, I'd like to know about Custom Photo Albums. |
 
 **Also at the studio** (compact row, icons `IdCard`, `Printer`, `Frame`): Passport & ID Photos · Photo Printing · Photo Framing. WhatsApp message: "Hi, I'd like to know about passport photos, printing or framing."
@@ -718,7 +724,7 @@ Every shoot ends the same way: with photographs and albums made just for you, to
 
 ### 17.11 Short business description
 
-Aakar Digital Photo Studio, Jalgaon. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding, family and product photography, with custom albums, printing and framing. Studio and outdoor shoots.
+Aakar Digital Photo Studio, Jalgaon. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding and family photography, with custom albums, printing and framing. Studio and outdoor shoots.
 
 ### 17.12 Contact closing headline
 
@@ -739,7 +745,9 @@ Let's capture your story.
 - [ ] What are DSC00006 and DSC00008 (woman, floral arch): maternity, portrait or something else?
 - [ ] Does the studio offer regular wedding or event video coverage (not cinematic films)? If yes, add it as a service
 - [ ] For baby shoots, does the studio provide props and themed backdrops? (The themed sets in the photos suggest yes)
-- [ ] Photos still needed: newborn, maternity, wedding (actual photos, not only album pages), pre-wedding, family, events, product
+- [ ] Photos still needed: wedding (actual photos, not only album pages), family, events; more newborn, maternity and pre-wedding (one or a few of each so far)
+- [ ] `family.jpg` (delivered 2026-10-23) carries "Krishna Kids Photography" branding and phone numbers: is it the studio's own work? Not published; a clean, unbranded version is needed if it is
+- [ ] `pre-weding1.jpg` (now `pre-wedding-outdoor-01`): the pose suggests a maternity couple shoot; confirm pre-wedding or maternity
 - [ ] Owner photo and studio or behind-the-scenes photos (`about`)
 - [ ] Clean versions without the logo badge of DSC00008, DSC01597 and DSC01615
 - [ ] A cover for the beach-baby album
@@ -760,6 +768,7 @@ Let's capture your story.
 - No AI-generated images anywhere on the site.
 - Google Maps listing photos are owner-uploaded and count as studio photos.
 - The studio does not provide baby outfits or wraps; copy reflects this.
+- Product photography is not offered (removed from services, marquee, description and SEO, 2026-10-23).
 - Logo is redrawn as SVG from the banner reference.
 - The site adapts to available photos: theme filters when only one category exists, icon-only service cards without real photos, hidden sections without content.
 - Child photos and the wedding album are gated behind confirmed consent in the launch build.
@@ -769,6 +778,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-23 | Product photography removed (1, 5, 11, 17.3, 17.6, 17.11, 18.2); services are now eight. 6 new photos added with the new `pnpm images:add` (7.3): newborn, maternity and pre-wedding service cards and the baby band use them, and the gallery now filters by category. `family.jpg` withheld (another studio's branding, 18.1). `scripts/new_added_photos/` git-ignored |
 | 2026-10-21 | Photo quality copy approved and added (17.13). Phase 5 Part A accepted: split hero layout |
 | 2026-10-21 | Logo approved by the user and the owner (4.6, 18.1); Phase 5 started |
 | 2026-10-21 | Logo tweaks (4.6): favicons at 16/24 px show only the A and lens (`logo-mark-tiny`, ICO 16/24, adaptive `favicon.svg`); camera outline ~20% heavier in all variants. Final logo confirmation by the user and owner pending. 7.2 records the final image settings and measured build times (cold 138 s, warm 18 s) |

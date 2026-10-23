@@ -24,6 +24,10 @@ export const photoFocus: Record<string, string> = {
   'baby-kids-pink-winter-02': '45% 45%',
   'baby-kids-first-birthday-01': '42% 60%',
   'baby-kids-teddy-theme-01': '50% 40%',
+  // 4:3 service thumbnails and previews of portrait photos: keep faces in the crop.
+  'maternity-portrait-01': '50% 22%',
+  'pre-wedding-outdoor-03': '50% 20%',
+  'newborn-studio-01': '20% 50%',
 };
 
 /** Hero candidates, in display order (spec 7.3). */

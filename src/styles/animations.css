@@ -107,8 +107,8 @@
   animation-fill-mode: both;
   animation-duration: auto;
   animation-timing-function: var(--ease-out);
-  animation-range: entry calc(var(--reveal-i, 0) * var(--reveal-step))
-    entry calc(var(--reveal-range) + var(--reveal-i, 0) * var(--reveal-step));
+  animation-range: entry calc(var(--reveal-i, 0) * var(--reveal-step)) entry
+    calc(var(--reveal-range) + var(--reveal-i, 0) * var(--reveal-step));
 }
 
 .motion-ok.sdt [data-reveal='up'].is-near {

@@ -36,10 +36,58 @@ Desktop.ini
 
 # Image pipeline: owner's original client photos (backup lives in the owner's Google Drive)
 src/haveToProcessImages/
+# New originals dropped in for processing (client photos): never committed.
+scripts/new_added_photos/
 # Image pipeline: generated working files (contact sheets of client photos, reports)
 scripts/images/out/
 # Client photo masters: never committed while the repo is public.
 # Regenerate with the images:* scripts. src/data/photos.manifest.json IS committed.
 src/assets/photos/
+
+# Safety net, the repo is public: photo originals, camera RAW files, layered edits and archives
+# are ignored wherever they land. Only the logo assets in public/ and src/assets/brand/ may be
+# JPEGs (og-image.jpg). PNG and WebP are not listed: the logo PNGs are tracked on purpose and the
+# WebP masters live in the ignored src/assets/photos/.
+*.jpg
+*.jpeg
+*.JPG
+*.JPEG
+*.heic
+*.heif
+*.HEIC
+*.tif
+*.tiff
+*.cr2
+*.cr3
+*.nef
+*.arw
+*.dng
+*.raf
+*.orf
+*.rw2
+*.psd
+*.zip
+!public/**/*.jpg
+!src/assets/brand/**/*.jpg
 # Logo reference: banner photo with a baby in it; never committed while the repo is public.
+# (After the line above, so it stays ignored.)
 src/assets/brand/reference-banner.jpg
+
+# Python (scripts/brand/outline_text.py)
+__pycache__/
+*.pyc
+
+# Deploy CLIs (spec 15: Netlify or Cloudflare from a local build)
+.netlify/
+.wrangler/
+
+# Measurement output: Lighthouse reports, DevTools traces and profiles
+.lighthouseci/
+lighthouse-report*
+*.report.html
+Trace-*.json
+*.cpuprofile
+*.heapsnapshot
+
+# Vite temporary config bundles
+vite.config.*.timestamp-*

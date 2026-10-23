@@ -10,7 +10,7 @@ export const studio: StudioInfo = {
   tagline: 'Capturing Emotions, Creating Memories',
   subTagline: 'Digital Photo Studio',
   description:
-    'Aakar Digital Photo Studio, Jalgaon. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding, family and product photography, with custom albums, printing and framing. Studio and outdoor shoots.',
+    'Aakar Digital Photo Studio, Jalgaon. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding and family photography, with custom albums, printing and framing. Studio and outdoor shoots.',
   owner: 'Prakash S. Suryawanshi', // TBD: spelling to confirm (spec 18.1)
   team: 'A team of photographers, videographers, album designers and support staff',
   address: {

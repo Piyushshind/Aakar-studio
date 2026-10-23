@@ -51,7 +51,11 @@ export const galleryPhotos = interleaveByTheme(
   getPhotos({ kind: 'photo' }).filter((p) => p.category !== 'about'),
 );
 
-const galleryCategories = categoriesWithPhotos().filter((c) => c !== 'about');
+// Tabs follow the category order above (newborn first), not the manifest's file order.
+const categoryOrder = Object.keys(categoryLabels) as Category[];
+const galleryCategories = categoriesWithPhotos()
+  .filter((c) => c !== 'about')
+  .sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
 
 /**
  * Spec 5, Gallery: filter by category when two or more have photos, otherwise by theme

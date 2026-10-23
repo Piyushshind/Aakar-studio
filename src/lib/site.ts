@@ -19,7 +19,6 @@ export const SITE_KEYWORDS = [
   'wedding photographer Jalgaon',
   'pre-wedding shoot Jalgaon',
   'maternity photoshoot Jalgaon',
-  'product photography Jalgaon',
   'passport photo Jalgaon',
   'photo studio Jalgaon',
 ];

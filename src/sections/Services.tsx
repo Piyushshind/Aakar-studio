@@ -33,7 +33,7 @@ const withPhotos = services
 
 /**
  * A service's real photo, or an icon tile of the same shape when it has none (spec 5, item 9:
- * no stock photos). Same frame and hairline either way, so the nine read as one set.
+ * no stock photos). Same frame and hairline either way, so the set reads as one.
  */
 function ServiceMedia({
   service,
@@ -251,7 +251,7 @@ function StudioExtras() {
   );
 }
 
-/** Services (spec 5, item 9): the nine services from 17.6 and the "Also at the studio" row. */
+/** Services (spec 5, item 9): the eight services from 17.6 and the "Also at the studio" row. */
 export function Services() {
   const { number: eyebrowNumber, label } = sectionEyebrows.services;
 
