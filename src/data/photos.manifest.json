@@ -14,7 +14,7 @@
     "albumOrder": 1,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Beach_Page1_24x8.jpg"
   },
@@ -33,7 +33,7 @@
     "albumOrder": 2,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Beach_Page2_24x8.jpg"
   },
@@ -52,7 +52,7 @@
     "albumOrder": 0,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Cover_Back_24x8.jpg"
   },
@@ -71,7 +71,7 @@
     "albumOrder": 1,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Farm_Design2_Page1_24x8.jpg"
   },
@@ -90,7 +90,7 @@
     "albumOrder": 2,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Farm_Design2_Page2_24x8.jpg"
   },
@@ -109,7 +109,7 @@
     "albumOrder": 0,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Cover_Back_Format1_24x8.jpg"
   },
@@ -128,7 +128,7 @@
     "albumOrder": 1,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Farm_Page1_24x8.jpg"
   },
@@ -147,7 +147,7 @@
     "albumOrder": 2,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "Album_Farm_Page2_24x8.jpg"
   },
@@ -166,7 +166,7 @@
     "albumOrder": 0,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "FRANT .jpg.jpeg"
   },
@@ -185,7 +185,7 @@
     "albumOrder": 1,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "TP.jpg.jpeg"
   },
@@ -204,7 +204,7 @@
     "albumOrder": 2,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "1.jpg.jpeg"
   },
@@ -223,7 +223,7 @@
     "albumOrder": 3,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "33.jpg.jpeg"
   },
@@ -242,7 +242,7 @@
     "albumOrder": 4,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "34.jpg.jpeg"
   },
@@ -261,7 +261,7 @@
     "albumOrder": 5,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "35.jpg.jpeg"
   },
@@ -280,7 +280,7 @@
     "albumOrder": 6,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "BACK .jpg.jpeg"
   },
@@ -299,7 +299,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01773 copy 2.jpg"
   },
@@ -318,7 +318,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01776 copy 2.jpg"
   },
@@ -337,7 +337,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01777 copy - Copy - Copy copy.jpg"
   },
@@ -356,7 +356,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01781 copy 2.jpg"
   },
@@ -375,7 +375,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02364 copy.jpg"
   },
@@ -394,7 +394,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02400 copy.jpg"
   },
@@ -413,7 +413,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02409 copy.jpg"
   },
@@ -432,7 +432,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02424 copy.jpg"
   },
@@ -451,7 +451,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01763 copy - Copy copy 2 - Copy.jpg"
   },
@@ -470,7 +470,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01765 copy - Copy - Copy - Copy copy 2.jpg"
   },
@@ -489,7 +489,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01769 copy - Copy (3) copy 2.jpg"
   },
@@ -508,7 +508,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01771 copy 2 - Copy.jpg"
   },
@@ -527,7 +527,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01772 copy - Copy copy.jpg"
   },
@@ -546,7 +546,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02168 copy 3.jpg"
   },
@@ -565,7 +565,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02171 copy 2.jpg"
   },
@@ -584,7 +584,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02220 copy.jpg"
   },
@@ -603,7 +603,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01649 copy 4.jpg"
   },
@@ -622,7 +622,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01652 copy 3.jpg"
   },
@@ -641,7 +641,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01657 copy 3.jpg"
   },
@@ -660,7 +660,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02253 copy.jpg"
   },
@@ -679,7 +679,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02274 copy.jpg"
   },
@@ -698,7 +698,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02292 copy.jpg"
   },
@@ -717,7 +717,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02295 copy.jpg"
   },
@@ -736,7 +736,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02307 copy.jpg"
   },
@@ -755,7 +755,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02313 copy.jpg"
   },
@@ -774,7 +774,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02319 copy.jpg"
   },
@@ -793,7 +793,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02337 copy.jpg"
   },
@@ -812,7 +812,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02346 copy.jpg"
   },
@@ -831,7 +831,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02439 copy.jpg"
   },
@@ -850,7 +850,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02475 copy (1).jpg"
   },
@@ -869,7 +869,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02478 copy (1).jpg"
   },
@@ -888,7 +888,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02497 copy.jpg"
   },
@@ -907,7 +907,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC02511 copy.jpg"
   },
@@ -926,7 +926,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01756 copy - Copy (2) copy 2 - Copy.jpg"
   },
@@ -945,7 +945,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01760 copy - Copy - Copy copy.jpg"
   },
@@ -964,7 +964,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01597.JPG"
   },
@@ -983,7 +983,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01601.JPG"
   },
@@ -1002,7 +1002,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": true,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01614.JPG",
     "xlSrc": "src/assets/photos/baby-kids/baby-kids-traditional-flowers-03-xl.webp"
@@ -1022,9 +1022,28 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "DSC01615.JPG"
+  },
+  {
+    "id": "family-studio-01",
+    "src": "src/assets/photos/family/family-studio-01.webp",
+    "alt": "Three-generation family portrait on a peach backdrop: grandparents, parents, a smiling little girl on a wooden stump and a baby on his grandfather’s lap",
+    "category": "family",
+    "orientation": "portrait",
+    "width": 1708,
+    "height": 2560,
+    "source": "studio",
+    "theme": "studio",
+    "kind": "photo",
+    "album": null,
+    "albumOrder": null,
+    "qualityTier": "hero",
+    "featured": false,
+    "consent": true,
+    "requiresConsent": true,
+    "originalFile": "family-photo.jpg"
   },
   {
     "id": "maternity-portrait-01",
@@ -1041,7 +1060,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "maternity.jpg"
   },
@@ -1060,7 +1079,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "new-born.jpg"
   },
@@ -1079,7 +1098,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "pre-weding1.jpg"
   },
@@ -1098,7 +1117,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "pre-weding2.jpg"
   },
@@ -1117,7 +1136,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": true,
     "originalFile": "pre-weding3.jpg"
   },
@@ -1136,7 +1155,7 @@
     "albumOrder": null,
     "qualityTier": "hero",
     "featured": false,
-    "consent": null,
+    "consent": true,
     "requiresConsent": false,
     "originalFile": "engagment.jpg"
   }

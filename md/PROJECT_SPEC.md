@@ -256,7 +256,7 @@ One long-scroll page in this order, each section its own component in `src/secti
 7. **"Tiny Fingers, Big Memories" band** — Cream section with brown text, 3 to 5 large photos, gentle parallax, newborn and baby trust points and a "Plan Your Baby's Shoot" WhatsApp CTA. *Current state:* the newborn photo (`newborn-studio-01`) with soft baby-kids photos (teddy, pink-winter themes).
 8. **Albums** — Grid of album covers, each a real client album. Clicking opens a viewer: GSAP + CSS 3D flip-book on desktop, Embla swipe slider on mobile, with a GSAP Flip cover-to-viewer transition. Album spreads are wide (about 3:1); show them full-width in the viewer. Short note that every album is custom-designed. *Current state:* four albums (section 7.3). If an album has no `album-cover`, use its first page as the cover.
 9. **Services** — Eight animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
-   - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Newborn, Maternity and Pre-Wedding use the 2026-10-23 photos; Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use album pages; Family is an icon card.
+   - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Newborn, Maternity and Pre-Wedding use the 2026-10-23 photos; Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use album pages; Family uses `family-studio-01` (2026-10-24). No icon cards remain.
 10. **"Anywhere you celebrate" band** — Short full-width statement: in-studio or outdoor, in Jalgaon or wherever the customer wants. Background: studio photo preferred; a licensed real stock landscape is acceptable here because it is atmosphere, not portfolio.
 11. **Custom quote band** — Replaces pricing. No prices anywhere on the site. Headline and copy from section 17.8 with WhatsApp and Call buttons.
 12. **How it works** — Five steps from section 17.9. A DrawSVG line connects them as you scroll.
@@ -411,7 +411,7 @@ Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `s
 
 73 originals (760 MB) became 56 WebP masters (23.9 MB). 17 duplicates were skipped. 54 are in the manifest and 2 are in `_review`.
 
-**Added 2026-10-23:** 7 originals delivered in `scripts/new_added_photos/` (git-ignored), category taken from the file names. 6 were added with `pnpm images:add` (`scripts/images/add-new.mjs`: same encoding as `images:export`; it only appends to the manifest, so hand-edited `consent` and `featured` stay as they are; re-run it after any `images:export`). The manifest now has 60 entries. `family.jpg` was not added: it carries another studio's branding ("Krishna Kids Photography" logo and phone numbers).
+**Added 2026-10-23:** 7 originals delivered in `scripts/new_added_photos/` (git-ignored), category taken from the file names. 6 were added with `pnpm images:add` (`scripts/images/add-new.mjs`: same encoding as `images:export`; it only appends to the manifest, so hand-edited `consent` and `featured` stay as they are; re-run it after any `images:export`). `family.jpg` was not added: it carries another studio's branding ("Krishna Kids Photography" logo and phone numbers). On 2026-10-24 the owner supplied a clean replacement, `family-photo.jpg` (unbranded, supplied by the developer), added as `family-studio-01`. The manifest now has 61 entries.
 
 | Category | Count | Notes |
 | --- | --- | --- |
@@ -424,9 +424,10 @@ Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `s
 | `newborn` | 1 | `newborn-studio-01` (2026-10-23) |
 | `maternity` | 1 | `maternity-portrait-01` (2026-10-23) |
 | `pre-wedding` | 4 | `pre-wedding-outdoor-01` to `-03` and `pre-wedding-ring-ceremony-01` (engagement ring close-up, hands only) (2026-10-23) |
-| `wedding` (photos), `family`, `events`, `about` | 0 | Requested from the owner |
+| `family` | 1 | `family-studio-01`, three-generation studio portrait (2026-10-24) |
+| `wedding` (photos), `events`, `about` | 0 | Requested from the owner |
 
-With four categories the gallery filters by category (section 5, item 6): All, Newborn, Baby & Kids, Maternity, Pre-Wedding.
+With five categories the gallery filters by category (section 5, item 6): All, Newborn, Baby & Kids, Maternity, Pre-Wedding, Family.
 
 **Theme labels** (for gallery filters and captions, in `src/data/themes.ts`):
 
@@ -446,7 +447,7 @@ With four categories the gallery filters by category (section 5, item 6): All, N
 
 **Hero candidates (8):** traditional-flowers-01, traditional-flowers-03, krishna-theme-01, farm-theme-01, beach-theme-04, kutchi-traditional-01, blue-sky-01, pink-winter-01.
 
-**Consent status:** `consent` is `null` on every entry. 49 of 54 photos show children, and the wedding album shows a private couple and guests. The 2026-10-23 newborn, maternity and couple photos show identifiable private clients; only the ring close-up does not. All of these have `requiresConsent: true` and must be confirmed by the owner before launch (section 6, consent gate).
+**Consent status:** confirmed on 2026-10-24: the studio owner told the developer that the clients agreed to their photos being shown on the website, so `consent` is `true` on every entry. `requiresConsent` stays as it was (49 of 54 originals show children, the wedding album shows a private couple and guests, and the 2026-10-23 newborn, maternity and couple photos show private clients), so any photo added later still needs its own confirmation (section 6, consent gate).
 
 **Excluded:** `wedding-01-06` (album back cover) shows an older blue Aakar logo. It is listed in `excludedPhotos` in `src/data/curation.ts`, so no getter returns it and the build never emits it, until the owner confirms which logo is current.
 
@@ -607,7 +608,7 @@ The repo is public during development, so client photos are not in git. Deploy f
 - [ ] All photos served as AVIF/WebP with responsive sizes and no layout shift
 - [ ] No AI-generated images anywhere; no stock photo in any portfolio area; CREDITS.md complete
 - [ ] Sections and filters adapt to the photos that exist; nothing empty or broken
-- [ ] Every published child photo and the wedding album have confirmed consent; launch build uses `VITE_ENFORCE_CONSENT=true`
+- [x] Every published child photo and the wedding album have confirmed consent; launch build uses `VITE_ENFORCE_CONSENT=true`
 - [ ] Warm dark theme with cream baby sections, gold accents, large kinetic type
 - [ ] Reduced-motion users get a calm, fully usable site
 - [ ] Gallery, lightbox, album viewer and FAQ work with mouse, touch and keyboard
@@ -682,7 +683,7 @@ Every shoot ends the same way: with photographs and albums made just for you, to
 | Maternity Photoshoot | `Heart` | `maternity-portrait-01` | Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter. | Hi, I'd like to know about a Maternity Photoshoot. |
 | Wedding Photography | `Gem` | wedding-01 album page | From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. | Hi, I'd like to know about Wedding Photography. |
 | Pre-Wedding & Engagement | `HeartHandshake` | `pre-wedding-outdoor-03` | Tell your love story before the big day, with relaxed couple portraits at the locations you love. | Hi, I'd like to know about a Pre-Wedding Shoot. |
-| Family & Sibling Portraits | `Users` | Icon card | Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family. | Hi, I'd like to know about a Family Photoshoot. |
+| Family & Sibling Portraits | `Users` | `family-studio-01` | Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family. | Hi, I'd like to know about a Family Photoshoot. |
 | Birthdays & Ceremonies | `PartyPopper` | first-birthday photo | First birthdays, half birthdays, naming ceremonies and family functions, captured with every smile and every detail. | Hi, I'd like to know about photography for a birthday or ceremony. |
 | Custom Photo Albums | `BookOpen` | Album spread (little-farmer or wedding-01) | Albums designed entirely around your photos and your taste, in any style, size or finish you like. | Hi, I'd like to know about Custom Photo Albums. |
 
@@ -741,14 +742,14 @@ Let's capture your story.
 
 ### 18.1 Still needed
 
-- [ ] **Consent (launch blocker):** confirm parents agreed for every child photo used (49 photos), and the wedding couple agreed for the wedding-01 album (shows names, date and guests)
+- [x] **Consent (launch blocker):** confirmed by the owner on 2026-10-24 for every photo in the manifest, including the child photos and the wedding-01 album
 - [ ] Confirm opening hours are AM/PM as assumed (10 AM – 8 PM, Sunday 10 AM – 3 PM)
 - [ ] Confirm the owner's name spelling: Prakash S. Suryawanshi (the Facebook link resolves to a profile named prakash.sonawane: which surname is right, and is that the studio's account?)
 - [ ] What are DSC00006 and DSC00008 (woman, floral arch): maternity, portrait or something else?
 - [ ] Does the studio offer regular wedding or event video coverage (not cinematic films)? If yes, add it as a service
 - [ ] For baby shoots, does the studio provide props and themed backdrops? (The themed sets in the photos suggest yes)
 - [ ] Photos still needed: wedding (actual photos, not only album pages), family, events; more newborn, maternity and pre-wedding (one or a few of each so far)
-- [ ] `family.jpg` (delivered 2026-10-23) carries "Krishna Kids Photography" branding and phone numbers: is it the studio's own work? Not published; a clean, unbranded version is needed if it is
+- [x] `family.jpg` (delivered 2026-10-23) carried "Krishna Kids Photography" branding: replaced on 2026-10-24 by the unbranded `family-photo.jpg` (`family-studio-01`)
 - [ ] `pre-weding1.jpg` (now `pre-wedding-outdoor-01`): the pose suggests a maternity couple shoot; confirm pre-wedding or maternity
 - [ ] Owner photo and studio or behind-the-scenes photos (`about`)
 - [ ] Clean versions without the logo badge of DSC00008, DSC01597 and DSC01615
@@ -780,6 +781,8 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-24 | Family photo added (7.3): `family-photo.jpg` replaces the branded `family.jpg` as `family-studio-01` (`consent: true`). The gallery gains a Family tab and the Family service card uses it (5, 17.6) |
+| 2026-10-24 | Consent confirmed by the owner for all 60 photos (and for `family-studio-01`, added the same day): `consent: true` in the manifest (7.3, 18.1). The gate and `VITE_ENFORCE_CONSENT=true` stay in place for photos added later |
 | 2026-10-23 | Instagram and Facebook links added (17.1, `studio.socials`): shown in the footer; the social grid stays hidden until posts are provided. Owner-name and Instagram-handle questions in 18.1 |
 | 2026-10-23 | WebGL: hand-written WebGL2 module instead of three + R3F, approved by the user (section 2 table): measured lazy chunk 2.1 KB gz versus 335.6 KB |
 | 2026-10-23 | Signature moment 5 (album cover into flip-book) moved from Phase 7 to Phase 8, with the album viewer (8.1, 14). `.gitattributes` added (LF line endings) |

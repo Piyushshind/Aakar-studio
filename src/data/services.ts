@@ -51,6 +51,7 @@ export const services: Service[] = [
     id: 'family',
     title: 'Family & Sibling Portraits',
     icon: 'Users',
+    imageId: 'family-studio-01',
     description:
       'Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family.',
     whatsappMessage: "Hi, I'd like to know about a Family Photoshoot.",

@@ -46,6 +46,7 @@ export const photoFocus: Record<string, string> = {
   'maternity-portrait-01': '50% 22%',
   'pre-wedding-outdoor-03': '50% 20%',
   'newborn-studio-01': '20% 50%',
+  'family-studio-01': '50% 20%',
 };
 
 /** Hero candidates, in display order (spec 7.3). */

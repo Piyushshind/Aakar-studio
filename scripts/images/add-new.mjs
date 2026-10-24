@@ -65,6 +65,13 @@ const PHOTOS = {
     alt: 'Couple in a warm embrace under a blue sky, she in a lilac saree',
     requiresConsent: true,
   },
+  // Delivered 2026-10-24 in place of family.jpg (below).
+  'family-photo.jpg': {
+    category: 'family',
+    theme: 'studio',
+    alt: 'Three-generation family portrait on a peach backdrop: grandparents, parents, a smiling little girl on a wooden stump and a baby on his grandfather’s lap',
+    requiresConsent: true,
+  },
 };
 
 // Delivered but not published, with the reason.
