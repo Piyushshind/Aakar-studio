@@ -261,7 +261,7 @@ One long-scroll page in this order, each section its own component in `src/secti
 10. **"Anywhere you celebrate" band** — Short full-width statement: in-studio or outdoor, in Jalgaon or wherever the customer wants. Background: studio photo preferred; a licensed real stock landscape is acceptable here because it is atmosphere, not portfolio.
 11. **Custom quote band** — Replaces pricing. No prices anywhere on the site. Headline and copy from section 17.8 with WhatsApp and Call buttons.
 12. **How it works** — Five steps from section 17.9. A DrawSVG line connects them as you scroll.
-13. **About** — Owner and team story (section 17.5), owner photo, studio photos, behind-the-scenes shots. Animated stats counters only when real numbers exist. *Current state:* no owner or studio photos yet; build the layout so it works text-only with the logo mark, and adds photos when the `about` category is filled.
+13. **About** — Owner and team story (section 17.5), owner photo, studio photos, behind-the-scenes shots. Animated stats counters only when real numbers exist. *Current state:* the owner photo (`about-owner-01`, 2026-10-26) replaces the logo-mark panel; studio or behind-the-scenes photos would add two squares below it.
 14. **Testimonials** — Embla slider of real client reviews with event type; autoplay pauses on hover and focus, visible controls. Includes a "Read our Google reviews" link to the Maps listing. Hidden until real reviews are provided. *Current state:* built (one, two or three per view; pause button; no autoplay with reduced motion), waiting for reviews.
 15. **FAQ** — Accordion (Motion) with the questions in section 17.10, one answer open at a time; closed answers stay in the page (height 0, inert) for pre-rendering. Also output as `FAQPage` JSON-LD.
 16. **Social grid** — Static grid of locally saved recent posts linking to the studio's Instagram. Hidden until a profile is provided.
@@ -755,7 +755,7 @@ Let's capture your story.
 - [ ] Photos still needed: wedding (actual photos, not only album pages), family, events; more newborn, maternity and pre-wedding (one or a few of each so far)
 - [x] `family.jpg` (delivered 2026-10-23) carried "Krishna Kids Photography" branding: replaced on 2026-10-24 by the unbranded `family-photo.jpg` (`family-studio-01`)
 - [x] `pre-weding1.jpg` (`pre-wedding-outdoor-01`) is a pre-wedding shoot (2026-10-24)
-- [ ] Owner photo and studio or behind-the-scenes photos (`about`). `owner_photo.png` (2026-10-26) not used: it carries the Gemini sparkle mark (AI-edited, spec 7.1) and is only 893x1200; needs the original camera photo
+- [ ] Owner photo and studio or behind-the-scenes photos (`about`). Owner photo published 2026-10-26 as `about-owner-01` (About section). It carries a small Gemini sparkle mark (bottom right); the user decided to publish it as is, an explicit exception to the no-AI rule for this one photo. Small (893x1200): a larger original would be sharper. Studio and behind-the-scenes photos still wanted
 - [ ] Clean versions without the logo badge of DSC00008, DSC01597 and DSC01615
 - [ ] A cover for the beach-baby album
 - [ ] Before/after photo pairs (section hidden without them)
@@ -787,7 +787,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
-| 2026-10-26 | Web3Forms key committed in `src/lib/inquiry.ts` (public by design). DSC00006 published in a new `portrait` category (Portraits tab, featured; 5, 7.3, 18.1). Owner photo held back: Gemini AI mark (18.1) |
+| 2026-10-26 | Web3Forms key committed in `src/lib/inquiry.ts` (public by design). DSC00006 published in a new `portrait` category (Portraits tab, featured; 5, 7.3, 18.1). Owner photo published in About (`about-owner-01`); it has a small Gemini mark, published as is by the user's decision (18.1) |
 | 2026-10-24 | Phase 8 built (5, 2): gallery lightbox (yet-another-react-lightbox, lazy) and Motion layout filter animations (`domMax`); album viewer with the CSS 3D flip-book, cover-to-book FLIP and the phone slider (signature moment 5, lazy); FAQ as a Motion accordion; Testimonials Embla slider (hidden until reviews); contact form on Web3Forms with sending / sent / error states (key pending, 18.1); before/after slider (hidden until pairs) |
 | 2026-10-24 | Owner answers (18.1): hours and owner name confirmed; founded October 2003 ("Since 2003", years stat, `foundingDate`); wedding and event videos added as a ninth service (5, 11, 17.3, 17.6, 18.2); baby props in the FAQ (17.10); `pre-wedding-outdoor-01` confirmed; DSC00006/8 explained (7.3); zoom captions approved (17.13); logo colour to be decided; domain suggestions (17.1) |
 | 2026-10-24 | Family photo added (7.3): `family-photo.jpg` replaces the branded `family.jpg` as `family-studio-01` (`consent: true`). The gallery gains a Family tab and the Family service card uses it (5, 17.6) |

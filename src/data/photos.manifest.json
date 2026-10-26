@@ -1,5 +1,24 @@
 [
   {
+    "id": "about-owner-01",
+    "src": "src/assets/photos/about/about-owner-01.webp",
+    "alt": "Prakash S. Suryawanshi, owner of Aakar Digital Photo Studio, in a white shirt and sunglasses, arms folded",
+    "category": "about",
+    "orientation": "portrait",
+    "width": 893,
+    "height": 1200,
+    "source": "studio",
+    "theme": "owner",
+    "kind": "photo",
+    "album": null,
+    "albumOrder": null,
+    "qualityTier": "grid",
+    "featured": false,
+    "consent": true,
+    "requiresConsent": true,
+    "originalFile": "owner_photo.png"
+  },
+  {
     "id": "beach-baby-01",
     "src": "src/assets/photos/albums/beach-baby/beach-baby-01.webp",
     "alt": "Album spread titled Beach Vibes with photos of a toddler in sunglasses on a beach set",

@@ -80,6 +80,14 @@ const PHOTOS = {
     alt: 'Young woman in a pink saree and green blouse holding pink roses before a floral stone arch',
     requiresConsent: true,
   },
+  // Delivered 2026-10-26. Shows a small Gemini sparkle mark (bottom right); the user decided to
+  // publish it as is (2026-10-26). Small original (893x1200), so it stays at that size.
+  'owner_photo.png': {
+    category: 'about',
+    theme: 'owner',
+    alt: 'Prakash S. Suryawanshi, owner of Aakar Digital Photo Studio, in a white shirt and sunglasses, arms folded',
+    requiresConsent: true,
+  },
 };
 
 // Delivered but not published, with the reason.

@@ -15,6 +15,7 @@ export const themeLabels: Record<string, string> = {
   outdoor: 'Outdoor',
   'ring-ceremony': 'Ring Ceremony',
   'floral-arch': 'Floral Arch',
+  owner: 'Owner',
 };
 
 /** Label for a theme id; unlisted ids (e.g. the album-only `wedding`) fall back to title case. */
