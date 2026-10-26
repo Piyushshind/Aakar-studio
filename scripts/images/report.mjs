@@ -40,6 +40,7 @@ const WEBSITE_CATEGORIES = [
   'wedding',
   'pre-wedding',
   'family',
+  'portrait',
   'events',
   'product',
   'about',

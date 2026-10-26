@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { services } from '@/data/services';
 import { STUDIO_TIME_ZONE } from './hours';
 
-// Contact form (spec 5, item 17): fields, validation and the WhatsApp fallback message. The
-// online submission (Web3Forms or Formspree) is wired in Phase 8; WhatsApp stays as a second path.
+// Contact form (spec 5, item 17): fields, validation, online submission (Web3Forms) and the
+// WhatsApp message. WhatsApp stays as a second path, and the only one until a key is set.
 
 export const shootTypes = [
   ...services.map((s) => s.title),
@@ -61,6 +61,42 @@ function formatDate(iso: string) {
     year: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+// The studio's Web3Forms access key (form "aakar studio", aakardigital81@gmail.com). Public by
+// design: it can only send to that inbox, so it lives here and every deploy works without host
+// settings. VITE_WEB3FORMS_KEY overrides it (e.g. a test form).
+const STUDIO_WEB3FORMS_KEY = '447af0d1-b579-4e21-8b7b-a6a17eb3c387';
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY?.trim() || STUDIO_WEB3FORMS_KEY;
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+const SUBMIT_TIMEOUT_MS = 15_000;
+
+/** True when the form can send online (a Web3Forms key is configured). */
+export const inquiryOnline = WEB3FORMS_KEY !== '';
+
+/**
+ * Sends the enquiry to the studio's inbox through Web3Forms. Throws on a network error, a timeout
+ * or a rejected submission. `botcheck` is the honeypot: real visitors never fill it.
+ */
+export async function submitInquiry(values: InquiryValues, botcheck = false) {
+  const response = await fetch(WEB3FORMS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
+    body: JSON.stringify({
+      access_key: WEB3FORMS_KEY,
+      subject: `Website enquiry: ${values.shootType} (${values.name})`,
+      from_name: 'Aakar website',
+      botcheck,
+      Name: values.name,
+      Phone: values.phone,
+      'Shoot type': values.shootType,
+      'Preferred date': values.date ? formatDate(values.date) : 'Not given',
+      Message: values.message || '(none)',
+    }),
+  });
+  const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
+  if (!response.ok || !result?.success) throw new Error(`Web3Forms: ${response.status}`);
 }
 
 /** The WhatsApp message pre-filled from whatever the visitor has typed; empty fields are left out. */

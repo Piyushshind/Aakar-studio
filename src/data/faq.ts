@@ -27,7 +27,7 @@ export const faq: FaqItem[] = [
   {
     question: 'What should I bring for a baby shoot?',
     answer:
-      "Please bring your baby's outfits, wraps and any favourite toys. We take care of the lighting, setups and photography.",
+      "Please bring your baby's outfits, wraps and any favourite toys. We have a few props and themed setups at the studio, and we take care of the lighting and photography.",
   },
   {
     question: 'How will I receive my photos?',

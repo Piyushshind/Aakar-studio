@@ -4,14 +4,22 @@ import type { StudioInfo } from '@/types/content';
 const PHONE = '9890468885';
 const COUNTRY_CODE = '91';
 
+// The studio opened in October 2003 (confirmed by the owner, 2026-10-24).
+const FOUNDED = { year: 2003, month: 10 };
+
+/** Whole years since a month, so the count stays right without editing. */
+function yearsSince(year: number, month: number, now = new Date()) {
+  return now.getFullYear() - year - (now.getMonth() + 1 < month ? 1 : 0);
+}
+
 export const studio: StudioInfo = {
   name: 'Aakar Digital Photo Studio',
   shortName: 'Aakar',
   tagline: 'Capturing Emotions, Creating Memories',
   subTagline: 'Digital Photo Studio',
   description:
-    'Aakar Digital Photo Studio, Jalgaon. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding and family photography, with custom albums, printing and framing. Studio and outdoor shoots.',
-  owner: 'Prakash S. Suryawanshi', // TBD: spelling to confirm (spec 18.1)
+    'Aakar Digital Photo Studio, Jalgaon, since 2003. Newborn, baby and kids themed shoots, maternity, wedding, pre-wedding and family photography, wedding and event video coverage, with custom albums, printing and framing. Studio and outdoor shoots.',
+  owner: 'Prakash S. Suryawanshi', // spelling confirmed 2026-10-24
   team: 'A team of photographers, videographers, album designers and support staff',
   address: {
     street: 'Shop No. 6, Om Chamber, in front of Jalgaon Court',
@@ -24,7 +32,7 @@ export const studio: StudioInfo = {
   phoneE164: `+${COUNTRY_CODE}${PHONE}`,
   whatsapp: `${COUNTRY_CODE}${PHONE}`,
   email: 'aakardigital81@gmail.com',
-  // TBD: AM/PM to confirm (spec 18.1)
+  // 10 AM – 8 PM, Sunday 10 AM – 3 PM (confirmed 2026-10-24).
   hours: [
     {
       days: 'Monday to Saturday',
@@ -47,8 +55,8 @@ export const studio: StudioInfo = {
     },
     { platform: 'Facebook', url: 'https://www.facebook.com/prakash.sonawane.165' },
   ],
-  stats: [], // only real numbers; the stats block hides while empty
-  // foundedYear: TBD
+  stats: [{ label: 'Years of experience', value: yearsSince(FOUNDED.year, FOUNDED.month) }],
+  foundedYear: FOUNDED.year,
 };
 
 /** Single-line postal address for display. */

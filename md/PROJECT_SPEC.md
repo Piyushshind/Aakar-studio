@@ -103,19 +103,19 @@ Use one tool per job, and never animate the same property of the same element wi
 | GSAP plugins | SplitText, Flip, CustomEase, DrawSVG, MorphSVG, ScrollToPlugin | Register once in `src/lib/gsap.ts` |
 | GSAP in React | `@gsap/react` (`useGSAP`) | Always with a `scope` ref, never raw `useEffect` |
 | Smooth scroll | Lenis (`lenis/react`) | One instance at app root, synced with ScrollTrigger |
-| UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` |
+| UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` with the `domMax` features (layout animations for the gallery filters, Phase 8) |
 | Simple scroll effects | Native CSS scroll-driven animations | Reveals, progress bar, light parallax; wrap in `@supports` with a fallback |
 | WebGL | Hand-written WebGL2 module (`src/components/webgl/heroGL.ts`) | Hero transition only, lazy-loaded. Chosen over three + R3F by measurement (2026-10-23): lazy chunk 2.1 KB gz versus 335.6 KB (three alone 135.1 KB) for one full-screen plane. three / R3F stay installed but unused |
 | Post-processing | none | Not needed for one shader |
 | Interactive vector | Rive (`@rive-app/react-canvas`) | Optional, e.g. camera shutter loader |
 | Carousels | embla-carousel-react (+ autoplay plugin) | |
-| Lightbox | yet-another-react-lightbox (Zoom, Thumbnails, Captions) | Or custom Motion + GSAP Flip |
+| Lightbox | yet-another-react-lightbox (Zoom, Captions, Counter) | Lazy-loaded with its CSS on first use. WebP `srcSet` (a plain `<img>` has no format fallback) |
 | Before/after | react-compare-slider | Only when real pairs exist |
 | Flip-book album | Custom GSAP + CSS 3D | `react-pageflip` as fallback |
 | Icons | lucide-react | |
 | Fonts | @fontsource-variable | Self-hosted, max two families |
 | Class helpers | clsx + tailwind-merge | A `cn()` utility |
-| Forms | react-hook-form + zod, sent to Web3Forms or Formspree | No backend |
+| Forms | react-hook-form + zod, sent to Web3Forms (chosen 2026-10-24) | No backend. The public access key is in `src/lib/inquiry.ts` (`VITE_WEB3FORMS_KEY` overrides it) |
 | Images | vite-imagetools (responsive sizes from the WebP masters) | Section 7.2 |
 | Logo and brand assets | Hand-built SVG, exported with sharp (Node) or Pillow/cairosvg (Python) | Section 4.6 |
 | Pre-rendering | vite-react-ssg or equivalent | Real HTML for SEO, added in the SEO phase |
@@ -249,22 +249,23 @@ One long-scroll page in this order, each section its own component in `src/secti
 4. **Marquee** — Infinite keyword strip reacting to scroll velocity (words in section 17.3).
 5. **Photo quality ("See the difference")** — Two parts, each shown only when its content exists:
    - **Zoom into detail:** a pinned section where scrolling zooms into one photo to reveal detail (eyes, embroidery, jewellery, tiny fingers). Uses the photo with an `xlSrc` (extra-large master). *Current state:* live.
-   - **Before/after slider:** raw versus edited pairs. *Current state:* hidden, no pairs yet.
-6. **Gallery** — Masonry or bento grid with hover zoom, parallax shift, caption reveal and a "View" cursor. Click opens the lightbox. Then a GSAP-pinned horizontal "Best of" strip of the featured photos.
+   - **Before/after slider:** raw versus edited pairs (react-compare-slider, lazy-loaded). *Current state:* built and tested, hidden until pairs are added to `src/data/beforeAfter.ts`.
+6. **Gallery** — Masonry or bento grid with hover zoom, parallax shift, caption reveal and a "View" cursor. Click opens the lightbox (steps through the current tab, or the Best of photos; swipe, arrow keys, pinch/double-tap/wheel zoom, Esc; focus returns to the photo last viewed). Then a GSAP-pinned horizontal "Best of" strip of the featured photos.
    - **Filter logic:** if two or more categories have photos, filter by category (tabs for categories with photos only). If only one category has photos, filter by **theme** within it, using the labels in section 7.3. Motion layout animations on filter change.
-   - *Current state:* five categories have photos (Newborn, Baby & Kids, Maternity, Pre-Wedding, Family), so tabs are All plus those five, filtering by category.
+   - *Current state:* six categories have photos (Newborn, Baby & Kids, Maternity, Pre-Wedding, Family, Portraits), so tabs are All plus those six, filtering by category.
 7. **"Tiny Fingers, Big Memories" band** — Cream section with brown text, 3 to 5 large photos, gentle parallax, newborn and baby trust points and a "Plan Your Baby's Shoot" WhatsApp CTA. *Current state:* the newborn photo (`newborn-studio-01`) with soft baby-kids photos (teddy, pink-winter themes).
 8. **Albums** — Grid of album covers, each a real client album. Clicking opens a viewer: GSAP + CSS 3D flip-book on desktop, Embla swipe slider on mobile, with a GSAP Flip cover-to-viewer transition. Album spreads are wide (about 3:1); show them full-width in the viewer. Short note that every album is custom-designed. *Current state:* four albums (section 7.3). If an album has no `album-cover`, use its first page as the cover.
-9. **Services** — Eight animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
+   - **Viewer (built 2026-10-24):** a modal dialog, lazy-loaded. Each spread is split at the spine into pages; a cover that is itself a spread (the kids albums) closes the book at both ends, a single front cover (wedding) only at the start, and an album without a cover opens straight at its first spread. The card's cover flies into the closed book (FLIP) and the cover opens. Narrower spreads are letterboxed in the book's shape over a soft blurred wash of the same spread. Arrow keys, buttons or clicking either page turn; Esc, the close button or a click outside closes. Phones and reduced motion: an Embla slider of whole spreads, with a "turn your phone sideways" hint in portrait.
+9. **Services** — Nine animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
    - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Newborn, Maternity and Pre-Wedding use the 2026-10-23 photos; Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use album pages; Family uses `family-studio-01` (2026-10-24). No icon cards remain.
 10. **"Anywhere you celebrate" band** — Short full-width statement: in-studio or outdoor, in Jalgaon or wherever the customer wants. Background: studio photo preferred; a licensed real stock landscape is acceptable here because it is atmosphere, not portfolio.
 11. **Custom quote band** — Replaces pricing. No prices anywhere on the site. Headline and copy from section 17.8 with WhatsApp and Call buttons.
 12. **How it works** — Five steps from section 17.9. A DrawSVG line connects them as you scroll.
 13. **About** — Owner and team story (section 17.5), owner photo, studio photos, behind-the-scenes shots. Animated stats counters only when real numbers exist. *Current state:* no owner or studio photos yet; build the layout so it works text-only with the logo mark, and adds photos when the `about` category is filled.
-14. **Testimonials** — Embla slider of real client reviews with event type; autoplay pauses on hover and focus, visible controls. Includes a "Read our Google reviews" link to the Maps listing. Hidden until real reviews are provided.
-15. **FAQ** — Accordion (Motion) with the questions in section 17.10. Also output as `FAQPage` JSON-LD.
+14. **Testimonials** — Embla slider of real client reviews with event type; autoplay pauses on hover and focus, visible controls. Includes a "Read our Google reviews" link to the Maps listing. Hidden until real reviews are provided. *Current state:* built (one, two or three per view; pause button; no autoplay with reduced motion), waiting for reviews.
+15. **FAQ** — Accordion (Motion) with the questions in section 17.10, one answer open at a time; closed answers stay in the page (height 0, inert) for pre-rendering. Also output as `FAQPage` JSON-LD.
 16. **Social grid** — Static grid of locally saved recent posts linking to the studio's Instagram. Hidden until a profile is provided.
-17. **Contact** — Closing headline, WhatsApp, Call, Email and Directions buttons, inquiry form (name, phone, shoot type, preferred date, message) with animated success and error states, lazy-loaded Google Map, address and opening hours.
+17. **Contact** — Closing headline, WhatsApp, Call, Email and Directions buttons, inquiry form (name, phone, shoot type, preferred date, message) with animated success and error states, lazy-loaded Google Map, address and opening hours. The form posts to Web3Forms (honeypot spam check, 15 s timeout); on an error it keeps the details and offers "Try again" and WhatsApp. *Current state:* live; access key in `src/lib/inquiry.ts` since 2026-10-26 (18.1).
 18. **Footer** — Light logo, "Digital Photo Studio", quick links, socials, address, hours, phone, email, copyright, and a large outlined "Aakar" as a final flourish.
 
 Global extras: floating WhatsApp button on all devices, custom cursor on pointer devices only (dot plus ring, labels like "View" and "Drag"), CSS scroll progress bar and a back-to-top button.
@@ -280,7 +281,7 @@ Types live in `src/types/content.ts`:
 ```ts
 export type Category =
   | 'newborn' | 'baby-kids' | 'maternity' | 'wedding'
-  | 'pre-wedding' | 'family' | 'events' | 'product' | 'about';
+  | 'pre-wedding' | 'family' | 'portrait' | 'events' | 'product' | 'about';
 
 export type PhotoSource = 'studio' | 'stock';   // no AI-generated photos, ever
 export type PhotoKind = 'photo' | 'album-cover' | 'album-page';
@@ -420,14 +421,14 @@ Folders: `src/assets/photos/<category>/`, `src/assets/photos/albums/<slug>/`, `s
 | `albums/little-farmer` | 3 | Designed album pages |
 | `albums/little-farmer-green` | 3 | Designed album pages |
 | `albums/beach-baby` | 2 | No cover; use the first page as cover |
-| `_review` | 2 | DSC00006 and DSC00008, a woman in a floral-arch portrait; category to be confirmed by the owner |
+| `_review` | 2 | DSC00006 and DSC00008, a floral-arch portrait of the owner's daughter, shown in the shop as a showpiece (owner, 2026-10-24); no shoot category. DSC00006 published 2026-10-26 as `portrait-floral-arch-01` (new `portrait` category, Portraits tab, featured), via `images:add`; DSC00008 stays out (logo badge only) |
 | `newborn` | 1 | `newborn-studio-01` (2026-10-23) |
 | `maternity` | 1 | `maternity-portrait-01` (2026-10-23) |
 | `pre-wedding` | 4 | `pre-wedding-outdoor-01` to `-03` and `pre-wedding-ring-ceremony-01` (engagement ring close-up, hands only) (2026-10-23) |
 | `family` | 1 | `family-studio-01`, three-generation studio portrait (2026-10-24) |
 | `wedding` (photos), `events`, `about` | 0 | Requested from the owner |
 
-With five categories the gallery filters by category (section 5, item 6): All, Newborn, Baby & Kids, Maternity, Pre-Wedding, Family.
+With six categories the gallery filters by category (section 5, item 6): All, Newborn, Baby & Kids, Maternity, Pre-Wedding, Family, Portraits.
 
 **Theme labels** (for gallery filters and captions, in `src/data/themes.ts`):
 
@@ -514,9 +515,9 @@ Code-split WebGL, the lightbox and the album viewer. Lazy-load the map iframe. S
 
 - Pre-render at build time so the HTML holds real content.
 - **Title:** Aakar Digital Photo Studio | Newborn, Baby & Wedding Photographer in Jalgaon
-- **Meta description:** Newborn, baby, maternity, wedding, pre-wedding and family photography in Jalgaon, Maharashtra. Studio and outdoor shoots, custom albums. Call or WhatsApp 9890468885.
-- **Keywords:** newborn photography Jalgaon, baby photoshoot Jalgaon, kids theme photoshoot Jalgaon, first birthday photoshoot Jalgaon, wedding photographer Jalgaon, pre-wedding shoot Jalgaon, maternity photoshoot Jalgaon, passport photo Jalgaon, photo studio Jalgaon.
-- **JSON-LD `ProfessionalService`:** name, founder/owner Prakash S. Suryawanshi, telephone `+91-9890468885`, email, `PostalAddress` (streetAddress "Shop No. 6, Om Chamber, in front of Jalgaon Court", addressLocality Jalgaon, addressRegion Maharashtra, postalCode 425001, addressCountry IN), `openingHoursSpecification` from section 17.1, `hasMap` with the Maps link, `areaServed` Jalgaon and beyond. Add geo coordinates and `sameAs` socials when available. No `aggregateRating` until real ratings are provided.
+- **Meta description:** Newborn, baby, maternity, wedding, pre-wedding and family photography in Jalgaon, Maharashtra, since 2003. Wedding and event videos, studio and outdoor shoots, custom albums. Call or WhatsApp 9890468885.
+- **Keywords:** newborn photography Jalgaon, baby photoshoot Jalgaon, kids theme photoshoot Jalgaon, first birthday photoshoot Jalgaon, wedding photographer Jalgaon, wedding videography Jalgaon, pre-wedding shoot Jalgaon, maternity photoshoot Jalgaon, passport photo Jalgaon, photo studio Jalgaon.
+- **JSON-LD `ProfessionalService`:** name, founder/owner Prakash S. Suryawanshi, `foundingDate` 2003-10, telephone `+91-9890468885`, email, `PostalAddress` (streetAddress "Shop No. 6, Om Chamber, in front of Jalgaon Court", addressLocality Jalgaon, addressRegion Maharashtra, postalCode 425001, addressCountry IN), `openingHoursSpecification` from section 17.1, `hasMap` with the Maps link, `areaServed` Jalgaon and beyond. Add geo coordinates and `sameAs` socials when available. No `aggregateRating` until real ratings are provided.
 - **JSON-LD `FAQPage`** from section 17.10.
 - Open Graph and Twitter tags with `public/og-image.jpg`.
 - `sitemap.xml`, `robots.txt`, favicon set and `site.webmanifest`. Domain TBD: use a placeholder base URL in one config constant.
@@ -597,7 +598,7 @@ Keep the site working at every step. At the end of each phase, report back, sugg
 
 ## 15. Deployment
 
-Deploy the static `dist/` folder to Netlify, Cloudflare Pages, Vercel or GitHub Pages on a free tier. Domain TBD, HTTPS on, long cache headers for hashed assets.
+Deploy the static `dist/` folder to Netlify, Cloudflare Pages, Vercel or GitHub Pages on a free tier. Domain TBD, HTTPS on, long cache headers for hashed assets. The launch build needs `VITE_ENFORCE_CONSENT=true` (in `.env.production.local` locally, and in the host's environment variables). The Web3Forms key is in the code, so the form needs no host setting.
 
 The repo is public during development, so client photos are not in git. Deploy from a local build with the Netlify or Cloudflare CLI (e.g. `netlify deploy --prod --dir dist` or `wrangler pages deploy dist`). If the repo becomes private later, the photos can be committed and the site deployed from git.
 
@@ -629,19 +630,19 @@ Use this copy as written in `src/data/`. Items marked TBD stay as placeholders u
 | --- | --- |
 | Studio name | Aakar Digital Photo Studio |
 | Line under name | Digital Photo Studio |
-| Owner | Prakash S. Suryawanshi (spelling to confirm) |
+| Owner | Prakash S. Suryawanshi (confirmed 2026-10-24) |
 | Team | A team of photographers, videographers, album designers and support staff |
 | Address | Shop No. 6, Om Chamber, in front of Jalgaon Court, Jalgaon, Maharashtra 425001 |
 | Phone and WhatsApp | 9890468885 (`tel:+919890468885`, `https://wa.me/919890468885`) |
 | Email | aakardigital81@gmail.com |
-| Opening hours | Monday to Saturday 10:00 AM – 8:00 PM; Sunday 10:00 AM – 3:00 PM (AM/PM to confirm) |
+| Opening hours | Monday to Saturday 10:00 AM – 8:00 PM; Sunday 10:00 AM – 3:00 PM (confirmed 2026-10-24) |
 | Google Maps link | https://maps.app.goo.gl/WQSiiJc4WbKtbNfx6 (Directions button and `hasMap`) |
 | Map embed | Use `https://www.google.com/maps?q=Om+Chamber+Jalgaon+Court+Jalgaon+425001&output=embed` until the official embed code from Google Maps (Share → Embed a map) is provided |
-| Founded / years in business | TBD |
+| Founded / years in business | October 2003 (confirmed 2026-10-24). Shown as "Since 2003" (About, footer, meta description) and a years-of-experience stat counted from the date, so it never goes stale |
 | Instagram | https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=x0anqvb (invite link as sent; profile URL with the handle to follow) |
 | Facebook | https://www.facebook.com/prakash.sonawane.165 (the share link https://www.facebook.com/share/1E2ZAVXkG1/ resolves to this personal profile) |
 | YouTube | TBD |
-| Domain | TBD |
+| Domain | TBD (suggestions given 2026-10-24: `aakarstudio.in`, `aakarphotostudio.in`, `aakardigitalstudio.com`; the owner to pick and buy) |
 
 ### 17.2 Taglines
 
@@ -660,7 +661,7 @@ Use this copy as written in `src/data/`. Items marked TBD stay as placeholders u
 - **Tagline:** Capturing Emotions, Creating Memories
 - **Sub-line:** Newborn, baby, maternity, wedding and family photography in Jalgaon, in our studio, outdoors, or wherever you celebrate.
 - **CTAs:** View Our Work · Book on WhatsApp
-- **Marquee:** Newborn · Baby & Kids · Themed Shoots · First Birthday · Maternity · Weddings · Pre-Wedding · Family · Custom Albums
+- **Marquee:** Newborn · Baby & Kids · Themed Shoots · First Birthday · Maternity · Weddings · Wedding Videos · Pre-Wedding · Family · Custom Albums
 
 ### 17.4 Home intro
 
@@ -674,7 +675,7 @@ Behind every shoot is a dedicated team of photographers, videographers and album
 
 Every shoot ends the same way: with photographs and albums made just for you, to be kept, shared and relived for years to come.
 
-### 17.6 Services (eight cards)
+### 17.6 Services (nine cards)
 
 | Service | Icon | Image (current) | Description | WhatsApp message |
 | --- | --- | --- | --- | --- |
@@ -682,6 +683,7 @@ Every shoot ends the same way: with photographs and albums made just for you, to
 | Baby & Kids Themed Shoots | `Sparkles` | Featured kids photo | Little Krishna, Little Farmer, Beach Baby and more: playful themed sets for babies and children of any age, in our studio or outdoors. Bring their favourite outfits and we'll create the magic. | Hi, I'd like to know about a Baby and Kids Themed Photoshoot. |
 | Maternity Photoshoot | `Heart` | `maternity-portrait-01` | Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter. | Hi, I'd like to know about a Maternity Photoshoot. |
 | Wedding Photography | `Gem` | wedding-01 album page | From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. | Hi, I'd like to know about Wedding Photography. |
+| Wedding & Event Videos | `Video` | Icon card | Full video coverage of your wedding, ceremonies and events, from the rituals to the celebrations, so you can relive every moment. | Hi, I'd like to know about video coverage for a wedding or event. |
 | Pre-Wedding & Engagement | `HeartHandshake` | `pre-wedding-outdoor-03` | Tell your love story before the big day, with relaxed couple portraits at the locations you love. | Hi, I'd like to know about a Pre-Wedding Shoot. |
 | Family & Sibling Portraits | `Users` | `family-studio-01` | Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family. | Hi, I'd like to know about a Family Photoshoot. |
 | Birthdays & Ceremonies | `PartyPopper` | first-birthday photo | First birthdays, half birthdays, naming ceremonies and family functions, captured with every smile and every detail. | Hi, I'd like to know about photography for a birthday or ceremony. |
@@ -719,7 +721,7 @@ Every shoot ends the same way: with photographs and albums made just for you, to
 | Do you do outdoor shoots? | Yes. We shoot in our studio, outdoors, or at your venue. |
 | Is there an age limit for baby and kids shoots? | No. We photograph newborns, babies and children of any age. |
 | What themes do you offer for kids? | Many, including Little Krishna, Little Farmer, Beach Baby, Traditional Florals, Kutchi Traditional, Teddy Time, Blue Skies, Pink Winter and First Birthday setups. Ask us about the latest themes. |
-| What should I bring for a baby shoot? | Please bring your baby's outfits, wraps and any favourite toys. We take care of the lighting, setups and photography. |
+| What should I bring for a baby shoot? | Please bring your baby's outfits, wraps and any favourite toys. We have a few props and themed setups at the studio, and we take care of the lighting and photography. |
 | How will I receive my photos? | In whatever format you prefer: pen drive, Google Drive, WhatsApp, or a printed album. |
 | How soon will I get my photos? | We deliver as soon as possible after your shoot. |
 | Can I customise my album? | Yes. Every album is designed to your choice of style, size and finish. |
@@ -737,31 +739,34 @@ Let's capture your story.
 
 - **Title:** Every detail, beautifully clear.
 - **Copy:** Look closer: the embroidery, the jewellery, the tiniest expressions. Every photograph is carefully lit, shot and edited so the details hold up, on screen and in print.
+- **Zoom captions** (approved 2026-10-24): The embroidery: Every thread and mirror, crisp. · The jewellery: Fine metalwork in true colour. · The expression: The moment you'll want to keep.
 
 ## 18. Open items and change log
 
 ### 18.1 Still needed
 
 - [x] **Consent (launch blocker):** confirmed by the owner on 2026-10-24 for every photo in the manifest, including the child photos and the wedding-01 album
-- [ ] Confirm opening hours are AM/PM as assumed (10 AM – 8 PM, Sunday 10 AM – 3 PM)
-- [ ] Confirm the owner's name spelling: Prakash S. Suryawanshi (the Facebook link resolves to a profile named prakash.sonawane: which surname is right, and is that the studio's account?)
-- [ ] What are DSC00006 and DSC00008 (woman, floral arch): maternity, portrait or something else?
-- [ ] Does the studio offer regular wedding or event video coverage (not cinematic films)? If yes, add it as a service
-- [ ] For baby shoots, does the studio provide props and themed backdrops? (The themed sets in the photos suggest yes)
+- [x] Opening hours confirmed: 10 AM – 8 PM, Sunday 10 AM – 3 PM (2026-10-24)
+- [x] Owner's name: Prakash S. Suryawanshi (2026-10-24). The Facebook link the developer gave resolves to a profile named prakash.sonawane; kept as given
+- [x] DSC00006 and DSC00008 (floral arch): the owner's daughter, a shop showpiece, no category (2026-10-24)
+- [x] Where to show DSC00006: a Portraits gallery tab, also in Best of (2026-10-26)
+- [x] Wedding and event video coverage: yes, full wedding video shoots (2026-10-24). Added as the "Wedding & Event Videos" service (17.6)
+- [x] Baby shoot props: yes, a few props and themed setups (2026-10-24); FAQ updated (17.10)
 - [ ] Photos still needed: wedding (actual photos, not only album pages), family, events; more newborn, maternity and pre-wedding (one or a few of each so far)
 - [x] `family.jpg` (delivered 2026-10-23) carried "Krishna Kids Photography" branding: replaced on 2026-10-24 by the unbranded `family-photo.jpg` (`family-studio-01`)
-- [ ] `pre-weding1.jpg` (now `pre-wedding-outdoor-01`): the pose suggests a maternity couple shoot; confirm pre-wedding or maternity
-- [ ] Owner photo and studio or behind-the-scenes photos (`about`)
+- [x] `pre-weding1.jpg` (`pre-wedding-outdoor-01`) is a pre-wedding shoot (2026-10-24)
+- [ ] Owner photo and studio or behind-the-scenes photos (`about`). `owner_photo.png` (2026-10-26) not used: it carries the Gemini sparkle mark (AI-edited, spec 7.1) and is only 893x1200; needs the original camera photo
 - [ ] Clean versions without the logo badge of DSC00008, DSC01597 and DSC01615
 - [ ] A cover for the beach-baby album
 - [ ] Before/after photo pairs (section hidden without them)
-- [ ] Year the studio started (optional)
+- [x] Year the studio started: October 2003 (2026-10-24)
 - [ ] Instagram profile URL (instagram.com/<handle>/, the invite link may expire or need a login), a Facebook business Page if there is one, and YouTube
 - [ ] Real customer reviews (from the Google Maps listing, with permission to quote)
 - [ ] Real numbers for stats (optional; section hidden without them)
 - [x] Logo approved by the user and the owner (2026-10-21)
-- [ ] Which logo is current: the gold "A" banner logo or the older blue logo on the wedding-01 back cover? (`wedding-01-06` stays excluded until confirmed)
+- [ ] Logo colour: the gold "A" logo stays for now; the developer will check whether the older blue (or a related blue) looks better and decide (2026-10-24). `wedding-01-06` stays excluded until then
 - [ ] Domain
+- [x] Web3Forms access key for the contact form (form "aakar studio" on the aakardigital81@gmail.com account, received 2026-10-26): committed in `src/lib/inquiry.ts` (the key is public by design and only sends to the studio inbox), so every deploy sends without host settings; `VITE_WEB3FORMS_KEY` can override it
 
 ### 18.2 Decisions made
 
@@ -771,6 +776,7 @@ Let's capture your story.
 - No AI-generated images anywhere on the site.
 - Google Maps listing photos are owner-uploaded and count as studio photos.
 - The studio does not provide baby outfits or wraps; copy reflects this.
+- Wedding and event video coverage is offered as a service card; still no cinematic films section or video embeds (2026-10-24).
 - Product photography is not offered (removed from services, marquee, description and SEO, 2026-10-23).
 - Logo is redrawn as SVG from the banner reference.
 - The site adapts to available photos: theme filters when only one category exists, icon-only service cards without real photos, hidden sections without content.
@@ -781,6 +787,9 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-26 | Web3Forms key committed in `src/lib/inquiry.ts` (public by design). DSC00006 published in a new `portrait` category (Portraits tab, featured; 5, 7.3, 18.1). Owner photo held back: Gemini AI mark (18.1) |
+| 2026-10-24 | Phase 8 built (5, 2): gallery lightbox (yet-another-react-lightbox, lazy) and Motion layout filter animations (`domMax`); album viewer with the CSS 3D flip-book, cover-to-book FLIP and the phone slider (signature moment 5, lazy); FAQ as a Motion accordion; Testimonials Embla slider (hidden until reviews); contact form on Web3Forms with sending / sent / error states (key pending, 18.1); before/after slider (hidden until pairs) |
+| 2026-10-24 | Owner answers (18.1): hours and owner name confirmed; founded October 2003 ("Since 2003", years stat, `foundingDate`); wedding and event videos added as a ninth service (5, 11, 17.3, 17.6, 18.2); baby props in the FAQ (17.10); `pre-wedding-outdoor-01` confirmed; DSC00006/8 explained (7.3); zoom captions approved (17.13); logo colour to be decided; domain suggestions (17.1) |
 | 2026-10-24 | Family photo added (7.3): `family-photo.jpg` replaces the branded `family.jpg` as `family-studio-01` (`consent: true`). The gallery gains a Family tab and the Family service card uses it (5, 17.6) |
 | 2026-10-24 | Consent confirmed by the owner for all 60 photos (and for `family-studio-01`, added the same day): `consent: true` in the manifest (7.3, 18.1). The gate and `VITE_ENFORCE_CONSENT=true` stay in place for photos added later |
 | 2026-10-23 | Instagram and Facebook links added (17.1, `studio.socials`): shown in the footer; the social grid stays hidden until posts are provided. Owner-name and Instagram-handle questions in 18.1 |

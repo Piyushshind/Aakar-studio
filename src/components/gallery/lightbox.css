@@ -1,0 +1,46 @@
+/* Lightbox theme (yet-another-react-lightbox): warm dark backdrop, gold controls, the site's type.
+   z-index 90 (set inline): above the header (50) and mobile menu (60), below the cursor (100). */
+.aakar-lightbox {
+  --yarl__color_backdrop: var(--color-bg);
+  --yarl__color_button: rgb(246 239 230 / 0.8);
+  --yarl__color_button_active: var(--color-gold-light);
+  --yarl__color_button_disabled: rgb(246 239 230 / 0.25);
+  --yarl__button_filter: none;
+  --yarl__icon_size: 28px;
+  --yarl__slide_icon_loading_color: var(--color-gold);
+  --yarl__slide_captions_container_background: transparent;
+  --yarl__slide_title_color: var(--color-gold);
+  --yarl__slide_title_font_size: 0.75rem;
+  --yarl__slide_title_font_weight: 600;
+  --yarl__counter_color: var(--color-muted);
+  --yarl__counter_filter: none;
+  /* Counter at the bottom left: the caption takes the top left. */
+  --yarl__counter_top: auto;
+  --yarl__counter_bottom: 0;
+  font-family: var(--font-sans);
+}
+
+/* Caption: a small gold eyebrow at the top left, clear of the counter and close button. */
+.aakar-lightbox .yarl__slide_title {
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.aakar-lightbox .yarl__counter {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+}
+
+.aakar-lightbox .yarl__button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -4px;
+}
+
+/* Phones: no side arrows over the photo; swipe instead (the buttons stay for keyboards). */
+@media (pointer: coarse) {
+  .aakar-lightbox .yarl__navigation_prev,
+  .aakar-lightbox .yarl__navigation_next {
+    display: none;
+  }
+}

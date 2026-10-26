@@ -94,6 +94,7 @@ export function Footer() {
         </p>
         <p>
           {studio.address.locality}, {studio.address.region}
+          {studio.foundedYear && <> · Since {studio.foundedYear}</>}
         </p>
       </Container>
 

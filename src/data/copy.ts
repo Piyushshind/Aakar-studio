@@ -42,6 +42,7 @@ export const marqueeWords = [
   'First Birthday',
   'Maternity',
   'Weddings',
+  'Wedding Videos',
   'Pre-Wedding',
   'Family',
   'Custom Albums',
@@ -51,12 +52,10 @@ export const marqueeWords = [
 export const homeIntro =
   "Every moment tells a story. At Aakar Digital Photo Studio, we capture yours with creativity, care and professional craft. From a newborn's very first days to the rituals and celebrations of your wedding, we turn fleeting moments into photographs you'll treasure for a lifetime.";
 
-// Spec 17.5. TBD: years in business. While null, the "For N years," clause is left out.
-const yearsInBusiness: number | null = null;
-
+// Spec 17.5. Opened in October 2003 (studio.foundedYear).
 export const aboutParagraphs = [
   `Aakar Digital Photo Studio is a photography studio in the heart of Jalgaon, led by ${studio.owner}. ${
-    yearsInBusiness ? `For ${yearsInBusiness} years, we` : 'We'
+    studio.foundedYear ? `Since ${studio.foundedYear}, we` : 'We'
   } have been photographing the moments families never want to forget: a newborn's first days, the glow of motherhood, a child's birthday, and the emotions of a wedding day.`,
   'Behind every shoot is a dedicated team of photographers, videographers and album designers. We shoot in our studio, outdoors, or wherever you need us, in Jalgaon and beyond.',
   'Every shoot ends the same way: with photographs and albums made just for you, to be kept, shared and relived for years to come.',
@@ -93,7 +92,7 @@ export const qualityCopy = {
   body: 'Look closer: the embroidery, the jewellery, the tiniest expressions. Every photograph is carefully lit, shot and edited so the details hold up, on screen and in print.',
 };
 
-// Zoom-into-detail stops (Phase 7), on traditional-flowers-03. DRAFT copy: needs approval.
+// Zoom-into-detail stops (Phase 7), on traditional-flowers-03. Captions approved 2026-10-24.
 // x, y: the detail's position as fractions of the photo; scale: zoom (≤ 2.2 keeps the 4000px -xl
 // master sharp on a 2x screen at 1440); label + text: the caption that fades in at the stop.
 export const qualityStops = [

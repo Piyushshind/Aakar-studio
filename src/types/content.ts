@@ -8,6 +8,7 @@ export type Category =
   | 'wedding'
   | 'pre-wedding'
   | 'family'
+  | 'portrait'
   | 'events'
   | 'product'
   | 'about';

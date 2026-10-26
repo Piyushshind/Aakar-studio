@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Container } from '@/components/ui/Container';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { Reveal } from '@/components/ui/Reveal';
@@ -15,6 +15,9 @@ import { MOTION_OK_QUERY } from '@/hooks/useReducedMotion';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { duration, ease } from '@/lib/motion';
 import { getPhotos } from '@/lib/photos';
+
+// Loaded only when real before/after pairs exist (none yet).
+const BeforeAfter = lazy(() => import('@/components/quality/BeforeAfter'));
 
 // Desktop with motion: the pinned zoom. Mobile and reduced motion: the static "Up close" layout.
 const ZOOM_QUERY = `(min-width: 1024px) and ${MOTION_OK_QUERY}`;
@@ -181,8 +184,11 @@ export function Quality() {
       </Container>
 
       {beforeAfterPairs.length > 0 && (
-        // Phase 8: react-compare-slider with the real pairs.
-        <Container className="mt-24" />
+        <Container className="mt-24">
+          <Suspense fallback={null}>
+            <BeforeAfter pairs={beforeAfterPairs} />
+          </Suspense>
+        </Container>
       )}
     </Section>
   );

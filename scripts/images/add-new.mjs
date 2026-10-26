@@ -72,6 +72,14 @@ const PHOTOS = {
     alt: 'Three-generation family portrait on a peach backdrop: grandparents, parents, a smiling little girl on a wooden stump and a baby on his grandfather’s lap',
     requiresConsent: true,
   },
+  // DSC00006 from the original batch (was in _review), copied here 2026-10-26: the owner's
+  // daughter, a shop showpiece (owner, 2026-10-24). DSC00008 stays out (logo badge).
+  'floral-arch-portrait.jpg': {
+    category: 'portrait',
+    theme: 'floral-arch',
+    alt: 'Young woman in a pink saree and green blouse holding pink roses before a floral stone arch',
+    requiresConsent: true,
+  },
 };
 
 // Delivered but not published, with the reason.

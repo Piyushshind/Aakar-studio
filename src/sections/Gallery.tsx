@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
@@ -13,25 +14,35 @@ import { useDragScroll } from '@/hooks/useDragScroll';
 import { MOTION_OK_QUERY } from '@/hooks/useReducedMotion';
 import { cn } from '@/lib/cn';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { duration, ease } from '@/lib/motion';
+import { duration, ease, transition } from '@/lib/motion';
+import { observeReveal } from '@/lib/reveal';
 import { getActiveLenis, goTo } from '@/lib/scroll';
 import type { Photo } from '@/types/content';
 
 const INITIAL_COUNT = 12;
 const GRID_SIZES = '(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw';
 
+// The lightbox and its CSS load on first use; hovering or touching a photo fetches them early.
+const loadLightbox = () => import('@/components/gallery/Lightbox');
+const Lightbox = lazy(loadLightbox);
+const prefetchLightbox = () => void loadLightbox();
+
+type OpenPhoto = (photo: Photo) => void;
+
 /**
- * A gallery photo as a button, ready for the Phase 8 lightbox. Hover and keyboard focus zoom the
- * photo slowly inside its frame (the `scale` property, separate from the reveal's transform).
+ * A gallery photo as a button that opens the lightbox. Hover and keyboard focus zoom the photo
+ * slowly inside its frame (the `scale` property, separate from the reveal's transform).
  */
 function PhotoButton({
   photo,
   sizes,
+  onOpen,
   cursor = 'view',
   className,
 }: {
   photo: Photo;
   sizes: string;
+  onOpen: OpenPhoto;
   /** Custom cursor label; 'inherit' uses the container's (the Best of strip's "Drag"). */
   cursor?: 'view' | 'inherit';
   className?: string;
@@ -40,7 +51,13 @@ function PhotoButton({
     <button
       type="button"
       aria-label={`View photo: ${photo.alt}`}
+      aria-haspopup="dialog"
+      data-photo-id={photo.id}
       data-cursor={cursor === 'inherit' ? undefined : cursor}
+      onClick={() => onOpen(photo)}
+      onPointerEnter={prefetchLightbox}
+      onTouchStart={prefetchLightbox}
+      onFocus={prefetchLightbox}
       className={cn('gallery-item group block w-full overflow-clip', className)}
     >
       <ResponsiveImage
@@ -53,17 +70,52 @@ function PhotoButton({
 }
 
 /**
- * Gallery (spec 5, item 6), static: theme (or category) filter tabs, a masonry grid that keeps
- * portrait and landscape photos at their own ratio, "View more", then the "Best of" strip
- * (native horizontal scroll; GSAP pinning comes in Phase 7). Filtering is plain state for now;
- * Motion layout animations come in Phase 8.
+ * A grid cell: the photo reveal (data-reveal, observed like <Reveal>) on a Motion item, so filter
+ * changes fade leaving photos out, slide the rest to their new places and fade new ones in. The
+ * `ref` prop is forwarded too: AnimatePresence measures a leaving item through it.
+ */
+function GridItem({ ref, children }: { ref?: Ref<HTMLLIElement>; children: ReactNode }) {
+  const own = useRef<HTMLLIElement | null>(null);
+  useEffect(() => (own.current ? observeReveal(own.current) : undefined), []);
+
+  return (
+    <m.li
+      ref={(el) => {
+        own.current = el;
+        if (typeof ref === 'function') ref(el);
+        else if (ref) ref.current = el;
+      }}
+      data-reveal="photo"
+      layout="position"
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96, transition: transition.fast }}
+      transition={transition.base}
+      className="mb-3 break-inside-avoid sm:mb-4"
+    >
+      {children}
+    </m.li>
+  );
+}
+
+/**
+ * Gallery (spec 5, item 6): category (or theme) filter tabs, a masonry grid that keeps portrait
+ * and landscape photos at their own ratio, "View more", then the "Best of" strip. Filter changes
+ * animate with Motion layout animations (the gold underline slides to the active tab); any photo
+ * opens the lightbox, stepping through the current tab (or the Best of photos).
  */
 export function Gallery() {
   const [tabId, setTabId] = useState('all');
   const [expanded, setExpanded] = useState(false);
+  const [viewer, setViewer] = useState<{ photos: Photo[]; index: number } | null>(null);
   const tab = galleryTabs.find((t) => t.id === tabId) ?? galleryTabs[0];
   const visible = expanded ? tab.photos : tab.photos.slice(0, INITIAL_COUNT);
   const { number, label } = sectionEyebrows.work;
+
+  const openIn =
+    (photos: Photo[]): OpenPhoto =>
+    (photo) =>
+      setViewer({ photos, index: Math.max(0, photos.indexOf(photo)) });
 
   return (
     <Section id="work" tone="surface" aria-labelledby="work-title" className="gallery">
@@ -96,16 +148,22 @@ export function Gallery() {
                       setExpanded(false);
                     }}
                     className={cn(
-                      '-mb-px flex items-baseline gap-1.5 border-b py-4 eyebrow text-xs whitespace-nowrap lg:text-[0.68rem]',
-                      active
-                        ? 'border-gold text-text'
-                        : 'border-transparent text-muted hover:text-text',
+                      'relative flex items-baseline gap-1.5 py-4 eyebrow text-xs whitespace-nowrap lg:text-[0.68rem]',
+                      active ? 'text-text' : 'text-muted hover:text-text',
                     )}
                   >
                     {t.label}
                     <span className="text-xs tracking-normal text-muted/80 lg:text-[0.6rem]">
                       {t.photos.length}
                     </span>
+                    {active && (
+                      <m.span
+                        layoutId="gallery-tab"
+                        aria-hidden="true"
+                        transition={transition.base}
+                        className="absolute inset-x-0 -bottom-px h-px bg-gold"
+                      />
+                    )}
                   </button>
                 </li>
               );
@@ -113,17 +171,16 @@ export function Gallery() {
           </ul>
         </Reveal>
 
-        <ul className="gallery-grid mt-10 columns-2 gap-3 sm:gap-4 md:columns-3 xl:columns-4">
-          {visible.map((photo) => (
-            <Reveal
-              as="li"
-              variant="photo"
-              key={photo.id}
-              className="mb-3 break-inside-avoid sm:mb-4"
-            >
-              <PhotoButton photo={photo} sizes={GRID_SIZES} />
-            </Reveal>
-          ))}
+        {/* relative: a leaving photo is taken out of the flow (popLayout) and placed absolutely
+            here while it fades, so the others can already move into the gap. */}
+        <ul className="gallery-grid relative mt-10 columns-2 gap-3 sm:gap-4 md:columns-3 xl:columns-4">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visible.map((photo) => (
+              <GridItem key={photo.id}>
+                <PhotoButton photo={photo} sizes={GRID_SIZES} onOpen={openIn(tab.photos)} />
+              </GridItem>
+            ))}
+          </AnimatePresence>
         </ul>
 
         {!expanded && tab.photos.length > INITIAL_COUNT && (
@@ -135,7 +192,13 @@ export function Gallery() {
         )}
       </Container>
 
-      {bestOf.length > 0 && <BestOfStrip />}
+      {bestOf.length > 0 && <BestOfStrip onOpen={openIn(bestOf)} />}
+
+      {viewer && (
+        <Suspense fallback={null}>
+          <Lightbox photos={viewer.photos} index={viewer.index} onClose={() => setViewer(null)} />
+        </Suspense>
+      )}
     </Section>
   );
 }
@@ -163,7 +226,7 @@ const ITEM_HEIGHT = 'h-[clamp(320px,62svh,680px)]';
  * moves one-to-one under the pointer.
  * Mobile and reduced motion: the native horizontal row with snap points.
  */
-function BestOfStrip() {
+function BestOfStrip({ onOpen }: { onOpen: OpenPhoto }) {
   const root = useRef<HTMLDivElement>(null);
   const strip = useRef<HTMLDivElement>(null);
   const pinned = useRef<ScrollTrigger | null>(null);
@@ -287,6 +350,7 @@ function BestOfStrip() {
               key={photo.id}
               photo={photo}
               sizes="(min-width: 1024px) 45vw, 85vw"
+              onOpen={onOpen}
               cursor="inherit"
               className={`best-of-item best-of-photo ${ITEM_HEIGHT} w-auto shrink-0 snap-start [&>div]:h-full [&>div]:w-auto`}
             />

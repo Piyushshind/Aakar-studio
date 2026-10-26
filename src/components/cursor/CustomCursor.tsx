@@ -4,8 +4,15 @@ import { FINE_POINTER_QUERY, useReducedMotion } from '@/hooks/useReducedMotion';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { duration, ease } from '@/lib/motion';
 
-/** `data-cursor` values and their labels (gallery photos, album cards, Best of, service rows). */
-const LABELS: Record<string, string> = { view: 'View', drag: 'Drag', enquire: 'Enquire' };
+/** `data-cursor` values and their labels (gallery photos, album cards, Best of, service rows,
+ * the album flip-book's halves). */
+const LABELS: Record<string, string> = {
+  view: 'View',
+  drag: 'Drag',
+  enquire: 'Enquire',
+  prev: 'Back',
+  next: 'Next',
+};
 
 /** Native cursor here (precision matters), so the custom one hides. Matches animations.css. */
 const NATIVE = 'input, textarea, select, iframe, [contenteditable]';

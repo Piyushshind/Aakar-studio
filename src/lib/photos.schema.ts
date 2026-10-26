@@ -28,6 +28,7 @@ export const photoSchema = z.strictObject({
       'wedding',
       'pre-wedding',
       'family',
+      'portrait',
       'events',
       'product',
       'about',

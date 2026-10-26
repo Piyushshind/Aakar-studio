@@ -1084,6 +1084,25 @@
     "originalFile": "new-born.jpg"
   },
   {
+    "id": "portrait-floral-arch-01",
+    "src": "src/assets/photos/portrait/portrait-floral-arch-01.webp",
+    "alt": "Young woman in a pink saree and green blouse holding pink roses before a floral stone arch",
+    "category": "portrait",
+    "orientation": "portrait",
+    "width": 1707,
+    "height": 2560,
+    "source": "studio",
+    "theme": "floral-arch",
+    "kind": "photo",
+    "album": null,
+    "albumOrder": null,
+    "qualityTier": "hero",
+    "featured": true,
+    "consent": true,
+    "requiresConsent": true,
+    "originalFile": "floral-arch-portrait.jpg"
+  },
+  {
     "id": "pre-wedding-outdoor-01",
     "src": "src/assets/photos/pre-wedding/pre-wedding-outdoor-01.webp",
     "alt": "Couple standing close in a field of dry grass, she in a red dress",

@@ -11,6 +11,7 @@ import {
   Printer,
   Sparkles,
   Users,
+  Video,
   type LucideIcon,
   type LucideProps,
 } from 'lucide-react';
@@ -30,6 +31,7 @@ const ICONS: Partial<Record<IconName, LucideIcon>> = {
   Printer,
   Sparkles,
   Users,
+  Video,
 };
 
 /** A lucide icon by its data name (e.g. a service's `icon`). Decorative by default. */

@@ -42,12 +42,13 @@ function AboutMark() {
       </div>
       <p className="absolute inset-x-0 bottom-8 text-center eyebrow text-xs text-muted sm:bottom-10 lg:text-[0.62rem]">
         {studio.subTagline} · {studio.address.locality}
+        {studio.foundedYear && <> · Since {studio.foundedYear}</>}
       </p>
     </Reveal>
   );
 }
 
-/** About (spec 5, item 13; copy 17.5). Stats only with real numbers (none yet). */
+/** About (spec 5, item 13; copy 17.5). Stats only with real numbers (years since 2003). */
 export function About() {
   const photos = getPhotos({ category: 'about', kind: 'photo' });
   const [lead, ...paragraphs] = aboutParagraphs;

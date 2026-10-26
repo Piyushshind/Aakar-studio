@@ -17,6 +17,7 @@ const categoryLabels: Record<Category, string> = {
   wedding: 'Wedding',
   'pre-wedding': 'Pre-Wedding',
   family: 'Family',
+  portrait: 'Portraits',
   events: 'Events',
   product: 'Product',
   about: 'About',
@@ -80,6 +81,13 @@ export const galleryTabs: GalleryTab[] = [
         })),
       )),
 ];
+
+/** Lightbox caption: category and theme, e.g. "Baby & Kids · Little Krishna". */
+export function photoCaption(photo: Photo) {
+  const category = categoryLabels[photo.category as Category] ?? themeLabel(photo.category);
+  const theme = themeLabel(photo.theme);
+  return theme === category ? category : `${category} · ${theme}`;
+}
 
 /** Featured photos for the "Best of" strip. */
 export const bestOf = galleryPhotos.filter((p) => p.featured);

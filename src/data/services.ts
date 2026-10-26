@@ -39,6 +39,14 @@ export const services: Service[] = [
     whatsappMessage: "Hi, I'd like to know about Wedding Photography.",
   },
   {
+    id: 'video',
+    title: 'Wedding & Event Videos',
+    icon: 'Video',
+    description:
+      'Full video coverage of your wedding, ceremonies and events, from the rituals to the celebrations, so you can relive every moment.',
+    whatsappMessage: "Hi, I'd like to know about video coverage for a wedding or event.",
+  },
+  {
     id: 'pre-wedding',
     title: 'Pre-Wedding & Engagement',
     icon: 'HeartHandshake',

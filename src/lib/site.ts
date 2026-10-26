@@ -9,7 +9,7 @@ export const SITE_URL = 'https://example.com';
 export const SITE_TITLE =
   'Aakar Digital Photo Studio | Newborn, Baby & Wedding Photographer in Jalgaon';
 
-export const SITE_DESCRIPTION = `Newborn, baby, maternity, wedding, pre-wedding and family photography in Jalgaon, Maharashtra. Studio and outdoor shoots, custom albums. Call or WhatsApp ${studio.phone}.`;
+export const SITE_DESCRIPTION = `Newborn, baby, maternity, wedding, pre-wedding and family photography in Jalgaon, Maharashtra, since 2003. Wedding and event videos, studio and outdoor shoots, custom albums. Call or WhatsApp ${studio.phone}.`;
 
 export const SITE_KEYWORDS = [
   'newborn photography Jalgaon',
@@ -17,6 +17,7 @@ export const SITE_KEYWORDS = [
   'kids theme photoshoot Jalgaon',
   'first birthday photoshoot Jalgaon',
   'wedding photographer Jalgaon',
+  'wedding videography Jalgaon',
   'pre-wedding shoot Jalgaon',
   'maternity photoshoot Jalgaon',
   'passport photo Jalgaon',

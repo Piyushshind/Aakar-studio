@@ -49,6 +49,19 @@ export function getPhotoSources(photo: Photo, { xl = false } = {}): PhotoSources
   };
 }
 
+/**
+ * The WebP widths as {src, width, height} entries (the lightbox's `srcSet` format; WebP because a
+ * plain <img> has no format fallback). Height follows the photo's own ratio.
+ */
+export function getPhotoSrcSet(photo: Photo) {
+  const srcset = getPhotoSources(photo)?.webp;
+  if (!srcset) return [];
+  return [...srcset.matchAll(/(\S+)\s(\d+)w/g)].map(([, src, w]) => {
+    const width = Number(w);
+    return { src, width, height: Math.round((width * photo.height) / photo.width) };
+  });
+}
+
 /** URL of the largest built WebP, e.g. for meta tags. */
 export function resolvePhotoUrl(photo: Photo): string | undefined {
   return getPhotoSources(photo)?.src;
