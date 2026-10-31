@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { startTransition, StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import '@fontsource-variable/fraunces/opsz.css';
 import '@fontsource-variable/manrope';
@@ -14,12 +14,14 @@ if (import.meta.env.DEV) {
 }
 
 // The build pre-renders the page into #root (scripts/prerender.mjs), so React hydrates it; the dev
-// server serves an empty #root and renders from scratch.
+// server serves an empty #root and renders from scratch. Hydration runs as a transition so React
+// yields to the browser between sections (App.tsx wraps each in Suspense) instead of blocking
+// the main thread for the whole page at once (Phase 10: ~1.4 s TBT on a throttled phone).
 const container = document.getElementById('root')!;
 const app = (
   <StrictMode>
     <Root />
   </StrictMode>
 );
-if (container.hasChildNodes()) hydrateRoot(container, app);
+if (container.hasChildNodes()) startTransition(() => void hydrateRoot(container, app));
 else createRoot(container).render(app);

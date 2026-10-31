@@ -8,8 +8,14 @@ import { Root } from './Root';
 export { headTags, robotsTxt, sitemapXml } from './lib/seo';
 export { SITE_URL } from './lib/site';
 
-/** The page body as HTML, with every Suspense boundary resolved. */
+/**
+ * The page body as HTML, every Suspense boundary resolved and written in place.
+ * `progressiveChunkSize: Infinity`: React otherwise moves a large boundary's content out of line
+ * (a fallback, the content in a hidden <div> at the end, a script to swap it in) so a stream can
+ * flush sooner. Nothing streams here, and hydration would rebuild such a boundary (the contact
+ * form) instead of reusing its HTML.
+ */
 export async function render() {
-  const { prelude } = await prerender(createElement(Root));
+  const { prelude } = await prerender(createElement(Root), { progressiveChunkSize: Infinity });
   return new Response(prelude).text();
 }

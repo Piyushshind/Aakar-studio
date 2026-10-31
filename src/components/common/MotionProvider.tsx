@@ -1,6 +1,11 @@
-import { domMax, LazyMotion, MotionConfig } from 'motion/react';
+import { LazyMotion, MotionConfig } from 'motion/react';
 import type { ReactNode } from 'react';
 import { transition } from '@/lib/motion';
+
+// Loaded on demand (Phase 10): the features are most of Motion's weight, and nothing animates
+// with Motion before the visitor interacts (menu, filters, FAQ, form), so they leave the main
+// bundle. `m` components render normally until they arrive.
+const loadFeatures = () => import('./motionFeatures').then((mod) => mod.default);
 
 /**
  * Motion at the app root (spec 2): LazyMotion (use `m.*`, not `motion.*`; `strict` enforces it),
@@ -9,7 +14,7 @@ import { transition } from '@/lib/motion';
  */
 export function MotionProvider({ children }: { children: ReactNode }) {
   return (
-    <LazyMotion features={domMax} strict>
+    <LazyMotion features={loadFeatures} strict>
       <MotionConfig reducedMotion="user" transition={transition.base}>
         {children}
       </MotionConfig>

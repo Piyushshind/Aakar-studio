@@ -46,9 +46,19 @@ if (missing.length > 0) {
   throw new Error(`prerender: ${missing.length} asset(s) missing from dist/, e.g. ${missing[0]}`);
 }
 
+// Spec 9: preload the display font (the hero title, likely the LCP text), so it doesn't wait for
+// the CSS to be parsed first. Latin subset only; Vite hashes the file name.
+const fontFile = (await fs.readdir(path.join(DIST, 'assets'))).find((f) =>
+  /^fraunces-latin-opsz-normal-.*\.woff2$/.test(f),
+);
+if (!fontFile) console.warn('prerender: Fraunces latin woff2 not found, so no font preload');
+const fontPreload = fontFile
+  ? `<link rel="preload" href="/assets/${fontFile}" as="font" type="font/woff2" crossorigin />\n    `
+  : '';
+
 const html = template
   .replace(ROOT_DIV, `<div id="root">${body}</div>`)
-  .replace('</head>', `    ${headTags(siteUrl)}\n  </head>`);
+  .replace('</head>', `    ${fontPreload}${headTags(siteUrl)}\n  </head>`);
 await fs.writeFile(path.join(DIST, 'index.html'), html);
 await fs.writeFile(path.join(DIST, 'robots.txt'), robotsTxt(siteUrl));
 await fs.writeFile(path.join(DIST, 'sitemap.xml'), sitemapXml(siteUrl));

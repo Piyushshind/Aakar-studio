@@ -1,28 +1,18 @@
 // The only place GSAP plugins are registered (spec 8.2). Every other file imports GSAP from here.
+// Only the plugins the site uses (Phase 10): Flip, MorphSVG, CustomEase and ScrollTo were
+// registered but unused (the album viewer measures its own FLIP), and every plugin ships in the
+// main bundle. Import and register one here again if it's ever needed.
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
-import { CustomEase } from 'gsap/CustomEase';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { Flip } from 'gsap/Flip';
-import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { duration, ease } from './motion';
 import { getActiveLenis } from './scroll';
 
-gsap.registerPlugin(
-  useGSAP,
-  ScrollTrigger,
-  SplitText,
-  Flip,
-  CustomEase,
-  DrawSVGPlugin,
-  MorphSVGPlugin,
-  ScrollToPlugin,
-);
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText, DrawSVGPlugin);
 
-// The spec 4.5 eases are built into GSAP, so no CustomEase curves are needed yet.
+// The spec 4.5 eases are built into GSAP, so no CustomEase curves are needed.
 gsap.defaults({ ease: ease.out, duration: duration.base });
 
 // Mobile address-bar show/hide shouldn't trigger a full refresh.
@@ -64,14 +54,4 @@ if (typeof document !== 'undefined') {
   if (import.meta.env.DEV) Object.assign(window, { __gsap: gsap, __ScrollTrigger: ScrollTrigger });
 }
 
-export {
-  CustomEase,
-  DrawSVGPlugin,
-  Flip,
-  gsap,
-  MorphSVGPlugin,
-  ScrollToPlugin,
-  ScrollTrigger,
-  SplitText,
-  useGSAP,
-};
+export { DrawSVGPlugin, gsap, ScrollTrigger, SplitText, useGSAP };

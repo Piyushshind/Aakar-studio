@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 import { FloatingButtons } from '@/components/common/FloatingButtons';
 import { Preloader } from '@/components/common/Preloader';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
@@ -29,6 +29,15 @@ const showDevPanels =
   typeof window !== 'undefined' &&
   new URLSearchParams(window.location.search).has('dev');
 
+/**
+ * A hydration unit (Phase 10). Each section hydrates, and runs its animation setup, as its own
+ * task, so the browser can paint and respond in between. Nothing inside suspends, so the
+ * pre-rendered HTML is unchanged and the fallback never shows.
+ */
+function Chunk({ children }: { children: ReactNode }) {
+  return <Suspense fallback={null}>{children}</Suspense>;
+}
+
 function App() {
   if (DevPanels && showDevPanels) {
     return (
@@ -50,21 +59,51 @@ function App() {
       <main id="main" tabIndex={-1} className="outline-none">
         {/* Spec 5 order. Sections with no content (testimonials, social) render nothing. */}
         <Hero />
-        <Marquee />
-        <Quality />
-        <Gallery />
-        <BabyBand />
-        <Albums />
-        <Services />
-        <AnywhereBand />
-        <QuoteBand />
-        <Process />
-        <About />
-        <Testimonials />
-        <Faq />
-        <Social />
-        <Contact />
+        <Chunk>
+          <Marquee />
+        </Chunk>
+        <Chunk>
+          <Quality />
+        </Chunk>
+        <Chunk>
+          <Gallery />
+        </Chunk>
+        <Chunk>
+          <BabyBand />
+        </Chunk>
+        <Chunk>
+          <Albums />
+        </Chunk>
+        <Chunk>
+          <Services />
+        </Chunk>
+        <Chunk>
+          <AnywhereBand />
+        </Chunk>
+        <Chunk>
+          <QuoteBand />
+        </Chunk>
+        <Chunk>
+          <Process />
+        </Chunk>
+        <Chunk>
+          <About />
+        </Chunk>
+        <Chunk>
+          <Testimonials />
+        </Chunk>
+        <Chunk>
+          <Faq />
+        </Chunk>
+        <Chunk>
+          <Social />
+        </Chunk>
+        <Chunk>
+          <Contact />
+        </Chunk>
       </main>
+      {/* Not a Chunk: the preloader marks the top-level elements inert while it plays, and a
+          footer still waiting to hydrate would then mismatch its server HTML. */}
       <Footer />
       {/* Global extras (spec 5): progress line, WhatsApp and back-to-top buttons, cursor. */}
       <ScrollProgress />
