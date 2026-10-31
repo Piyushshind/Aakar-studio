@@ -46,15 +46,22 @@ if (missing.length > 0) {
   throw new Error(`prerender: ${missing.length} asset(s) missing from dist/, e.g. ${missing[0]}`);
 }
 
-// Spec 9: preload the display font (the hero title, likely the LCP text), so it doesn't wait for
-// the CSS to be parsed first. Latin subset only; Vite hashes the file name.
-const fontFile = (await fs.readdir(path.join(DIST, 'assets'))).find((f) =>
-  /^fraunces-latin-opsz-normal-.*\.woff2$/.test(f),
-);
-if (!fontFile) console.warn('prerender: Fraunces latin woff2 not found, so no font preload');
-const fontPreload = fontFile
-  ? `<link rel="preload" href="/assets/${fontFile}" as="font" type="font/woff2" crossorigin />\n    `
-  : '';
+// Spec 9: preload the display font (the hero title, likely the LCP text) and the body font, so
+// they don't wait for the CSS to be parsed first. A late body font re-flowed the whole page in
+// one ~400 ms task on a throttled phone (Phase 10). Latin subsets only; Vite hashes the names.
+const assets = await fs.readdir(path.join(DIST, 'assets'));
+const fontPreload = [
+  /^fraunces-latin-opsz-normal-.*\.woff2$/,
+  /^manrope-latin-wght-normal-.*\.woff2$/,
+]
+  .map((pattern) => {
+    const file = assets.find((f) => pattern.test(f));
+    if (!file) console.warn(`prerender: no font file matches ${pattern}, so no preload for it`);
+    return file
+      ? `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin />\n    `
+      : '';
+  })
+  .join('');
 
 const html = template
   .replace(ROOT_DIV, `<div id="root">${body}</div>`)

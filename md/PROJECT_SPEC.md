@@ -100,10 +100,10 @@ Use one tool per job, and never animate the same property of the same element wi
 | Styling | Tailwind CSS v4 | Official `@tailwindcss/vite` plugin, CSS-first config with `@theme`, no `tailwind.config.js`, no PostCSS setup |
 | Custom CSS | Plain CSS files | Keyframes, masks, clip-paths, 3D transforms, scroll-driven CSS |
 | Scroll and timelines | GSAP + ScrollTrigger | All plugins are free, including commercial use |
-| GSAP plugins | SplitText, Flip, CustomEase, DrawSVG, MorphSVG, ScrollToPlugin | Register once in `src/lib/gsap.ts` |
+| GSAP plugins | ScrollTrigger, SplitText, DrawSVG (Flip, CustomEase, MorphSVG, ScrollToPlugin removed in Phase 10: unused, and every registered plugin ships in the main bundle) | Register once in `src/lib/gsap.ts` |
 | GSAP in React | `@gsap/react` (`useGSAP`) | Always with a `scope` ref, never raw `useEffect` |
 | Smooth scroll | Lenis (`lenis/react`) | One instance at app root, synced with ScrollTrigger |
-| UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` with the `domMax` features (layout animations for the gallery filters, Phase 8) |
+| UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` with the `domMax` features (layout animations for the gallery filters, Phase 8), loaded on demand from their own chunk (Phase 10) |
 | Simple scroll effects | Native CSS scroll-driven animations | Reveals, progress bar, light parallax; wrap in `@supports` with a fallback |
 | WebGL | Hand-written WebGL2 module (`src/components/webgl/heroGL.ts`) | Hero transition only, lazy-loaded. Chosen over three + R3F by measurement (2026-10-23): lazy chunk 2.1 KB gz versus 335.6 KB (three alone 135.1 KB) for one full-screen plane. three / R3F stay installed but unused |
 | Post-processing | none | Not needed for one shader |
@@ -115,7 +115,7 @@ Use one tool per job, and never animate the same property of the same element wi
 | Icons | lucide-react | |
 | Fonts | @fontsource-variable | Self-hosted, max two families |
 | Class helpers | clsx + tailwind-merge | A `cn()` utility |
-| Forms | react-hook-form + zod, sent to Web3Forms (chosen 2026-10-24) | No backend. The public access key is in `src/lib/inquiry.ts` (`VITE_WEB3FORMS_KEY` overrides it) |
+| Forms | react-hook-form + zod (`zod/mini` since Phase 10, for bundle size), sent to Web3Forms (chosen 2026-10-24) | No backend. The public access key is in `src/lib/inquiry.ts` (`VITE_WEB3FORMS_KEY` overrides it) |
 | Images | vite-imagetools (responsive sizes from the WebP masters) | Section 7.2 |
 | Logo and brand assets | Hand-built SVG, exported with sharp (Node) or Pillow/cairosvg (Python) | Section 4.6 |
 | Pre-rendering | Own step on React's `prerender` (react-dom/static), Phase 9 | `pnpm build` runs an SSR build of `src/entry-server.ts`, then `scripts/prerender.mjs` writes the page into `dist/index.html` (hydrated by `main.tsx`) with the head tags, JSON-LD, `robots.txt` and `sitemap.xml` from `src/lib/seo.ts`. No router needed for one page, so no vite-react-ssg |
@@ -790,6 +790,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-31 | Phase 10 (performance), measured on the production build with a Lighthouse-like lab run (slow 4G, 4x CPU): mobile LCP 7.4 s to about 2.1 s with pre-rendering, CLS 0. Main bundle trimmed (unused GSAP plugins removed, Motion features lazy, `zod/mini`); hydration runs as a transition with one Suspense unit per section (`App.tsx`) to cut blocking time; both Latin fonts preloaded; `progressiveChunkSize: Infinity` so large boundaries are pre-rendered in place. Lazy-loading the contact form was tried and dropped: hydration discarded its server HTML (2, 9) |
 | 2026-10-31 | Phase 9 built: pre-rendering with hydration (2, 11, 12), head tags, Open Graph/Twitter, canonical, `ProfessionalService` and `FAQPage` JSON-LD, `robots.txt`, `sitemap.xml` (`src/lib/seo.ts`); accessibility pass with axe-core (no violations), heading/landmark check and a full keyboard walk: fixed filter-list semantics, service-number contrast, menu `aria-controls`, the h1's accessible name, and Lenis overriding keyboard focus scrolling (now handled in `SmoothScrollProvider`); preloader made hydration-safe; `CREDITS.md` added |
 | 2026-10-31 | Deploy: Vercel from the public GitHub repo. The website's WebP photos in `src/assets/photos/` are now committed (except `_review/` and the excluded `wedding-01-06`); originals stay git-ignored (12, 15, 18.2) |
 | 2026-10-31 | Wedding & event videos: card removed (no video material, no blank tile); now in the "Also available" row (renamed from "Also at the studio"), in the Wedding card text and as a contact-form shoot type (5, 17.6) |

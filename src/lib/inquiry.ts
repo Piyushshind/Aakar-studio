@@ -1,4 +1,5 @@
-import { z } from 'zod';
+// zod/mini (Phase 10): the same validation with a fraction of the bundle cost of classic zod.
+import * as z from 'zod/mini';
 import { services } from '@/data/services';
 import { STUDIO_TIME_ZONE } from './hours';
 
@@ -23,23 +24,29 @@ const PHONE_RE = /^(?:\+?91|0)?[1-9]\d{9}$/;
 export const inquirySchema = z.object({
   name: z
     .string()
-    .trim()
-    .min(1, 'Please enter your name.')
-    .min(2, 'Please enter at least 2 letters.')
-    .max(80, 'Please shorten your name.'),
-  phone: z
-    .string()
-    .trim()
-    .min(1, 'Please enter your phone number.')
-    .refine(
+    .check(
+      z.trim(),
+      z.minLength(1, 'Please enter your name.'),
+      z.minLength(2, 'Please enter at least 2 letters.'),
+      z.maxLength(80, 'Please shorten your name.'),
+    ),
+  phone: z.string().check(
+    z.trim(),
+    z.minLength(1, 'Please enter your phone number.'),
+    z.refine(
       (v) => PHONE_RE.test(v.replace(/[\s-]/g, '')),
       'Please enter a valid 10-digit phone number.',
     ),
-  shootType: z.string().min(1, 'Please choose a shoot type.'),
+  ),
+  shootType: z.string().check(z.minLength(1, 'Please choose a shoot type.')),
   date: z
     .string()
-    .refine((v) => v === '' || v >= todayInStudio(), 'Please choose a date from today onwards.'),
-  message: z.string().trim().max(1000, 'Please keep your message under 1,000 characters.'),
+    .check(
+      z.refine((v) => v === '' || v >= todayInStudio(), 'Please choose a date from today onwards.'),
+    ),
+  message: z
+    .string()
+    .check(z.trim(), z.maxLength(1000, 'Please keep your message under 1,000 characters.')),
 });
 
 export type InquiryInput = z.input<typeof inquirySchema>;
