@@ -606,6 +606,8 @@ Deploy the static `dist/` folder to Netlify, Cloudflare Pages, Vercel or GitHub 
 
 The repo stays public and the website's photos are committed (2026-10-31), so Vercel deploys straight from the GitHub repo: framework Vite, build `pnpm build`, output `dist`, environment variable `VITE_ENFORCE_CONSENT=true`.
 
+*Phase 12 setup (2026-10-31):* `vercel.json` holds the install and build commands and the headers (one-year immutable cache for the hashed files in `/assets/`, `nosniff`, a referrer policy). `package.json` pins `packageManager: pnpm@12.14.0` and Node `24.x`; Vercel needs `ENABLE_EXPERIMENTAL_COREPACK=1` to use that pnpm version. Production builds take the Vercel production domain as the site URL until `SITE_URL` in `src/lib/site.ts` is set (11). The first build encodes every photo (AVIF and WebP), so it takes several minutes.
+
 ## 16. Acceptance checklist
 
 - [ ] First screen loads fast and looks stunning on mobile and desktop
@@ -790,6 +792,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-31 | Phase 11 skipped for now (no new content from the owner). Phase 12 started: `vercel.json` (build settings, cache and security headers), pnpm and Node pinned in `package.json` (15) |
 | 2026-10-31 | Phase 10 closed: mobile performance accepted as is by the developer (clean lab run: LCP 2.0–2.4 s, CLS 0, TBT about 0.9–1.1 s; desktop LCP 0.96 s, TBT 40 ms); a lighter phone version was offered and declined. Unused `three`, `@react-three/*` and `@types/three` removed (0.3, 2). "Call us" button: accessible name now matches its visible text (10) |
 | 2026-10-31 | Phase 10 (performance), measured on the production build with a Lighthouse-like lab run (slow 4G, 4x CPU): mobile LCP 7.4 s to about 2.1 s with pre-rendering, CLS 0. Main bundle trimmed (unused GSAP plugins removed, Motion features lazy, `zod/mini`); hydration runs as a transition with one Suspense unit per section (`App.tsx`) to cut blocking time; both Latin fonts preloaded; `progressiveChunkSize: Infinity` so large boundaries are pre-rendered in place. Lazy-loading the contact form was tried and dropped: hydration discarded its server HTML (2, 9) |
 | 2026-10-31 | Phase 9 built: pre-rendering with hydration (2, 11, 12), head tags, Open Graph/Twitter, canonical, `ProfessionalService` and `FAQPage` JSON-LD, `robots.txt`, `sitemap.xml` (`src/lib/seo.ts`); accessibility pass with axe-core (no violations), heading/landmark check and a full keyboard walk: fixed filter-list semantics, service-number contrast, menu `aria-controls`, the h1's accessible name, and Lenis overriding keyboard focus scrolling (now handled in `SmoothScrollProvider`); preloader made hydration-safe; `CREDITS.md` added |
