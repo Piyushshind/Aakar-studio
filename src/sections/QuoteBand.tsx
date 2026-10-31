@@ -50,14 +50,12 @@ export function QuoteBand() {
             >
               {quoteBand.ctaWhatsapp}
             </Button>
-            <Button
-              href={telLink()}
-              variant="secondary"
-              size="lg"
-              icon={<Phone />}
-              aria-label={`${quoteBand.ctaCall}: ${studio.phone}`}
-            >
-              {quoteBand.ctaCall} · {studio.phone}
+            <Button href={telLink()} variant="secondary" size="lg" icon={<Phone />}>
+              {/* Name from the content (no aria-label), so it always matches the visible text
+                  (Lighthouse: label-content-name-mismatch); the dot is hidden from screen readers. */}
+              {quoteBand.ctaCall}
+              <span aria-hidden="true"> · </span>
+              {studio.phone}
             </Button>
           </Reveal>
         </Reveal>

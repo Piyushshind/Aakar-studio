@@ -35,12 +35,12 @@ Verify each of these against `package.json`. Install any that are missing. Do no
 | --- | --- |
 | Styling | `tailwindcss`, `@tailwindcss/vite` |
 | Animation | `gsap`, `@gsap/react`, `lenis`, `motion` |
-| WebGL | `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing` |
+| WebGL | none (hand-written WebGL2 module, section 2; `three` and `@react-three/*` removed 2026-10-31) |
 | Gallery and UI | `embla-carousel-react`, `embla-carousel-autoplay`, `yet-another-react-lightbox`, `react-compare-slider`, `lucide-react` |
 | Utilities | `clsx`, `tailwind-merge` |
 | Forms | `react-hook-form`, `zod`, `@hookform/resolvers` |
 | Fonts | `@fontsource-variable/fraunces`, `@fontsource-variable/manrope` |
-| Dev | `@types/three`, `prettier`, `prettier-plugin-tailwindcss`, `vite-imagetools`, `sharp`, `rollup-plugin-visualizer` |
+| Dev | `prettier`, `prettier-plugin-tailwindcss`, `vite-imagetools`, `sharp`, `rollup-plugin-visualizer` |
 
 Remove: `react-lite-youtube-embed` (the studio does not offer cinematic films).
 
@@ -105,7 +105,7 @@ Use one tool per job, and never animate the same property of the same element wi
 | Smooth scroll | Lenis (`lenis/react`) | One instance at app root, synced with ScrollTrigger |
 | UI motion | Motion (`motion`, import from `motion/react`) | Hover, tap, menus, lightbox, accordion, layout and exit animations; use `LazyMotion` + `m` with the `domMax` features (layout animations for the gallery filters, Phase 8), loaded on demand from their own chunk (Phase 10) |
 | Simple scroll effects | Native CSS scroll-driven animations | Reveals, progress bar, light parallax; wrap in `@supports` with a fallback |
-| WebGL | Hand-written WebGL2 module (`src/components/webgl/heroGL.ts`) | Hero transition only, lazy-loaded. Chosen over three + R3F by measurement (2026-10-23): lazy chunk 2.1 KB gz versus 335.6 KB (three alone 135.1 KB) for one full-screen plane. three / R3F stay installed but unused |
+| WebGL | Hand-written WebGL2 module (`src/components/webgl/heroGL.ts`) | Hero transition only, lazy-loaded. Chosen over three + R3F by measurement (2026-10-23): lazy chunk 2.1 KB gz versus 335.6 KB (three alone 135.1 KB) for one full-screen plane. three / R3F were removed as unused (2026-10-31) |
 | Post-processing | none | Not needed for one shader |
 | Interactive vector | Rive (`@rive-app/react-canvas`) | Optional, e.g. camera shutter loader |
 | Carousels | embla-carousel-react (+ autoplay plugin) | |
@@ -790,6 +790,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-31 | Phase 10 closed: mobile performance accepted as is by the developer (clean lab run: LCP 2.0–2.4 s, CLS 0, TBT about 0.9–1.1 s; desktop LCP 0.96 s, TBT 40 ms); a lighter phone version was offered and declined. Unused `three`, `@react-three/*` and `@types/three` removed (0.3, 2). "Call us" button: accessible name now matches its visible text (10) |
 | 2026-10-31 | Phase 10 (performance), measured on the production build with a Lighthouse-like lab run (slow 4G, 4x CPU): mobile LCP 7.4 s to about 2.1 s with pre-rendering, CLS 0. Main bundle trimmed (unused GSAP plugins removed, Motion features lazy, `zod/mini`); hydration runs as a transition with one Suspense unit per section (`App.tsx`) to cut blocking time; both Latin fonts preloaded; `progressiveChunkSize: Infinity` so large boundaries are pre-rendered in place. Lazy-loading the contact form was tried and dropped: hydration discarded its server HTML (2, 9) |
 | 2026-10-31 | Phase 9 built: pre-rendering with hydration (2, 11, 12), head tags, Open Graph/Twitter, canonical, `ProfessionalService` and `FAQPage` JSON-LD, `robots.txt`, `sitemap.xml` (`src/lib/seo.ts`); accessibility pass with axe-core (no violations), heading/landmark check and a full keyboard walk: fixed filter-list semantics, service-number contrast, menu `aria-controls`, the h1's accessible name, and Lenis overriding keyboard focus scrolling (now handled in `SmoothScrollProvider`); preloader made hydration-safe; `CREDITS.md` added |
 | 2026-10-31 | Deploy: Vercel from the public GitHub repo. The website's WebP photos in `src/assets/photos/` are now committed (except `_review/` and the excluded `wedding-01-06`); originals stay git-ignored (12, 15, 18.2) |
