@@ -118,7 +118,7 @@ Use one tool per job, and never animate the same property of the same element wi
 | Forms | react-hook-form + zod, sent to Web3Forms (chosen 2026-10-24) | No backend. The public access key is in `src/lib/inquiry.ts` (`VITE_WEB3FORMS_KEY` overrides it) |
 | Images | vite-imagetools (responsive sizes from the WebP masters) | Section 7.2 |
 | Logo and brand assets | Hand-built SVG, exported with sharp (Node) or Pillow/cairosvg (Python) | Section 4.6 |
-| Pre-rendering | vite-react-ssg or equivalent | Real HTML for SEO, added in the SEO phase |
+| Pre-rendering | Own step on React's `prerender` (react-dom/static), Phase 9 | `pnpm build` runs an SSR build of `src/entry-server.ts`, then `scripts/prerender.mjs` writes the page into `dist/index.html` (hydrated by `main.tsx`) with the head tags, JSON-LD, `robots.txt` and `sitemap.xml` from `src/lib/seo.ts`. No router needed for one page, so no vite-react-ssg |
 | PWA | vite-plugin-pwa | Optional |
 | Code quality | oxlint, Prettier, prettier-plugin-tailwindcss | |
 | Bundle check | rollup-plugin-visualizer | |
@@ -521,17 +521,19 @@ Code-split WebGL, the lightbox and the album viewer. Lazy-load the map iframe. S
 - **JSON-LD `FAQPage`** from section 17.10.
 - Open Graph and Twitter tags with `public/og-image.jpg`.
 - `sitemap.xml`, `robots.txt`, favicon set and `site.webmanifest`. Domain TBD: use a placeholder base URL in one config constant.
+- *Current state (Phase 9, 2026-10-31):* all of the above is built. Base URL: `SITE_URL` in `src/lib/site.ts` (placeholder `https://example.com` until the domain is bought); a build can override it with the `SITE_URL` environment variable, and Vercel production builds fall back to the project's production domain. `sameAs` lists profile URLs only (the Instagram invite link is left out until the profile URL is known). The Facebook link is the owner's personal profile, as given (17.1).
 - One `h1` and a clean heading hierarchy.
 
 ## 12. Folder structure
 
 ```text
 /
-├── public/                  favicon/, og-image.jpg, robots.txt, sitemap.xml
+├── public/                  favicon/, og-image.jpg, site.webmanifest (robots.txt and sitemap.xml are written into dist/ by the build)
 ├── scripts/
 │   ├── images/              analyze, dedupe, contact-sheets, classify, export, report, lib (.mjs)
 │   │   └── out/             reports and contact sheets (git-ignored)
-│   └── brand/               build.mjs (pnpm brand:build), outline_text.py, outlines.json
+│   ├── brand/               build.mjs (pnpm brand:build), outline_text.py, outlines.json
+│   └── prerender.mjs        last step of pnpm build (Phase 9)
 ├── src/
 │   ├── haveToProcessImages/ owner's originals (git-ignored, never imported; backup in the owner's Google Drive)
 │   ├── assets/
@@ -556,11 +558,13 @@ Code-split WebGL, the lightbox and the album viewer. Lazy-load the map iframe. S
 │   │                        Testimonials, Faq, Social, Contact
 │   ├── data/                photos.manifest.json + content files (section 6)
 │   ├── hooks/               useReducedMotion, useLenis, useMediaQuery, useIsTouch
-│   ├── lib/                 gsap.ts, motion.ts, cn.ts, whatsapp.ts, site.ts, photos.ts
+│   ├── lib/                 gsap.ts, motion.ts, cn.ts, whatsapp.ts, site.ts, seo.ts, photos.ts
 │   ├── styles/              index.css (@theme), animations.css
 │   ├── types/content.ts
 │   ├── App.tsx
-│   └── main.tsx
+│   ├── Root.tsx             App with its providers (browser and pre-render)
+│   ├── entry-server.ts      pre-render entry (Phase 9)
+│   └── main.tsx             hydrates the pre-rendered HTML
 ├── CREDITS.md
 ├── index.html
 ├── vite.config.ts
@@ -607,7 +611,7 @@ The repo stays public and the website's photos are committed (2026-10-31), so Ve
 - [ ] First screen loads fast and looks stunning on mobile and desktop
 - [ ] Logo approved, crisp at every size, favicon working
 - [ ] All photos served as AVIF/WebP with responsive sizes and no layout shift
-- [ ] No AI-generated images anywhere; no stock photo in any portfolio area; CREDITS.md complete
+- [x] No AI-generated images anywhere; no stock photo in any portfolio area; CREDITS.md complete (one owner photo with a Gemini mark published by the developer's decision, 18.1)
 - [ ] Sections and filters adapt to the photos that exist; nothing empty or broken
 - [x] Every published child photo and the wedding album have confirmed consent; launch build uses `VITE_ENFORCE_CONSENT=true`
 - [ ] Warm dark theme with cream baby sections, gold accents, large kinetic type
@@ -786,6 +790,7 @@ Let's capture your story.
 
 | Date | Change |
 | --- | --- |
+| 2026-10-31 | Phase 9 built: pre-rendering with hydration (2, 11, 12), head tags, Open Graph/Twitter, canonical, `ProfessionalService` and `FAQPage` JSON-LD, `robots.txt`, `sitemap.xml` (`src/lib/seo.ts`); accessibility pass with axe-core (no violations), heading/landmark check and a full keyboard walk: fixed filter-list semantics, service-number contrast, menu `aria-controls`, the h1's accessible name, and Lenis overriding keyboard focus scrolling (now handled in `SmoothScrollProvider`); preloader made hydration-safe; `CREDITS.md` added |
 | 2026-10-31 | Deploy: Vercel from the public GitHub repo. The website's WebP photos in `src/assets/photos/` are now committed (except `_review/` and the excluded `wedding-01-06`); originals stay git-ignored (12, 15, 18.2) |
 | 2026-10-31 | Wedding & event videos: card removed (no video material, no blank tile); now in the "Also available" row (renamed from "Also at the studio"), in the Wedding card text and as a contact-form shoot type (5, 17.6) |
 | 2026-10-31 | Logo accent switched to blue on trial (`LOGO_ACCENT` in `scripts/brand/build.mjs`; all logo SVGs/PNGs, favicons and the OG image regenerated). Site UI stays gold (18.1) |

@@ -143,7 +143,8 @@ export function Hero() {
         <div className="hero-copy pointer-events-auto max-w-[40rem] lg:max-w-[44%]">
           <h1 id="hero-title" className="hero-title">
             {/* Split into characters for the intro; screen readers read the plain copy. */}
-            <span className="sr-only">Aakar</span>
+            {/* The trailing space keeps "Aakar Digital…" apart in the plain text and accessible name. */}
+            <span className="sr-only">{'Aakar '}</span>
             <span
               aria-hidden="true"
               className="hero-title-main block display text-[clamp(4.75rem,14vw,11.5rem)] leading-[0.82]"

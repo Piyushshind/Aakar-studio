@@ -143,7 +143,8 @@ export function Header() {
             aria-label="Open menu"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
+            // Only while the menu exists: it isn't in the DOM when closed (axe: aria-valid-attr-value).
+            aria-controls={menuOpen ? 'mobile-menu' : undefined}
             className="-mr-2 inline-flex size-11 items-center justify-center text-text lg:hidden"
           >
             <Menu aria-hidden="true" className="size-6" strokeWidth={1.5} />

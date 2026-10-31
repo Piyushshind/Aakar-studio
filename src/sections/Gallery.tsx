@@ -131,44 +131,47 @@ export function Gallery() {
 
         {/* Phones: the tab row scrolls; its right edge fades to say so. */}
         <Reveal className="-mx-(--gutter) mt-14 scrollbar-thin overflow-x-auto [mask-image:linear-gradient(to_right,#000_calc(100%-3rem),transparent)] px-(--gutter) pr-12 lg:[mask-image:none] lg:pr-(--gutter)">
-          <ul
+          {/* The group label sits on a wrapper: role="group" on the <ul> itself would stop its
+              <li>s from being list items (axe: listitem). */}
+          <div
             role="group"
             aria-label={galleryFilterMode === 'theme' ? 'Filter by theme' : 'Filter by category'}
-            className="gallery-filters flex w-max gap-x-7 border-b border-line lg:w-full lg:flex-wrap"
           >
-            {galleryTabs.map((t) => {
-              const active = t.id === tab.id;
-              return (
-                <li key={t.id}>
-                  <button
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => {
-                      setTabId(t.id);
-                      setExpanded(false);
-                    }}
-                    className={cn(
-                      'relative flex items-baseline gap-1.5 py-4 eyebrow text-xs whitespace-nowrap lg:text-[0.68rem]',
-                      active ? 'text-text' : 'text-muted hover:text-text',
-                    )}
-                  >
-                    {t.label}
-                    <span className="text-xs tracking-normal text-muted/80 lg:text-[0.6rem]">
-                      {t.photos.length}
-                    </span>
-                    {active && (
-                      <m.span
-                        layoutId="gallery-tab"
-                        aria-hidden="true"
-                        transition={transition.base}
-                        className="absolute inset-x-0 -bottom-px h-px bg-gold"
-                      />
-                    )}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+            <ul className="gallery-filters flex w-max gap-x-7 border-b border-line lg:w-full lg:flex-wrap">
+              {galleryTabs.map((t) => {
+                const active = t.id === tab.id;
+                return (
+                  <li key={t.id}>
+                    <button
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => {
+                        setTabId(t.id);
+                        setExpanded(false);
+                      }}
+                      className={cn(
+                        'relative flex items-baseline gap-1.5 py-4 eyebrow text-xs whitespace-nowrap lg:text-[0.68rem]',
+                        active ? 'text-text' : 'text-muted hover:text-text',
+                      )}
+                    >
+                      {t.label}
+                      <span className="text-xs tracking-normal text-muted/80 lg:text-[0.6rem]">
+                        {t.photos.length}
+                      </span>
+                      {active && (
+                        <m.span
+                          layoutId="gallery-tab"
+                          aria-hidden="true"
+                          transition={transition.base}
+                          className="absolute inset-x-0 -bottom-px h-px bg-gold"
+                        />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </Reveal>
 
         {/* relative: a leaving photo is taken out of the flow (popLayout) and placed absolutely

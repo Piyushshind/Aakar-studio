@@ -170,7 +170,7 @@ function ServiceList() {
                 the thumbnail. From sm up it's the row's first column again. */}
             <span
               aria-hidden="true"
-              className="col-start-1 row-start-1 eyebrow text-gold opacity-60 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 sm:pt-2 lg:col-span-1 lg:pt-3"
+              className="col-start-1 row-start-1 eyebrow text-gold opacity-80 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 sm:pt-2 lg:col-span-1 lg:pt-3"
             >
               {number(i)}
             </span>

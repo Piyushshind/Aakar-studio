@@ -9,7 +9,7 @@ The full specification is [md/PROJECT_SPEC.md](md/PROJECT_SPEC.md).
 ```sh
 pnpm install
 pnpm dev            # dev server
-pnpm build          # typecheck + production build to dist/
+pnpm build          # typecheck + production build to dist/, pre-rendered (SEO HTML, robots.txt, sitemap.xml)
 pnpm lint           # oxlint
 pnpm typecheck
 pnpm format         # prettier --write

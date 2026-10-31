@@ -24,7 +24,10 @@ import { Testimonials } from '@/sections/Testimonials';
 // Dev only: the brand, images and foundation check panels at `?dev`. Production builds never
 // include them (import.meta.env.DEV is false, so the dynamic import is dropped).
 const DevPanels = import.meta.env.DEV ? lazy(() => import('./dev/DevPanels')) : null;
-const showDevPanels = DevPanels !== null && new URLSearchParams(window.location.search).has('dev');
+const showDevPanels =
+  DevPanels !== null &&
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).has('dev');
 
 function App() {
   if (DevPanels && showDevPanels) {

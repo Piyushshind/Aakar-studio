@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Logo } from '@/components/ui/Logo';
 import { INTRO_SESSION_KEY, introWillPlay, markIntroDone } from '@/lib/intro';
 import { gsap, useGSAP } from '@/lib/gsap';
@@ -15,21 +15,30 @@ import { getActiveLenis } from '@/lib/scroll';
  * thing stays under 2 s. The hero image loads underneath in parallel (its request is never
  * delayed). Scroll and focus are locked while it plays; the overlay is aria-hidden.
  */
+// Decided once, on the first client read: a slow start (e.g. a slow phone) skips it, the page has
+// waited long enough already. In dev, ?intro replays it even though the dev server mounts slowly.
+let playDecision: boolean | null = null;
+function shouldPlay() {
+  playDecision ??=
+    introWillPlay &&
+    (performance.now() < preloader.lateMount * 1000 ||
+      (import.meta.env.DEV && /[?&]intro/.test(window.location.search)));
+  return playDecision;
+}
+const subscribeNever = () => () => {};
+
 export function Preloader() {
-  // A slow start (e.g. a slow phone) skips it: the page has waited long enough already.
-  // In dev, ?intro replays it even though the dev server mounts slowly.
-  const [active, setActive] = useState(
-    () =>
-      introWillPlay &&
-      (performance.now() < preloader.lateMount * 1000 ||
-        (import.meta.env.DEV && /[?&]intro/.test(window.location.search))),
-  );
+  // The pre-rendered HTML has no overlay, so hydration starts without one (server snapshot) and
+  // React switches to the client value before the first paint; the CSS cover from index.html
+  // holds the frame until then.
+  const play = useSyncExternalStore(subscribeNever, shouldPlay, () => false);
+  const [done, setDone] = useState(false);
   useLayoutEffect(() => {
-    if (active || !introWillPlay) return;
+    if (!introWillPlay || shouldPlay()) return;
     document.documentElement.classList.remove('intro');
     markIntroDone();
-  }, [active]);
-  return active ? <Overlay onDone={() => setActive(false)} /> : null;
+  }, []);
+  return play && !done ? <Overlay onDone={() => setDone(true)} /> : null;
 }
 
 /** Overlay with a circular hole of radius r around (cx, cy): even-odd path, so it can open. */

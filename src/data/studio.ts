@@ -59,5 +59,8 @@ export const studio: StudioInfo = {
   foundedYear: FOUNDED.year,
 };
 
+/** For JSON-LD `foundingDate` (spec 11): YYYY-MM. */
+export const foundingDate = `${FOUNDED.year}-${String(FOUNDED.month).padStart(2, '0')}`;
+
 /** Single-line postal address for display. */
 export const studioAddressLine = `${studio.address.street}, ${studio.address.locality}, ${studio.address.region} ${studio.address.postalCode}`;

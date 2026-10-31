@@ -45,7 +45,23 @@ function LenisScrollTriggerSync() {
       setActiveLenis(lenis);
       ScrollTrigger.refresh();
 
+      // Keyboard focus (spec 10): while Lenis is gliding it overrides the browser's own scroll to
+      // a newly focused element, which then stays off screen (Phase 9 keyboard walk, e.g. tabbing
+      // out of the pinned "Best of" strip). Glide to it instead. The pinned strip moves its own
+      // items sideways, so focus inside it is left to Gallery.tsx.
+      const onFocusIn = (event: FocusEvent) => {
+        const el = event.target;
+        if (!(el instanceof HTMLElement) || el.closest('[data-pinned]')) return;
+        requestAnimationFrame(() => {
+          const r = el.getBoundingClientRect();
+          if (r.height === 0 || (r.top >= 0 && r.bottom <= window.innerHeight)) return;
+          lenis.scrollTo(el, { offset: -window.innerHeight / 3, force: true });
+        });
+      };
+      document.addEventListener('focusin', onFocusIn);
+
       return () => {
+        document.removeEventListener('focusin', onFocusIn);
         gsap.ticker.remove(raf);
         gsap.ticker.lagSmoothing(500, 33); // GSAP default, for native scroll
         offScroll();
