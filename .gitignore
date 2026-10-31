@@ -91,5 +91,6 @@ Trace-*.json
 *.cpuprofile
 *.heapsnapshot
 
+
 # Vite temporary config bundles
 vite.config.*.timestamp-*
