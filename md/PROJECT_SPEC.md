@@ -59,7 +59,7 @@ Do not install yet: `vite-react-ssg` (added in the SEO phase), `@rive-app/react-
 9. **Prettier:** `.prettierrc` with `prettier-plugin-tailwindcss`. `.prettierignore` already exists; keep its entries.
 10. **Linting (oxlint):** Keep the template's oxlint setup (`.oxlintrc.json`). `react/rules-of-hooks` is an error and `react/exhaustive-deps` a warning.
 11. **Scripts:** Add `format`, `format:check`, `typecheck` and `analyze` to `package.json`, keeping the existing `images:*` scripts.
-12. **Git:** `.gitignore` must cover `node_modules`, `dist`, `.env*`, OS files, `src/haveToProcessImages/`, `scripts/images/out/` and, while the repo is public, `src/assets/photos/`. `src/data/photos.manifest.json` is committed (it holds no image data). The originals stay in the owner's Google Drive as backup, and the masters can be regenerated with the `images:*` scripts.
+12. **Git:** `.gitignore` must cover `node_modules`, `dist`, `.env*`, OS files, `src/haveToProcessImages/`, `scripts/images/out/`, `scripts/new_added_photos/` and `src/assets/photos/_review/`. The website's WebP masters in `src/assets/photos/` and `src/data/photos.manifest.json` are committed (since 2026-10-31; the repo stays public). The originals stay in the owner's Google Drive as backup, and the masters can be regenerated with the `images:*` scripts.
 13. **Verify:** Run `pnpm dev`, `pnpm build`, `pnpm lint` and `pnpm typecheck`. Fix every error before moving on.
 14. **Report:** Tell the user what was already installed, what you added or removed, what you configured, and anything you were unsure about. Then wait for the go-ahead before Phase 2.
 
@@ -256,7 +256,7 @@ One long-scroll page in this order, each section its own component in `src/secti
 7. **"Tiny Fingers, Big Memories" band** — Cream section with brown text, 3 to 5 large photos, gentle parallax, newborn and baby trust points and a "Plan Your Baby's Shoot" WhatsApp CTA. *Current state:* the newborn photo (`newborn-studio-01`) with soft baby-kids photos (teddy, pink-winter themes).
 8. **Albums** — Grid of album covers, each a real client album. Clicking opens a viewer: GSAP + CSS 3D flip-book on desktop, Embla swipe slider on mobile, with a GSAP Flip cover-to-viewer transition. Album spreads are wide (about 3:1); show them full-width in the viewer. Short note that every album is custom-designed. *Current state:* four albums (section 7.3). If an album has no `album-cover`, use its first page as the cover.
    - **Viewer (built 2026-10-24):** a modal dialog, lazy-loaded. Each spread is split at the spine into pages; a cover that is itself a spread (the kids albums) closes the book at both ends, a single front cover (wedding) only at the start, and an album without a cover opens straight at its first spread. The card's cover flies into the closed book (FLIP) and the cover opens. Narrower spreads are letterboxed in the book's shape over a soft blurred wash of the same spread. Arrow keys, buttons or clicking either page turn; Esc, the close button or a click outside closes. Phones and reduced motion: an Embla slider of whole spreads, with a "turn your phone sideways" hint in portrait.
-9. **Services** — Nine animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also at the studio" row: passport and ID photos, photo printing, photo framing.
+9. **Services** — Eight animated cards (section 17.6) with icon, title, description and an "Enquire" button opening WhatsApp pre-filled with that service. Hover reveals a photo with a gold glow; staggered scroll reveal. Below the cards, a compact "Also available" row: wedding and event videos, passport and ID photos, photo printing, photo framing.
    - **Card images:** only real studio photos. A card without one is an elegant icon card, not a stock photo. *Current state:* Newborn, Maternity and Pre-Wedding use the 2026-10-23 photos; Baby & Kids uses a featured kids photo; Birthdays & Ceremonies uses a first-birthday photo; Wedding and Custom Photo Albums use album pages; Family uses `family-studio-01` (2026-10-24). No icon cards remain.
 10. **"Anywhere you celebrate" band** — Short full-width statement: in-studio or outdoor, in Jalgaon or wherever the customer wants. Background: studio photo preferred; a licensed real stock landscape is acceptable here because it is atmosphere, not portfolio.
 11. **Custom quote band** — Replaces pricing. No prices anywhere on the site. Headline and copy from section 17.8 with WhatsApp and Call buttons.
@@ -536,7 +536,7 @@ Code-split WebGL, the lightbox and the album viewer. Lazy-load the map iframe. S
 │   ├── haveToProcessImages/ owner's originals (git-ignored, never imported; backup in the owner's Google Drive)
 │   ├── assets/
 │   │   ├── brand/           reference-banner.jpg (reference only, git-ignored), logo SVGs, png/
-│   │   ├── photos/          git-ignored while the repo is public; regenerate with images:*
+│   │   ├── photos/          WebP masters, committed (except _review/); regenerate with images:*
 │   │   │   ├── baby-kids/   WebP masters (+ one -xl.webp)
 │   │   │   ├── albums/      wedding-01/, little-farmer/, little-farmer-green/, beach-baby/
 │   │   │   ├── about/       owner, studio, behind-the-scenes (empty for now)
@@ -600,7 +600,7 @@ Keep the site working at every step. At the end of each phase, report back, sugg
 
 Deploy the static `dist/` folder to Netlify, Cloudflare Pages, Vercel or GitHub Pages on a free tier. Domain TBD, HTTPS on, long cache headers for hashed assets. The launch build needs `VITE_ENFORCE_CONSENT=true` (in `.env.production.local` locally, and in the host's environment variables). The Web3Forms key is in the code, so the form needs no host setting.
 
-The repo is public during development, so client photos are not in git. Deploy from a local build with the Netlify or Cloudflare CLI (e.g. `netlify deploy --prod --dir dist` or `wrangler pages deploy dist`). If the repo becomes private later, the photos can be committed and the site deployed from git.
+The repo stays public and the website's photos are committed (2026-10-31), so Vercel deploys straight from the GitHub repo: framework Vite, build `pnpm build`, output `dist`, environment variable `VITE_ENFORCE_CONSENT=true`.
 
 ## 16. Acceptance checklist
 
@@ -675,21 +675,20 @@ Behind every shoot is a dedicated team of photographers, videographers and album
 
 Every shoot ends the same way: with photographs and albums made just for you, to be kept, shared and relived for years to come.
 
-### 17.6 Services (nine cards)
+### 17.6 Services (eight cards)
 
 | Service | Icon | Image (current) | Description | WhatsApp message |
 | --- | --- | --- | --- | --- |
 | Newborn Photoshoot | `Baby` | `newborn-studio-01` | Your baby's first days, beautifully preserved. Gentle poses, soft lighting and carefully styled setups, always at your baby's pace and with their comfort first. | Hi Aakar Digital Photo Studio, I'd like to know about a Newborn Photoshoot. |
 | Baby & Kids Themed Shoots | `Sparkles` | Featured kids photo | Little Krishna, Little Farmer, Beach Baby and more: playful themed sets for babies and children of any age, in our studio or outdoors. Bring their favourite outfits and we'll create the magic. | Hi, I'd like to know about a Baby and Kids Themed Photoshoot. |
 | Maternity Photoshoot | `Heart` | `maternity-portrait-01` | Celebrate the journey to motherhood with elegant portraits, graceful poses and personalised concepts that preserve this beautiful chapter. | Hi, I'd like to know about a Maternity Photoshoot. |
-| Wedding Photography | `Gem` | wedding-01 album page | From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. | Hi, I'd like to know about Wedding Photography. |
-| Wedding & Event Videos | `Video` | Icon card | Full video coverage of your wedding, ceremonies and events, from the rituals to the celebrations, so you can relive every moment. | Hi, I'd like to know about video coverage for a wedding or event. |
+| Wedding Photography | `Gem` | wedding-01 album page | From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. Full video coverage too. | Hi, I'd like to know about Wedding Photography and Video. |
 | Pre-Wedding & Engagement | `HeartHandshake` | `pre-wedding-outdoor-03` | Tell your love story before the big day, with relaxed couple portraits at the locations you love. | Hi, I'd like to know about a Pre-Wedding Shoot. |
 | Family & Sibling Portraits | `Users` | `family-studio-01` | Real smiles and loving connections, with natural, coordinated portraits of parents, siblings and the whole family. | Hi, I'd like to know about a Family Photoshoot. |
 | Birthdays & Ceremonies | `PartyPopper` | first-birthday photo | First birthdays, half birthdays, naming ceremonies and family functions, captured with every smile and every detail. | Hi, I'd like to know about photography for a birthday or ceremony. |
 | Custom Photo Albums | `BookOpen` | Album spread (little-farmer or wedding-01) | Albums designed entirely around your photos and your taste, in any style, size or finish you like. | Hi, I'd like to know about Custom Photo Albums. |
 
-**Also at the studio** (compact row, icons `IdCard`, `Printer`, `Frame`): Passport & ID Photos · Photo Printing · Photo Framing. WhatsApp message: "Hi, I'd like to know about passport photos, printing or framing."
+**Also available** (compact row, icons `Video`, `IdCard`, `Printer`, `Frame`): Wedding & Event Videos · Passport & ID Photos · Photo Printing · Photo Framing. WhatsApp message: "Hi, I'd like to know about wedding or event videos, passport photos, printing or framing." Videos were a ninth card with an icon in place of a photo; moved here on 2026-10-31 because there is no video material yet. Bring the card back once there is a real video or a still from a video shoot.
 
 ### 17.7 Baby trust points
 
@@ -764,7 +763,7 @@ Let's capture your story.
 - [ ] Real customer reviews (from the Google Maps listing, with permission to quote)
 - [ ] Real numbers for stats (optional; section hidden without them)
 - [x] Logo approved by the user and the owner (2026-10-21)
-- [ ] Logo colour: the gold "A" logo stays for now; the developer will check whether the older blue (or a related blue) looks better and decide (2026-10-24). `wedding-01-06` stays excluded until then
+- [ ] Logo colour: blue on trial since 2026-10-31 (the A, swash, lens rim, flash and tagline highlights, sampled from the older blue logo; the site's UI gold is unchanged). Switch back with `LOGO_ACCENT = 'gold'` in `scripts/brand/build.mjs` and `pnpm brand:build`. The developer decides after seeing it. `wedding-01-06` stays excluded until then
 - [ ] Domain
 - [x] Web3Forms access key for the contact form (form "aakar studio" on the aakardigital81@gmail.com account, received 2026-10-26): committed in `src/lib/inquiry.ts` (the key is public by design and only sends to the studio inbox), so every deploy sends without host settings; `VITE_WEB3FORMS_KEY` can override it
 
@@ -781,12 +780,15 @@ Let's capture your story.
 - Logo is redrawn as SVG from the banner reference.
 - The site adapts to available photos: theme filters when only one category exists, icon-only service cards without real photos, hidden sections without content.
 - Child photos and the wedding album are gated behind confirmed consent in the launch build.
-- Repo is public during development; client photos are never committed while it is public.
+- Repo is public. The website's WebP photos are committed so Vercel can build from git (developer's decision, 2026-10-31; consent given for the website). Camera originals are never committed.
 
 ### 18.3 Change log
 
 | Date | Change |
 | --- | --- |
+| 2026-10-31 | Deploy: Vercel from the public GitHub repo. The website's WebP photos in `src/assets/photos/` are now committed (except `_review/` and the excluded `wedding-01-06`); originals stay git-ignored (12, 15, 18.2) |
+| 2026-10-31 | Wedding & event videos: card removed (no video material, no blank tile); now in the "Also available" row (renamed from "Also at the studio"), in the Wedding card text and as a contact-form shoot type (5, 17.6) |
+| 2026-10-31 | Logo accent switched to blue on trial (`LOGO_ACCENT` in `scripts/brand/build.mjs`; all logo SVGs/PNGs, favicons and the OG image regenerated). Site UI stays gold (18.1) |
 | 2026-10-26 | Web3Forms key committed in `src/lib/inquiry.ts` (public by design). DSC00006 published in a new `portrait` category (Portraits tab, featured; 5, 7.3, 18.1). Owner photo published in About (`about-owner-01`); it has a small Gemini mark, published as is by the user's decision (18.1) |
 | 2026-10-24 | Phase 8 built (5, 2): gallery lightbox (yet-another-react-lightbox, lazy) and Motion layout filter animations (`domMax`); album viewer with the CSS 3D flip-book, cover-to-book FLIP and the phone slider (signature moment 5, lazy); FAQ as a Motion accordion; Testimonials Embla slider (hidden until reviews); contact form on Web3Forms with sending / sent / error states (key pending, 18.1); before/after slider (hidden until pairs) |
 | 2026-10-24 | Owner answers (18.1): hours and owner name confirmed; founded October 2003 ("Since 2003", years stat, `foundingDate`); wedding and event videos added as a ninth service (5, 11, 17.3, 17.6, 18.2); baby props in the FAQ (17.10); `pre-wedding-outdoor-01` confirmed; DSC00006/8 explained (7.3); zoom captions approved (17.13); logo colour to be decided; domain suggestions (17.1) |

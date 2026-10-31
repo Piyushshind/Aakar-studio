@@ -40,14 +40,16 @@ src/haveToProcessImages/
 scripts/new_added_photos/
 # Image pipeline: generated working files (contact sheets of client photos, reports)
 scripts/images/out/
-# Client photo masters: never committed while the repo is public.
-# Regenerate with the images:* scripts. src/data/photos.manifest.json IS committed.
-src/assets/photos/
+# Website photo masters (src/assets/photos/) ARE committed since 2026-10-31, so Vercel can build
+# from the public repo (the owner and the families gave consent for the website). Kept out: the
+# unpublished _review images and the excluded album page with the old logo and phone number.
+src/assets/photos/_review/
+src/assets/photos/albums/wedding-01/wedding-01-06.webp
 
-# Safety net, the repo is public: photo originals, camera RAW files, layered edits and archives
+# Safety net, the repo is public: camera originals, camera RAW files, layered edits and archives
 # are ignored wherever they land. Only the logo assets in public/ and src/assets/brand/ may be
-# JPEGs (og-image.jpg). PNG and WebP are not listed: the logo PNGs are tracked on purpose and the
-# WebP masters live in the ignored src/assets/photos/.
+# JPEGs (og-image.jpg). PNG and WebP are not listed: the logo PNGs and the WebP website photos
+# are tracked on purpose.
 *.jpg
 *.jpeg
 *.JPG

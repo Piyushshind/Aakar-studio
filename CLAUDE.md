@@ -16,7 +16,7 @@
 - Never invent prices, stats, years in business, phone numbers or reviews. Empty data hides its section.
 - Respect the consent gate: `isPublishable(photo)`; launch builds use `VITE_ENFORCE_CONSENT=true`.
 - Never import from `src/haveToProcessImages/` or `src/assets/photos/_review/`.
-- The repo is public during development: never commit client photos. `src/assets/photos/`, `src/haveToProcessImages/` and `scripts/images/out/` are git-ignored; only `src/data/photos.manifest.json` is committed. Before every push, `git log --all -- scripts/images/out src/assets/photos` must return nothing.
+- The repo is public. Since 2026-10-31 the website's WebP photos in `src/assets/photos/` are committed (consent given), so Vercel builds from GitHub; `_review/` and the excluded `wedding-01-06` stay ignored. Never commit originals: `src/haveToProcessImages/`, `scripts/new_added_photos/`, `scripts/images/out/` and `src/assets/brand/reference-banner.jpg` stay git-ignored. Before every push, `git log --all -- scripts/images/out src/haveToProcessImages scripts/new_added_photos` must return nothing.
 
 ## Images
 

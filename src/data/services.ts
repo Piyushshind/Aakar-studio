@@ -35,16 +35,8 @@ export const services: Service[] = [
     icon: 'Gem',
     imageId: 'wedding-01-04',
     description:
-      'From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate.',
-    whatsappMessage: "Hi, I'd like to know about Wedding Photography.",
-  },
-  {
-    id: 'video',
-    title: 'Wedding & Event Videos',
-    icon: 'Video',
-    description:
-      'Full video coverage of your wedding, ceremonies and events, from the rituals to the celebrations, so you can relive every moment.',
-    whatsappMessage: "Hi, I'd like to know about video coverage for a wedding or event.",
+      'From haldi to vidaai, we capture the rituals, candid emotions, couple portraits and family moments that make your day unforgettable, wherever you celebrate. Full video coverage too.',
+    whatsappMessage: "Hi, I'd like to know about Wedding Photography and Video.",
   },
   {
     id: 'pre-wedding',
@@ -84,12 +76,16 @@ export const services: Service[] = [
   },
 ];
 
-/** "Also at the studio" row under the service cards. */
+/**
+ * "Also available" row under the service cards. Wedding & event videos live here, not as a card,
+ * until there is real video or a still from a video shoot to show (2026-10-31).
+ */
 export const studioExtras: StudioExtra[] = [
+  { title: 'Wedding & Event Videos', icon: 'Video' },
   { title: 'Passport & ID Photos', icon: 'IdCard' },
   { title: 'Photo Printing', icon: 'Printer' },
   { title: 'Photo Framing', icon: 'Frame' },
 ];
 
 export const studioExtrasWhatsappMessage =
-  "Hi, I'd like to know about passport photos, printing or framing.";
+  "Hi, I'd like to know about wedding or event videos, passport photos, printing or framing.";

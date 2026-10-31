@@ -222,11 +222,11 @@ function ServiceList() {
   );
 }
 
-/** "Also at the studio": passport and ID photos, printing, framing (spec 17.6). */
+/** "Also available": wedding and event videos, passport and ID photos, printing, framing (spec 17.6). */
 function StudioExtras() {
   return (
     <Reveal className="studio-extras mt-16 flex flex-col gap-8 border border-line bg-surface/40 p-6 sm:p-8 lg:mt-20 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-      <h3 className="eyebrow text-gold">Also at the studio</h3>
+      <h3 className="eyebrow text-gold">Also available</h3>
       <ul className="flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:gap-x-10">
         {studioExtras.map((extra) => (
           <li key={extra.title} className="flex items-center gap-3 text-text/90">
@@ -238,7 +238,7 @@ function StudioExtras() {
       <Button
         href={whatsappLink(studioExtrasWhatsappMessage)}
         variant="secondary"
-        aria-label="Enquire about passport photos, printing or framing on WhatsApp"
+        aria-label="Enquire about videos, passport photos, printing or framing on WhatsApp"
         className="self-start lg:self-auto"
       >
         Enquire
@@ -247,7 +247,7 @@ function StudioExtras() {
   );
 }
 
-/** Services (spec 5, item 9): the eight services from 17.6 and the "Also at the studio" row. */
+/** Services (spec 5, item 9): the eight services from 17.6 and the "Also available" row. */
 export function Services() {
   const { number: eyebrowNumber, label } = sectionEyebrows.services;
 

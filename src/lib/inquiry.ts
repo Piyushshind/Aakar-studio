@@ -7,6 +7,7 @@ import { STUDIO_TIME_ZONE } from './hours';
 
 export const shootTypes = [
   ...services.map((s) => s.title),
+  'Wedding or event video',
   'Passport, printing or framing',
   'Something else',
 ];

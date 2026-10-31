@@ -2,9 +2,8 @@
 //
 // Every master in src/assets/photos/ is imported through vite-imagetools: `?responsive` gives AVIF
 // and WebP srcsets (widths from src/lib/imagePolicy.ts, never upscaled) and `?placeholder` a tiny
-// inline WebP for the blur-up. Photos are git-ignored, so a fresh clone has no files: the globs
-// are then empty and every photo resolves to `undefined` (ResponsiveImage shows a neutral
-// placeholder). Blocked photos (excluded, or no consent in the launch build) resolve to
+// inline WebP for the blur-up. A photo whose file is missing (e.g. a fresh clone without the
+// masters) resolves to `undefined` (ResponsiveImage shows a neutral placeholder). Blocked photos (excluded, or no consent in the launch build) resolve to
 // `undefined` too, via the photo gate in vite.config.ts, and are never emitted.
 import type { Picture } from 'vite-imagetools';
 import manifest from '@/data/photos.manifest.json';

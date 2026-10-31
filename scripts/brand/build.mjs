@@ -40,6 +40,16 @@ const C = {
 };
 const INK = { dark: C.brown, light: C.cream }; // dark = for cream/white backgrounds
 
+// Logo accent (the A, swash, lens rim, flash and tagline highlights). 'blue' is sampled from the
+// studio's older blue logo (album page wedding-01-06), on trial since 2026-10-31 (spec 18.1);
+// set 'gold' and run `pnpm brand:build` to go back. The site's own gold UI is unaffected.
+const LOGO_ACCENT = 'blue';
+const ACCENTS = {
+  gold: { light: C.goldLight, mid: C.gold, deep: C.goldDeep },
+  blue: { light: '#b4cdf2', mid: '#5f93da', deep: '#2c62b0' },
+};
+const A = ACCENTS[LOGO_ACCENT];
+
 // ---------------------------------------------------------------------------------------------
 // Text runs (sizes measured on the banner, in banner pixels).
 const TAGLINE = 'CAPTURING EMOTIONS, CREATING MEMORIES';
@@ -273,14 +283,14 @@ function markMarkup({ ink, simple = false, tiny = false, fitGroup = false }) {
 const DEFS = `
   <defs>
     <linearGradient id="__ID__gold" gradientUnits="userSpaceOnUse" x1="86" y1="14" x2="132" y2="168">
-      <stop offset="0" stop-color="${C.goldLight}"/>
-      <stop offset=".5" stop-color="${C.gold}"/>
-      <stop offset="1" stop-color="${C.goldDeep}"/>
+      <stop offset="0" stop-color="${A.light}"/>
+      <stop offset=".5" stop-color="${A.mid}"/>
+      <stop offset="1" stop-color="${A.deep}"/>
     </linearGradient>
     <linearGradient id="__ID__gold-text" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="${C.goldLight}"/>
-      <stop offset=".55" stop-color="${C.gold}"/>
-      <stop offset="1" stop-color="${C.goldDeep}"/>
+      <stop offset="0" stop-color="${A.light}"/>
+      <stop offset=".55" stop-color="${A.mid}"/>
+      <stop offset="1" stop-color="${A.deep}"/>
     </linearGradient>
     <radialGradient id="__ID__glass" cx=".4" cy=".38" r=".75">
       <stop offset="0" stop-color="#3b302b"/>
@@ -600,9 +610,9 @@ write(
         <stop offset="1" stop-color="${C.bg}"/>
       </radialGradient>
       <linearGradient id="hair" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="${C.gold}" stop-opacity="0"/>
-        <stop offset=".5" stop-color="${C.gold}" stop-opacity=".7"/>
-        <stop offset="1" stop-color="${C.gold}" stop-opacity="0"/>
+        <stop offset="0" stop-color="${A.mid}" stop-opacity="0"/>
+        <stop offset=".5" stop-color="${A.mid}" stop-opacity=".7"/>
+        <stop offset="1" stop-color="${A.mid}" stop-opacity="0"/>
       </linearGradient>
     </defs>
     <rect width="${W}" height="${H}" fill="url(#bg)"/>

@@ -18,4 +18,4 @@ pnpm analyze        # bundle report at dist/stats.html
 
 ## Photos
 
-Client photos are not in git. `src/assets/photos/` is git-ignored and regenerated from the owner's originals with the `images:*` scripts (spec section 7.2). `src/data/photos.manifest.json` is committed.
+The website's photos (WebP masters in `src/assets/photos/`) and `src/data/photos.manifest.json` are committed. The owner's camera originals are not: they stay git-ignored and the masters are regenerated from them with the `images:*` scripts (spec section 7.2).
